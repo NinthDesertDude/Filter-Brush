@@ -417,6 +417,11 @@ namespace BrushFilter
             bttnSymmetry.DataSource = symmetryOptions;
             bttnSymmetry.DisplayMember = "Item1";
             bttnSymmetry.ValueMember = "Item2";
+
+            //Forces the window to cover the screen without being maximized.
+            Left = Top = 0;
+            Width = Screen.PrimaryScreen.WorkingArea.Width;
+            Height = Screen.PrimaryScreen.WorkingArea.Height;
         }
         #endregion
 
