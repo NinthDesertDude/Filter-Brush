@@ -751,22 +751,27 @@ namespace BrushFilter
             //Locks the pixels to be edited.
             BitmapData canvasData, brushData;
 
-            //Gets the affected area on the canvas.
-            Rectangle canvasRect = new Rectangle(
-                Utils.Clamp(coords.X - brush.Width / 2, 0, canvas.Width),
-                Utils.Clamp(coords.Y - brush.Height / 2, 0, canvas.Height),
-                Utils.Clamp(brush.Width, 1, canvas.Width - coords.X),
-                Utils.Clamp(brush.Height, 1, canvas.Height - coords.Y));
+            //Gets the brush area to draw.
+            int brushX = Utils.Clamp(-coords.X, 0, brush.Width);
+            int brushY = Utils.Clamp(-coords.Y, 0, brush.Height);
+            int brushWidth = Utils.Clamp(brush.Width - brushX, 0,
+                Math.Min(brush.Width, Math.Max(0, canvas.Width - coords.X)));
+            int brushHeight = Utils.Clamp(brush.Height - brushY, 0,
+                Math.Min(brush.Height, Math.Max(0, canvas.Height - coords.Y)));
 
-            //Gets the amount of brush area being drawn.
             Rectangle brushRect = new Rectangle(
-                Utils.Clamp(brush.Width / 2 - coords.X, 0, brush.Width),
-                Utils.Clamp(brush.Height / 2 - coords.Y, 0, brush.Height),
-                brush.Width, brush.Height);
+                brushX, brushY, brushWidth, brushHeight);
+
+            //Gets the affected area on the canvas.
+            int canvasX = Utils.Clamp(coords.X, 0, canvas.Width);
+            int canvasY = Utils.Clamp(coords.Y, 0, canvas.Height);
+            int canvasWidth = Utils.Clamp(canvasX + brushWidth / 2, 0, Math.Max(0, canvas.Width - canvasX));
+            int canvasHeight = Utils.Clamp(canvasY + brushHeight / 2, 0, Math.Max(0, canvas.Height - canvasY));
+            Rectangle canvasRect = new Rectangle(canvasX, canvasY, canvasWidth, canvasHeight);
 
             //Does not lockbits for an invalid rectangle.
-            if (canvasRect.Width <= 0 || canvasRect.Height <= 0 ||
-                brushRect.Width <= 0 || brushRect.Height <= 0)
+            if (brushRect.Width <= 0 || brushRect.Height <= 0 ||
+                canvasRect.Width <= 0 || canvasRect.Height <= 0)
             {
                 return false;
             }
@@ -778,7 +783,7 @@ namespace BrushFilter
 
             brushData = brush.LockBits(
                 brushRect,
-                ImageLockMode.ReadWrite,
+                ImageLockMode.ReadOnly,
                 brush.PixelFormat);
 
             byte* canvasRow = (byte*)canvasData.Scan0;

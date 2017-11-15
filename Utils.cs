@@ -257,11 +257,11 @@ namespace BrushFilter
                 g.TranslateTransform(-(float)origBmp.Width / 2, -(float)origBmp.Height / 2);
 
                 //Draws the image.
-                g.FillRectangle(Brushes.White,
-                        new Rectangle(0, 0, origBmp.Width, origBmp.Height));
+                g.FillRectangle(Brushes.White, new Rectangle(0, 0, origBmp.Width, origBmp.Height));
                 g.DrawImage(origBmp, 0, 0, origBmp.Width, origBmp.Height);
-                return newBmp;
             }
+
+            return newBmp;
         }
         #endregion
     }
