@@ -242,6 +242,9 @@ namespace BrushFilter
             Bitmap newBmp = new Bitmap(newWidth, newHeight);
             using (Graphics g = Graphics.FromImage(newBmp))
             {
+                //Fills the image with white.
+                g.FillRectangle(Brushes.White, new Rectangle(0, 0, newBmp.Width, newBmp.Height));
+
                 //Uses matrices to centrally-rotate the original image.
                 g.TranslateTransform(
                     (float)(newWidth - origBmp.Width) / 2,
@@ -257,7 +260,6 @@ namespace BrushFilter
                 g.TranslateTransform(-(float)origBmp.Width / 2, -(float)origBmp.Height / 2);
 
                 //Draws the image.
-                g.FillRectangle(Brushes.White, new Rectangle(0, 0, origBmp.Width, origBmp.Height));
                 g.DrawImage(origBmp, 0, 0, origBmp.Width, origBmp.Height);
             }
 
