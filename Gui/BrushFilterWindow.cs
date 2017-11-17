@@ -2639,23 +2639,23 @@ namespace BrushFilter
                 //Renders in segments for images of 129 x 129 or greater.
                 if (bounds.Width > 128 && bounds.Height > 128)
                 {
-                    List<Rectangle> rects = new List<Rectangle>();
-                    for (int x = 0; x < bounds.Width; x += 64)
+                    Parallel.For(0, 1 + bounds.Width / 64, (row) =>
                     {
+                        int x = row * 64;
                         for (int y = 0; y < bounds.Height; y += 64)
                         {
                             //Only adds rectangles with valid width and height.
                             if (bounds.Width - x > 0 &&
                                 bounds.Height - y > 0)
                             {
-                                rects.Add(new Rectangle(x, y,
+                                var rect = new Rectangle(x, y,
                                     Utils.Clamp(64, 0, bounds.Width - x),
-                                    Utils.Clamp(64, 0, bounds.Height - y)));
+                                    Utils.Clamp(64, 0, bounds.Height - y));
+
+                                effect.Render(new Rectangle[] { rect }, 0, 1);
                             }
                         }
-                    }
-
-                    effect.Render(rects.ToArray(), 0, rects.Count);
+                    });
                 }
                 else
                 {
