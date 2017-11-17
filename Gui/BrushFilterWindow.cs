@@ -30,6 +30,11 @@ namespace BrushFilter
         private bool hasLoaded = false;
 
         /// <summary>
+        /// When true, the effect surface has 192 alpha as a preview.
+        /// </summary>
+        private bool doPreview = false;
+
+        /// <summary>
         /// Creates the list of brushes used by the brush selector.
         /// </summary>
         private BindingList<BrushSelectorItem> loadedBrushes;
@@ -2023,7 +2028,7 @@ namespace BrushFilter
                     sliderEffectProperty4.Minimum, sliderEffectProperty4.Maximum);
             }
 
-            //Applies an effect to the bitmap stroke.
+            //Applies an effect to the bitmap.
             ApplyFilter();
         }
 
@@ -2686,6 +2691,20 @@ namespace BrushFilter
 
                 bmpEffectDrawing = new Bitmap(dstArgs.Bitmap);
             }
+            
+            ApplyFilterAlpha();
+        }
+
+        /// <summary>
+        /// Makes the filter effect invisible or semi-opaque for previews.
+        /// </summary>
+        private unsafe void ApplyFilterAlpha()
+        {
+            //Doesn't compute the effect if it hasn't loaded yet.
+            if (bmpEffectAlpha == null)
+            {
+                return;
+            }
 
             //Copies the affected bitmap's alpha, then sets it to 0 so it can
             //be "uncovered" by the user's brush strokes.
@@ -2706,11 +2725,21 @@ namespace BrushFilter
                 {
                     int ptr = y * bmpData.Stride + x * 4;
                     bmpEffectAlpha[x, y] = pixRow[ptr + 3];
-                    pixRow[ptr + 3] = 0;
+                    if (doPreview)
+                    {
+                        pixRow[ptr + 3] = 192;
+                    }
+                    else
+                    {
+                        pixRow[ptr + 3] = 0;
+                    }
                 }
             });
 
             bmpEffectDrawing.UnlockBits(bmpData);
+
+            //Updates the displayed filter.
+            displayCanvas.Refresh();
         }
 
         /// <summary>
@@ -3235,6 +3264,7 @@ namespace BrushFilter
             this.displayCanvasBG.Controls.Add(this.displayCanvas);
             this.displayCanvasBG.Name = "displayCanvasBG";
             this.displayCanvasBG.MouseEnter += new System.EventHandler(this.displayCanvasBG_MouseEnter);
+            this.displayCanvasBG.MouseLeave += new System.EventHandler(this.EnablePreview);
             // 
             // displayCanvas
             // 
@@ -4130,6 +4160,7 @@ namespace BrushFilter
             displayCanvas.Focus();
 
             txtTooltip.Text = Globalization.GlobalStrings.GeneralTooltip;
+            DisablePreview(this, null);
         }
 
         /// <summary>
@@ -4303,8 +4334,8 @@ namespace BrushFilter
                 displayCanvas.ClientRectangle.Width + (sliderCanvasZoom.Value / 100),
                 displayCanvas.ClientRectangle.Height + (sliderCanvasZoom.Value / 100));
 
-            //Draws the effect surface when a brush stroke is being made.
-            if (isUserDrawing)
+            //Draws the effect surface for user drawing or as a preview.
+            if (isUserDrawing || doPreview)
             {
                 e.Graphics.DrawImage(bmpEffectDrawing, 0, 0,
                     displayCanvas.ClientRectangle.Width + (sliderCanvasZoom.Value / 100),
@@ -4381,6 +4412,31 @@ namespace BrushFilter
             displayCanvas.Focus();
 
             txtTooltip.Text = Globalization.GlobalStrings.GeneralTooltip;
+            DisablePreview(this, null);
+        }
+
+        /// <summary>
+        /// Displays a preview of the effect that was rendered.
+        /// </summary>
+        private void EnablePreview(object sender, EventArgs e)
+        {
+            if (!doPreview)
+            {
+                doPreview = true;
+                ApplyFilterAlpha();
+            }
+        }
+
+        /// <summary>
+        /// Hides the preview of the effect that was rendered.
+        /// </summary>
+        private void DisablePreview(object sender, EventArgs e)
+        {
+            if (doPreview)
+            {
+                doPreview = false;
+                ApplyFilterAlpha();
+            }
         }
 
         /// <summary>
@@ -4696,6 +4752,7 @@ namespace BrushFilter
             //Loads effect properties if the dialog has loaded.
             if (bmpEffectAlpha != null)
             {
+                doPreview = true;
                 SetEffectProperties(true);
             }
         }
@@ -4817,6 +4874,9 @@ namespace BrushFilter
         {
             txtEffectProperty1.Text =
                 txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
+
+            doPreview = true;
+            ApplyFilterAlpha();
         }
 
         /// <summary>
@@ -4834,6 +4894,9 @@ namespace BrushFilter
         {
             txtEffectProperty2.Text =
                 txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
+
+            doPreview = true;
+            ApplyFilterAlpha();
         }
 
         /// <summary>
@@ -4851,6 +4914,9 @@ namespace BrushFilter
         {
             txtEffectProperty3.Text =
                 txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
+
+            doPreview = true;
+            ApplyFilterAlpha();
         }
 
         /// <summary>
@@ -4868,6 +4934,9 @@ namespace BrushFilter
         {
             txtEffectProperty4.Text =
                 txtEffectProperty4.Tag + ": " + sliderEffectProperty4.Value;
+
+            doPreview = true;
+            ApplyFilterAlpha();
         }
 
         /// <summary>
