@@ -2691,15 +2691,7 @@ namespace BrushFilter
 
                 bmpEffectDrawing = new Bitmap(dstArgs.Bitmap);
             }
-            
-            ApplyFilterAlpha();
-        }
 
-        /// <summary>
-        /// Makes the filter effect invisible or semi-opaque for previews.
-        /// </summary>
-        private unsafe void ApplyFilterAlpha()
-        {
             //Doesn't compute the effect if it hasn't loaded yet.
             if (bmpEffectAlpha == null)
             {
@@ -4126,6 +4118,10 @@ namespace BrushFilter
                 isUserDrawing = true;
                 mouseLocPrev = e.Location;
 
+                //Removes the preview for cases where no mouse enter event fired.
+                doPreview = false;
+                ApplyFilter();
+
                 //Repositions the canvas when the user draws out-of-bounds.
                 timerRepositionUpdate.Enabled = true;
 
@@ -4423,7 +4419,7 @@ namespace BrushFilter
             if (!doPreview)
             {
                 doPreview = true;
-                ApplyFilterAlpha();
+                ApplyFilter();
             }
         }
 
@@ -4435,7 +4431,7 @@ namespace BrushFilter
             if (doPreview)
             {
                 doPreview = false;
-                ApplyFilterAlpha();
+                ApplyFilter();
             }
         }
 
@@ -4876,7 +4872,7 @@ namespace BrushFilter
                 txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
             doPreview = true;
-            ApplyFilterAlpha();
+            ApplyFilter();
         }
 
         /// <summary>
@@ -4896,7 +4892,7 @@ namespace BrushFilter
                 txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
             doPreview = true;
-            ApplyFilterAlpha();
+            ApplyFilter();
         }
 
         /// <summary>
@@ -4916,7 +4912,7 @@ namespace BrushFilter
                 txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
 
             doPreview = true;
-            ApplyFilterAlpha();
+            ApplyFilter();
         }
 
         /// <summary>
@@ -4936,7 +4932,7 @@ namespace BrushFilter
                 txtEffectProperty4.Tag + ": " + sliderEffectProperty4.Value;
 
             doPreview = true;
-            ApplyFilterAlpha();
+            ApplyFilter();
         }
 
         /// <summary>
