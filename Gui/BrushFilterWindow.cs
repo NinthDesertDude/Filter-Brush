@@ -2164,7 +2164,7 @@ namespace BrushFilter
             int canvWidth = canvas.Width;
             int canvHeight = canvas.Height;
 
-            //Iterates through each pixel in parallel.            
+            //Iterates through each pixel in parallel.         
             Parallel.For(0, brushRect.Height, (y) =>
             {
                 for (int x = 0; x < brushRect.Width; x++)
@@ -2188,7 +2188,8 @@ namespace BrushFilter
                     //Increases alpha by intensity to "uncover" the surface.
                     canvasRow[canvasPtr + 3] =
                         (byte)Utils.Clamp(canvasRow[canvasPtr + 3] +
-                        (int)((100 - intensity) * sliderIntensity), 0, bmpEffectAlpha[x, y]);
+                        (int)((100 - intensity) * sliderIntensity), 0,
+                            bmpEffectAlpha[canvasX + x, canvasY + y]);
                 }
             });
 
