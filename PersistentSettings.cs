@@ -184,6 +184,51 @@ namespace BrushFilter
         }
 
         /// <summary>
+        /// Sets the effect to be applied during filter drawing.
+        /// </summary>
+        public int EffectMode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the first property of the effect chosen.
+        /// </summary>
+        public int EffectProperty1
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the second property of the effect chosen.
+        /// </summary>
+        public int EffectProperty2
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the third property of the effect chosen.
+        /// </summary>
+        public int EffectProperty3
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the fourth property of the effect chosen.
+        /// </summary>
+        public int EffectProperty4
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Contains a list of all custom brushes to reload. The dialog will
         /// attempt to read the paths of each brush and add them if possible.
         /// </summary>
@@ -217,6 +262,11 @@ namespace BrushFilter
             int rotChange,
             int intensityChange,
             int symmetryMode,
+            int effectMode,
+            int valProperty1,
+            int valProperty2,
+            int valProperty3,
+            int valProperty4,
             List<string> customBrushLocations)
             : base()
         {
@@ -238,6 +288,11 @@ namespace BrushFilter
             RotChange = rotChange;
             IntensityChange = intensityChange;
             SymmetryMode = symmetryMode;
+            EffectMode = effectMode;
+            EffectProperty1 = valProperty1;
+            EffectProperty2 = valProperty2;
+            EffectProperty3 = valProperty3;
+            EffectProperty4 = valProperty4;
             CustomBrushLocations = new List<string>(customBrushLocations);
         }
 
@@ -265,6 +320,11 @@ namespace BrushFilter
             RotChange = other.RotChange;
             IntensityChange = other.IntensityChange;
             SymmetryMode = other.SymmetryMode;
+            EffectMode = other.EffectMode;
+            EffectProperty1 = other.EffectProperty1;
+            EffectProperty2 = other.EffectProperty2;
+            EffectProperty3 = other.EffectProperty3;
+            EffectProperty4 = other.EffectProperty4;
             CustomBrushLocations = new List<string>(other.CustomBrushLocations);
         }
         #endregion

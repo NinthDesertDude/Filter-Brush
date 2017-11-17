@@ -168,11 +168,557 @@
   <data name="ClearSettingsTip" xml:space="preserve">
     <value>Resets all settings to the default values they had when the plugin first loaded.</value>
   </data>
+  <data name="CmbxEffectAddNoise" xml:space="preserve">
+    <value>Add Noise</value>
+  </data>
+  <data name="CmbxEffectBlackWhite" xml:space="preserve">
+    <value>Black and White</value>
+  </data>
+  <data name="CmbxEffectBlur" xml:space="preserve">
+    <value>Blur</value>
+  </data>
+  <data name="CmbxEffectBrightnessContrast" xml:space="preserve">
+    <value>Brightness / Contrast</value>
+  </data>
+  <data name="CmbxEffectBulge" xml:space="preserve">
+    <value>Bulge</value>
+  </data>
+  <data name="CmbxEffectClouds" xml:space="preserve">
+    <value>Clouds</value>
+  </data>
+  <data name="CmbxEffectCrystalize" xml:space="preserve">
+    <value>Crystalize</value>
+  </data>
+  <data name="CmbxEffectDents" xml:space="preserve">
+    <value>Dents</value>
+  </data>
+  <data name="CmbxEffectDodgeBurn" xml:space="preserve">
+    <value>Dodge / Burn</value>
+  </data>
+  <data name="CmbxEffectEdgeDetect" xml:space="preserve">
+    <value>Edge Detect</value>
+  </data>
+  <data name="CmbxEffectEmboss" xml:space="preserve">
+    <value>Emboss</value>
+  </data>
+  <data name="CmbxEffectFlipHorizontal" xml:space="preserve">
+    <value>Flip Horizontal</value>
+  </data>
+  <data name="CmbxEffectFlipVertical" xml:space="preserve">
+    <value>Flip Vertical</value>
+  </data>
+  <data name="CmbxEffectFragment" xml:space="preserve">
+    <value>Fragment</value>
+  </data>
+  <data name="CmbxEffectFrostedGlass" xml:space="preserve">
+    <value>Frosted Glass</value>
+  </data>
+  <data name="CmbxEffectGlow" xml:space="preserve">
+    <value>Glow</value>
+  </data>
+  <data name="CmbxEffectHueSaturation" xml:space="preserve">
+    <value>Hue / Saturation</value>
+  </data>
+  <data name="CmbxEffectInkSketch" xml:space="preserve">
+    <value>Ink Sketch</value>
+  </data>
+  <data name="CmbxEffectInvertColors" xml:space="preserve">
+    <value>Invert Colors</value>
+  </data>
+  <data name="CmbxEffectMedian" xml:space="preserve">
+    <value>Median</value>
+  </data>
+  <data name="CmbxEffectMotionBlur" xml:space="preserve">
+    <value>Motion Blur</value>
+  </data>
+  <data name="CmbxEffectOilPainting" xml:space="preserve">
+    <value>Oil Painting</value>
+  </data>
+  <data name="CmbxEffectOutline" xml:space="preserve">
+    <value>Outline</value>
+  </data>
+  <data name="CmbxEffectPencilSketch" xml:space="preserve">
+    <value>Pencil Sketch</value>
+  </data>
+  <data name="CmbxEffectPixelate" xml:space="preserve">
+    <value>Pixelate</value>
+  </data>
+  <data name="CmbxEffectPosterize" xml:space="preserve">
+    <value>Posterize</value>
+  </data>
+  <data name="CmbxEffectReduceNoise" xml:space="preserve">
+    <value>Reduce Noise</value>
+  </data>
+  <data name="CmbxEffectRelief" xml:space="preserve">
+    <value>Relief</value>
+  </data>
+  <data name="CmbxEffectRgbTint" xml:space="preserve">
+    <value>Color Tint</value>
+  </data>
+  <data name="CmbxEffectSepia" xml:space="preserve">
+    <value>Sepia</value>
+  </data>
+  <data name="CmbxEffectSharpen" xml:space="preserve">
+    <value>Sharpen</value>
+  </data>
+  <data name="CmbxEffectSoftenPortrait" xml:space="preserve">
+    <value>Soften Portrait</value>
+  </data>
+  <data name="CmbxEffectSurfaceBlur" xml:space="preserve">
+    <value>Surface Blur</value>
+  </data>
+  <data name="CmbxEffectTileReflection" xml:space="preserve">
+    <value>Tile Reflection</value>
+  </data>
+  <data name="CmbxEffectTwist" xml:space="preserve">
+    <value>Twist</value>
+  </data>
+  <data name="CmbxEffectUnfocus" xml:space="preserve">
+    <value>Unfocus</value>
+  </data>
+  <data name="CmbxEffectVignette" xml:space="preserve">
+    <value>Vignette</value>
+  </data>
+  <data name="CmbxEffectZoomBlur" xml:space="preserve">
+    <value>Zoom Blur</value>
+  </data>
+  <data name="CmbxSymmetryBoth" xml:space="preserve">
+    <value>Symmetry: Both</value>
+  </data>
+  <data name="CmbxSymmetryHorz" xml:space="preserve">
+    <value>Symmetry: Horizontal</value>
+  </data>
+  <data name="CmbxSymmetryNone" xml:space="preserve">
+    <value>Symmetry: None</value>
+  </data>
+  <data name="CmbxSymmetryVert" xml:space="preserve">
+    <value>Symmetry: Vertical</value>
+  </data>
   <data name="CustomBrushLocations" xml:space="preserve">
     <value>Custom Brush Locations</value>
   </data>
   <data name="CustomBrushLocationsTip" xml:space="preserve">
     <value>Define where to look for brushes when this plugin loads.</value>
+  </data>
+  <data name="EffectAddNoiseProperty1" xml:space="preserve">
+    <value>Intensity</value>
+  </data>
+  <data name="EffectAddNoiseProperty1Tip" xml:space="preserve">
+    <value>How dark and bright the noise can be.</value>
+  </data>
+  <data name="EffectAddNoiseProperty2" xml:space="preserve">
+    <value>Color Saturation</value>
+  </data>
+  <data name="EffectAddNoiseProperty2Tip" xml:space="preserve">
+    <value>Low saturation is grayscale and high saturation yields vivid colors.</value>
+  </data>
+  <data name="EffectAddNoiseProperty3" xml:space="preserve">
+    <value>Coverage</value>
+  </data>
+  <data name="EffectAddNoiseProperty3Tip" xml:space="preserve">
+    <value>How much noise to add.</value>
+  </data>
+  <data name="EffectBlurProperty1" xml:space="preserve">
+    <value>Blur radius</value>
+  </data>
+  <data name="EffectBlurProperty1Tip" xml:space="preserve">
+    <value>A larger blur radius increases the blurring amount.</value>
+  </data>
+  <data name="EffectBrightnessContrastProperty1" xml:space="preserve">
+    <value>Brightness</value>
+  </data>
+  <data name="EffectBrightnessContrastProperty1Tip" xml:space="preserve">
+    <value>Changes how bright or dark the image is.</value>
+  </data>
+  <data name="EffectBrightnessContrastProperty2" xml:space="preserve">
+    <value>Contrast</value>
+  </data>
+  <data name="EffectBrightnessContrastProperty2Tip" xml:space="preserve">
+    <value>Changes the amount of contrast across the image to be smaller or greater.</value>
+  </data>
+  <data name="EffectBulgeProperty1" xml:space="preserve">
+    <value>Bulge</value>
+  </data>
+  <data name="EffectBulgeProperty1Tip" xml:space="preserve">
+    <value>The size of the bulge effect.</value>
+  </data>
+  <data name="EffectCloudsProperty1" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="EffectCloudsProperty1Tip" xml:space="preserve">
+    <value>The size of the cloud texture to render.</value>
+  </data>
+  <data name="EffectCloudsProperty2" xml:space="preserve">
+    <value>Roughness</value>
+  </data>
+  <data name="EffectCloudsProperty2Tip" xml:space="preserve">
+    <value>The edges of the clouds are roughened by this amount.</value>
+  </data>
+  <data name="EffectCrystalizeProperty1" xml:space="preserve">
+    <value>Cell Size</value>
+  </data>
+  <data name="EffectCrystalizeProperty1Tip" xml:space="preserve">
+    <value>Determines how large the shapes are.</value>
+  </data>
+  <data name="EffectCrystalizeProperty2" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="EffectCrystalizeProperty2Tip" xml:space="preserve">
+    <value>A higher quality usually results in better shapes.</value>
+  </data>
+  <data name="EffectDentsProperty1" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="EffectDentsProperty1Tip" xml:space="preserve">
+    <value>The size of the dents.</value>
+  </data>
+  <data name="EffectDentsProperty2" xml:space="preserve">
+    <value>Refraction</value>
+  </data>
+  <data name="EffectDentsProperty2Tip" xml:space="preserve">
+    <value>Higher values cause each dent to be drawn within itself more and more.</value>
+  </data>
+  <data name="EffectDentsProperty3" xml:space="preserve">
+    <value>Roughness</value>
+  </data>
+  <data name="EffectDentsProperty3Tip" xml:space="preserve">
+    <value>How much dithering to apply to the final result.</value>
+  </data>
+  <data name="EffectDentsProperty4" xml:space="preserve">
+    <value>Tension</value>
+  </data>
+  <data name="EffectDentsProperty4Tip" xml:space="preserve">
+    <value>How much distortion should be applied to the dents.</value>
+  </data>
+  <data name="EffectDodgeBurnProperty1" xml:space="preserve">
+    <value>Dodge or Burn</value>
+  </data>
+  <data name="EffectDodgeBurnProperty1Tip" xml:space="preserve">
+    <value>Negative values dodge (reduce saturation and increase value) and positive values burn (reduce value). Dodging makes things grayscale and lighter and burning makes them dark.</value>
+  </data>
+  <data name="EffectEdgeDetectProperty1" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="EffectEdgeDetectProperty1Tip" xml:space="preserve">
+    <value>Pixels opposite to an edge at this angle will be highlighted.</value>
+  </data>
+  <data name="EffectEmbossProperty1" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="EffectEmbossProperty1Tip" xml:space="preserve">
+    <value>Pixels opposite to an edge at this angle will be darkened.</value>
+  </data>
+  <data name="EffectFragmentProperty1" xml:space="preserve">
+    <value>Fragment Count</value>
+  </data>
+  <data name="EffectFragmentProperty1Tip" xml:space="preserve">
+    <value>How many fragments to create. Fragments are rotated evenly around a circle based on distance.</value>
+  </data>
+  <data name="EffectFragmentProperty2" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="EffectFragmentProperty2Tip" xml:space="preserve">
+    <value>How far apart each fragment is from the other.</value>
+  </data>
+  <data name="EffectFragmentProperty3" xml:space="preserve">
+    <value>Rotation</value>
+  </data>
+  <data name="EffectFragmentProperty3Tip" xml:space="preserve">
+    <value>Offsets the rotation of each fragment by an angle.</value>
+  </data>
+  <data name="EffectFrostedGlassProperty1" xml:space="preserve">
+    <value>Maximum Scatter Radius</value>
+  </data>
+  <data name="EffectFrostedGlassProperty1Tip" xml:space="preserve">
+    <value>The maximum distance each pixel will be displaced by.</value>
+  </data>
+  <data name="EffectFrostedGlassProperty2" xml:space="preserve">
+    <value>Minimum Scatter Radius</value>
+  </data>
+  <data name="EffectFrostedGlassProperty2Tip" xml:space="preserve">
+    <value>The minimum distance each pixel will be displaced by.</value>
+  </data>
+  <data name="EffectFrostedGlassProperty3" xml:space="preserve">
+    <value>Smoothness</value>
+  </data>
+  <data name="EffectFrostedGlassProperty3Tip" xml:space="preserve">
+    <value>Higher values decreases the sharpness of the scattered pixels in relation to their surrounding pixels.</value>
+  </data>
+  <data name="EffectGlowProperty1" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="EffectGlowProperty1Tip" xml:space="preserve">
+    <value>The distance of the glow from the pixels it's based on.</value>
+  </data>
+  <data name="EffectGlowProperty2" xml:space="preserve">
+    <value>Brightness</value>
+  </data>
+  <data name="EffectGlowProperty2Tip" xml:space="preserve">
+    <value>An overall increase or decrease in brightness.</value>
+  </data>
+  <data name="EffectGlowProperty3" xml:space="preserve">
+    <value>Contrast</value>
+  </data>
+  <data name="EffectGlowProperty3Tip" xml:space="preserve">
+    <value>An overall increase or decrease in contrast.</value>
+  </data>
+  <data name="EffectHueSaturationProperty1" xml:space="preserve">
+    <value>Hue</value>
+  </data>
+  <data name="EffectHueSaturationProperty1Tip" xml:space="preserve">
+    <value>Shifts the hue by an amount.</value>
+  </data>
+  <data name="EffectHueSaturationProperty2" xml:space="preserve">
+    <value>Saturation</value>
+  </data>
+  <data name="EffectHueSaturationProperty2Tip" xml:space="preserve">
+    <value>Changes the saturation. Lower values are bland and grayscale, higher values are vivid.</value>
+  </data>
+  <data name="EffectHueSaturationProperty3" xml:space="preserve">
+    <value>Lightness</value>
+  </data>
+  <data name="EffectHueSaturationProperty3Tip" xml:space="preserve">
+    <value>Changes the brightness. Lower values are dark and higher values are bright.</value>
+  </data>
+  <data name="EffectInkSketchProperty1" xml:space="preserve">
+    <value>Ink Outline</value>
+  </data>
+  <data name="EffectInkSketchProperty1Tip" xml:space="preserve">
+    <value>Determines the width of the outlines.</value>
+  </data>
+  <data name="EffectInkSketchProperty2" xml:space="preserve">
+    <value>Coloring</value>
+  </data>
+  <data name="EffectInkSketchProperty2Tip" xml:space="preserve">
+    <value>Determines how much color is used in the ink sketch.</value>
+  </data>
+  <data name="EffectMedianProperty1" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="EffectMedianProperty1Tip" xml:space="preserve">
+    <value>Larger values increase the amount of mellowing applied to the image.</value>
+  </data>
+  <data name="EffectMedianProperty2" xml:space="preserve">
+    <value>Percentile</value>
+  </data>
+  <data name="EffectMedianProperty2Tip" xml:space="preserve">
+    <value>Low values leave sharp contrasts more intact.</value>
+  </data>
+  <data name="EffectMotionBlurProperty1" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="EffectMotionBlurProperty1Tip" xml:space="preserve">
+    <value>Everything is smeared in this direction, based on an angle.</value>
+  </data>
+  <data name="EffectMotionBlurProperty2" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="EffectMotionBlurProperty2Tip" xml:space="preserve">
+    <value>The distance of the smear determines how far each pixel is smeared.</value>
+  </data>
+  <data name="EffectOilPaintingProperty1" xml:space="preserve">
+    <value>Brush Size</value>
+  </data>
+  <data name="EffectOilPaintingProperty1Tip" xml:space="preserve">
+    <value>A large brush size makes wide strokes, while a small brush size makes smaller strokes.</value>
+  </data>
+  <data name="EffectOilPaintingProperty2" xml:space="preserve">
+    <value>Coarseness</value>
+  </data>
+  <data name="EffectOilPaintingProperty2Tip" xml:space="preserve">
+    <value>The amount of blending used. Small values create sharp edges in the resulting image.</value>
+  </data>
+  <data name="EffectOutlineProperty1" xml:space="preserve">
+    <value>Thickness</value>
+  </data>
+  <data name="EffectOutlineProperty1Tip" xml:space="preserve">
+    <value>How much blurring to apply before the outline effect.</value>
+  </data>
+  <data name="EffectOutlineProperty2" xml:space="preserve">
+    <value>Intensity</value>
+  </data>
+  <data name="EffectOutlineProperty2Tip" xml:space="preserve">
+    <value>Higher values increase the effect of the outline.</value>
+  </data>
+  <data name="EffectPencilSketchProperty1" xml:space="preserve">
+    <value>Pencil Tip Size</value>
+  </data>
+  <data name="EffectPencilSketchProperty1Tip" xml:space="preserve">
+    <value>Larger pencil tip sizes result in less detail. (On photographs, small values don't look much like a sketch.)</value>
+  </data>
+  <data name="EffectPencilSketchProperty2" xml:space="preserve">
+    <value>Range</value>
+  </data>
+  <data name="EffectPencilSketchProperty2Tip" xml:space="preserve">
+    <value>Normal pencils don't go from stark white to pitch black, but a high value here will make the resulting image like that.</value>
+  </data>
+  <data name="EffectPixelateProperty1" xml:space="preserve">
+    <value>Cell Size</value>
+  </data>
+  <data name="EffectPixelateProperty1Tip" xml:space="preserve">
+    <value>The size of each cell in the effect.</value>
+  </data>
+  <data name="EffectPosterizeProperty1" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="EffectPosterizeProperty1Tip" xml:space="preserve">
+    <value>Truncates red channel values by grouping them into multiples of this value.</value>
+  </data>
+  <data name="EffectPosterizeProperty2" xml:space="preserve">
+    <value>Green</value>
+  </data>
+  <data name="EffectPosterizeProperty2Tip" xml:space="preserve">
+    <value>Truncates green channel values by grouping them into multiples of this value.</value>
+  </data>
+  <data name="EffectPosterizeProperty3" xml:space="preserve">
+    <value>Blue</value>
+  </data>
+  <data name="EffectPosterizeProperty3Tip" xml:space="preserve">
+    <value>Truncates blue channel values by grouping them into multiples of this value.</value>
+  </data>
+  <data name="EffectReduceNoiseProperty1" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="EffectReduceNoiseProperty1Tip" xml:space="preserve">
+    <value>The size of the noise reduction.</value>
+  </data>
+  <data name="EffectReduceNoiseProperty2" xml:space="preserve">
+    <value>Strength</value>
+  </data>
+  <data name="EffectReduceNoiseProperty2Tip" xml:space="preserve">
+    <value>How much the noise is reduced.</value>
+  </data>
+  <data name="EffectReliefProperty1" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="EffectReliefProperty1Tip" xml:space="preserve">
+    <value>Pixels opposite to an edge at this angle will be extended from the edge to make the edge thicker.</value>
+  </data>
+  <data name="EffectRgbTintProperty1" xml:space="preserve">
+    <value>Redness</value>
+  </data>
+  <data name="EffectRgbTintProperty1Tip" xml:space="preserve">
+    <value>How much red to add or subtract from each pixel.</value>
+  </data>
+  <data name="EffectRgbTintProperty2" xml:space="preserve">
+    <value>Greenness</value>
+  </data>
+  <data name="EffectRgbTintProperty2Tip" xml:space="preserve">
+    <value>How much green to add or subtract from each pixel.</value>
+  </data>
+  <data name="EffectRgbTintProperty3" xml:space="preserve">
+    <value>Blueness</value>
+  </data>
+  <data name="EffectRgbTintProperty3Tip" xml:space="preserve">
+    <value>How much blue to add or subtract from each pixel.</value>
+  </data>
+  <data name="EffectSharpenProperty1" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="EffectSharpenProperty1Tip" xml:space="preserve">
+    <value>How much sharpening should be applied.</value>
+  </data>
+  <data name="EffectSoftenPortraitProperty1" xml:space="preserve">
+    <value>Softness</value>
+  </data>
+  <data name="EffectSoftenPortraitProperty1Tip" xml:space="preserve">
+    <value>How much more mellow the contrasts in the image are.</value>
+  </data>
+  <data name="EffectSoftenPortraitProperty2" xml:space="preserve">
+    <value>Lighting</value>
+  </data>
+  <data name="EffectSoftenPortraitProperty2Tip" xml:space="preserve">
+    <value>A general increase or decrease in brightness.</value>
+  </data>
+  <data name="EffectSoftenPortraitProperty3" xml:space="preserve">
+    <value>Warmth</value>
+  </data>
+  <data name="EffectSoftenPortraitProperty3Tip" xml:space="preserve">
+    <value>Adds extra redness to the image to make it seem "warmer".</value>
+  </data>
+  <data name="EffectSurfaceBlurProperty1" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="EffectSurfaceBlurProperty1Tip" xml:space="preserve">
+    <value>The width of the blur.</value>
+  </data>
+  <data name="EffectSurfaceBlurProperty2" xml:space="preserve">
+    <value>Threshold</value>
+  </data>
+  <data name="EffectSurfaceBlurProperty2Tip" xml:space="preserve">
+    <value>Low values preserve datail and higher values increase the blurring.</value>
+  </data>
+  <data name="EffectTileReflectionProperty1" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="EffectTileReflectionProperty1Tip" xml:space="preserve">
+    <value>The tiles will be slanted at this angle.</value>
+  </data>
+  <data name="EffectTileReflectionProperty2" xml:space="preserve">
+    <value>Tile Size</value>
+  </data>
+  <data name="EffectTileReflectionProperty2Tip" xml:space="preserve">
+    <value>The size of each tile.</value>
+  </data>
+  <data name="EffectTileReflectionProperty3" xml:space="preserve">
+    <value>Curvature</value>
+  </data>
+  <data name="EffectTileReflectionProperty3Tip" xml:space="preserve">
+    <value>How much each tile is curved.</value>
+  </data>
+  <data name="EffectTileReflectionProperty4" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="EffectTileReflectionProperty4Tip" xml:space="preserve">
+    <value>The overall quality.</value>
+  </data>
+  <data name="EffectTwistProperty1" xml:space="preserve">
+    <value>Amount / Direction</value>
+  </data>
+  <data name="EffectTwistProperty1Tip" xml:space="preserve">
+    <value>The amount of twisting.</value>
+  </data>
+  <data name="EffectTwistProperty2" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="EffectTwistProperty2Tip" xml:space="preserve">
+    <value>The size of the twist effect.</value>
+  </data>
+  <data name="EffectTwistProperty3" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="EffectTwistProperty3Tip" xml:space="preserve">
+    <value>The overall quality.</value>
+  </data>
+  <data name="EffectType" xml:space="preserve">
+    <value>Effect Type</value>
+  </data>
+  <data name="EffectTypeTip" xml:space="preserve">
+    <value>Click to select the effect to apply.</value>
+  </data>
+  <data name="EffectUnfocusProperty1" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="EffectUnfocusProperty1Tip" xml:space="preserve">
+    <value>The size of the effect.</value>
+  </data>
+  <data name="EffectVignetteProperty1" xml:space="preserve">
+    <value>Radius</value>
+  </data>
+  <data name="EffectVignetteProperty1Tip" xml:space="preserve">
+    <value>The size of the unaffected region.</value>
+  </data>
+  <data name="EffectVignetteProperty2" xml:space="preserve">
+    <value>Density</value>
+  </data>
+  <data name="EffectVignetteProperty2Tip" xml:space="preserve">
+    <value>A high density has little fading from the black border to the image.</value>
+  </data>
+  <data name="EffectZoomBlurProperty1" xml:space="preserve">
+    <value>Zoom Amount</value>
+  </data>
+  <data name="EffectZoomBlurProperty1Tip" xml:space="preserve">
+    <value>The amount of zooming of the main image, the rest of which is blurred.</value>
   </data>
   <data name="GeneralTooltip" xml:space="preserve">
     <value>Middle click and drag to pan image. Right-click for options. Hover over items for details.</value>
@@ -297,6 +843,9 @@
   <data name="TabControls" xml:space="preserve">
     <value>Controls</value>
   </data>
+  <data name="TabEffect" xml:space="preserve">
+    <value>Effect</value>
+  </data>
   <data name="TabJitter" xml:space="preserve">
     <value>Jitter</value>
   </data>
@@ -310,6 +859,6 @@
     <value>Undo</value>
   </data>
   <data name="UndoTip" xml:space="preserve">
-    <value>Undo Shortcut: Ctrl + Z. Undo the last drawing, if possible.</value>
+    <value>Undo Shortcut: Ctrl + Z. Undo the last change, if possible.</value>
   </data>
 </root>
