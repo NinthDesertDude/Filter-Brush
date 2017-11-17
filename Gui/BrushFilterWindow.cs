@@ -22,6 +22,11 @@ namespace BrushFilter
     public class winBrushFilter : EffectConfigDialog
     {
         #region Fields
+        /// <summary>
+        /// Causes the dialog to load when ready. The first time the dialog
+        /// is called it will apply the filter twice, then PDN will stop
+        /// calling DialogLoad and it will be applied once.
+        /// </summary>
         private bool hasLoaded = false;
 
         /// <summary>
@@ -3171,16 +3176,16 @@ namespace BrushFilter
             this.bttnBrushSelector = new System.Windows.Forms.ComboBox();
             this.tabBar = new System.Windows.Forms.TabControl();
             this.tabEffect = new System.Windows.Forms.TabPage();
-            this.cmbxEffectType = new System.Windows.Forms.ComboBox();
-            this.txtEffectType = new System.Windows.Forms.Label();
-            this.txtEffectProperty3 = new System.Windows.Forms.Label();
-            this.sliderEffectProperty3 = new System.Windows.Forms.TrackBar();
-            this.txtEffectProperty4 = new System.Windows.Forms.Label();
-            this.sliderEffectProperty4 = new System.Windows.Forms.TrackBar();
-            this.txtEffectProperty1 = new System.Windows.Forms.Label();
-            this.sliderEffectProperty1 = new System.Windows.Forms.TrackBar();
-            this.txtEffectProperty2 = new System.Windows.Forms.Label();
             this.sliderEffectProperty2 = new System.Windows.Forms.TrackBar();
+            this.txtEffectProperty2 = new System.Windows.Forms.Label();
+            this.sliderEffectProperty1 = new System.Windows.Forms.TrackBar();
+            this.txtEffectProperty1 = new System.Windows.Forms.Label();
+            this.sliderEffectProperty4 = new System.Windows.Forms.TrackBar();
+            this.txtEffectProperty4 = new System.Windows.Forms.Label();
+            this.sliderEffectProperty3 = new System.Windows.Forms.TrackBar();
+            this.txtEffectProperty3 = new System.Windows.Forms.Label();
+            this.txtEffectType = new System.Windows.Forms.Label();
+            this.cmbxEffectType = new System.Windows.Forms.ComboBox();
             this.displayCanvasBG.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.displayCanvas)).BeginInit();
             this.tabOther.SuspendLayout();
@@ -3205,10 +3210,10 @@ namespace BrushFilter
             ((System.ComponentModel.ISupportInitialize)(this.sliderCanvasZoom)).BeginInit();
             this.tabBar.SuspendLayout();
             this.tabEffect.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty3)).BeginInit();
             this.SuspendLayout();
             // 
             // timerRepositionUpdate
@@ -3689,59 +3694,23 @@ namespace BrushFilter
             resources.ApplyResources(this.tabEffect, "tabEffect");
             this.tabEffect.Name = "tabEffect";
             // 
-            // cmbxEffectType
+            // sliderEffectProperty2
             // 
-            this.cmbxEffectType.FormattingEnabled = true;
-            resources.ApplyResources(this.cmbxEffectType, "cmbxEffectType");
-            this.cmbxEffectType.Name = "cmbxEffectType";
-            this.cmbxEffectType.MouseEnter += new System.EventHandler(this.cmbxEffectType_MouseEnter);
+            resources.ApplyResources(this.sliderEffectProperty2, "sliderEffectProperty2");
+            this.sliderEffectProperty2.LargeChange = 1;
+            this.sliderEffectProperty2.Maximum = 500;
+            this.sliderEffectProperty2.Name = "sliderEffectProperty2";
+            this.sliderEffectProperty2.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.sliderEffectProperty2.ValueChanged += new System.EventHandler(this.sliderEffectProperty2_ValueChanged);
+            this.sliderEffectProperty2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
+            this.sliderEffectProperty2.MouseEnter += new System.EventHandler(this.sliderEffectProperty2_MouseEnter);
+            this.sliderEffectProperty2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
             // 
-            // txtEffectType
+            // txtEffectProperty2
             // 
-            resources.ApplyResources(this.txtEffectType, "txtEffectType");
-            this.txtEffectType.Name = "txtEffectType";
-            // 
-            // txtEffectProperty3
-            // 
-            resources.ApplyResources(this.txtEffectProperty3, "txtEffectProperty3");
-            this.txtEffectProperty3.BackColor = System.Drawing.Color.Transparent;
-            this.txtEffectProperty3.Name = "txtEffectProperty3";
-            // 
-            // sliderEffectProperty3
-            // 
-            resources.ApplyResources(this.sliderEffectProperty3, "sliderEffectProperty3");
-            this.sliderEffectProperty3.LargeChange = 1;
-            this.sliderEffectProperty3.Maximum = 180;
-            this.sliderEffectProperty3.Name = "sliderEffectProperty3";
-            this.sliderEffectProperty3.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderEffectProperty3.ValueChanged += new System.EventHandler(this.sliderEffectProperty3_ValueChanged);
-            this.sliderEffectProperty3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
-            this.sliderEffectProperty3.MouseEnter += new System.EventHandler(this.sliderEffectProperty3_MouseEnter);
-            this.sliderEffectProperty3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
-            // 
-            // txtEffectProperty4
-            // 
-            resources.ApplyResources(this.txtEffectProperty4, "txtEffectProperty4");
-            this.txtEffectProperty4.BackColor = System.Drawing.Color.Transparent;
-            this.txtEffectProperty4.Name = "txtEffectProperty4";
-            // 
-            // sliderEffectProperty4
-            // 
-            resources.ApplyResources(this.sliderEffectProperty4, "sliderEffectProperty4");
-            this.sliderEffectProperty4.LargeChange = 1;
-            this.sliderEffectProperty4.Maximum = 180;
-            this.sliderEffectProperty4.Name = "sliderEffectProperty4";
-            this.sliderEffectProperty4.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderEffectProperty4.ValueChanged += new System.EventHandler(this.sliderEffectProperty4_ValueChanged);
-            this.sliderEffectProperty4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
-            this.sliderEffectProperty4.MouseEnter += new System.EventHandler(this.sliderEffectProperty4_MouseEnter);
-            this.sliderEffectProperty4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
-            // 
-            // txtEffectProperty1
-            // 
-            this.txtEffectProperty1.BackColor = System.Drawing.Color.Transparent;
-            resources.ApplyResources(this.txtEffectProperty1, "txtEffectProperty1");
-            this.txtEffectProperty1.Name = "txtEffectProperty1";
+            this.txtEffectProperty2.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.txtEffectProperty2, "txtEffectProperty2");
+            this.txtEffectProperty2.Name = "txtEffectProperty2";
             // 
             // sliderEffectProperty1
             // 
@@ -3755,23 +3724,59 @@ namespace BrushFilter
             this.sliderEffectProperty1.MouseEnter += new System.EventHandler(this.sliderEffectProperty1_MouseEnter);
             this.sliderEffectProperty1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
             // 
-            // txtEffectProperty2
+            // txtEffectProperty1
             // 
-            this.txtEffectProperty2.BackColor = System.Drawing.Color.Transparent;
-            resources.ApplyResources(this.txtEffectProperty2, "txtEffectProperty2");
-            this.txtEffectProperty2.Name = "txtEffectProperty2";
+            this.txtEffectProperty1.BackColor = System.Drawing.Color.Transparent;
+            resources.ApplyResources(this.txtEffectProperty1, "txtEffectProperty1");
+            this.txtEffectProperty1.Name = "txtEffectProperty1";
             // 
-            // sliderEffectProperty2
+            // sliderEffectProperty4
             // 
-            resources.ApplyResources(this.sliderEffectProperty2, "sliderEffectProperty2");
-            this.sliderEffectProperty2.LargeChange = 1;
-            this.sliderEffectProperty2.Maximum = 500;
-            this.sliderEffectProperty2.Name = "sliderEffectProperty2";
-            this.sliderEffectProperty2.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderEffectProperty2.ValueChanged += new System.EventHandler(this.sliderEffectProperty2_ValueChanged);
-            this.sliderEffectProperty2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
-            this.sliderEffectProperty2.MouseEnter += new System.EventHandler(this.sliderEffectProperty2_MouseEnter);
-            this.sliderEffectProperty2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
+            resources.ApplyResources(this.sliderEffectProperty4, "sliderEffectProperty4");
+            this.sliderEffectProperty4.LargeChange = 1;
+            this.sliderEffectProperty4.Maximum = 180;
+            this.sliderEffectProperty4.Name = "sliderEffectProperty4";
+            this.sliderEffectProperty4.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.sliderEffectProperty4.ValueChanged += new System.EventHandler(this.sliderEffectProperty4_ValueChanged);
+            this.sliderEffectProperty4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
+            this.sliderEffectProperty4.MouseEnter += new System.EventHandler(this.sliderEffectProperty4_MouseEnter);
+            this.sliderEffectProperty4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
+            // 
+            // txtEffectProperty4
+            // 
+            resources.ApplyResources(this.txtEffectProperty4, "txtEffectProperty4");
+            this.txtEffectProperty4.BackColor = System.Drawing.Color.Transparent;
+            this.txtEffectProperty4.Name = "txtEffectProperty4";
+            // 
+            // sliderEffectProperty3
+            // 
+            resources.ApplyResources(this.sliderEffectProperty3, "sliderEffectProperty3");
+            this.sliderEffectProperty3.LargeChange = 1;
+            this.sliderEffectProperty3.Maximum = 180;
+            this.sliderEffectProperty3.Name = "sliderEffectProperty3";
+            this.sliderEffectProperty3.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.sliderEffectProperty3.ValueChanged += new System.EventHandler(this.sliderEffectProperty3_ValueChanged);
+            this.sliderEffectProperty3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
+            this.sliderEffectProperty3.MouseEnter += new System.EventHandler(this.sliderEffectProperty3_MouseEnter);
+            this.sliderEffectProperty3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
+            // 
+            // txtEffectProperty3
+            // 
+            resources.ApplyResources(this.txtEffectProperty3, "txtEffectProperty3");
+            this.txtEffectProperty3.BackColor = System.Drawing.Color.Transparent;
+            this.txtEffectProperty3.Name = "txtEffectProperty3";
+            // 
+            // txtEffectType
+            // 
+            resources.ApplyResources(this.txtEffectType, "txtEffectType");
+            this.txtEffectType.Name = "txtEffectType";
+            // 
+            // cmbxEffectType
+            // 
+            this.cmbxEffectType.FormattingEnabled = true;
+            resources.ApplyResources(this.cmbxEffectType, "cmbxEffectType");
+            this.cmbxEffectType.Name = "cmbxEffectType";
+            this.cmbxEffectType.MouseEnter += new System.EventHandler(this.cmbxEffectType_MouseEnter);
             // 
             // winBrushFilter
             // 
@@ -3791,6 +3796,7 @@ namespace BrushFilter
             this.Load += new System.EventHandler(this.winBrushFilter_DialogLoad);
             this.Shown += new System.EventHandler(this.winBrushFilter_DialogShown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.winBrushFilter_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.winBrushFilter_KeyUp);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.displayCanvas_MouseWheel);
             this.Resize += new System.EventHandler(this.winBrushFilter_Resize);
             this.displayCanvasBG.ResumeLayout(false);
@@ -3819,10 +3825,10 @@ namespace BrushFilter
             this.tabBar.ResumeLayout(false);
             this.tabEffect.ResumeLayout(false);
             this.tabEffect.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sliderEffectProperty3)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4042,6 +4048,18 @@ namespace BrushFilter
             if (e.Alt)
             {
                 e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Re-applies a filter after undo or redo is released.
+        /// </summary>
+        private void winBrushFilter_KeyUp(object sender, KeyEventArgs e)
+        {
+            //When undo or redo is released, re-apply the filter.
+            if (e.Control && (e.KeyCode == Keys.Z || e.KeyCode == Keys.Y))
+            {
+                ApplyFilter();
             }
         }
 
@@ -4569,9 +4587,6 @@ namespace BrushFilter
                     Utils.CopyBitmapPure(redoBmp, bmpCurrentDrawing);
                 }
 
-                //Applies an effect to the bitmap stroke.
-                ApplyFilter();
-
                 displayCanvas.Refresh();
             }
             else
@@ -4583,6 +4598,7 @@ namespace BrushFilter
             if (redoHistory.Count == 0)
             {
                 bttnRedo.Enabled = false;
+                ApplyFilter();
             }
             if (!bttnUndo.Enabled && undoHistory.Count > 0)
             {
@@ -4629,9 +4645,6 @@ namespace BrushFilter
                     Utils.CopyBitmapPure(undoBmp, bmpCurrentDrawing);
                 }
 
-                //Applies an effect to the bitmap stroke.
-                ApplyFilter();
-
                 displayCanvas.Refresh();
             }
             else
@@ -4643,6 +4656,7 @@ namespace BrushFilter
             if (undoHistory.Count == 0)
             {
                 bttnUndo.Enabled = false;
+                ApplyFilter();
             }
             if (!bttnRedo.Enabled && redoHistory.Count > 0)
             {
