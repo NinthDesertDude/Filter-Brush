@@ -22,6 +22,8 @@ namespace BrushFilter
     public class winBrushFilter : EffectConfigDialog
     {
         #region Fields
+        private bool hasLoaded = false;
+
         /// <summary>
         /// Creates the list of brushes used by the brush selector.
         /// </summary>
@@ -763,7 +765,7 @@ namespace BrushFilter
         /// Updates the effect properties' labels and slider values to
         /// reflect the current effect choice.
         /// </summary>
-        private void SetEffectProperties()
+        private void SetEffectProperties(bool resetSliders)
         {
             switch (((Tuple<string, CmbxEffectOptions>)cmbxEffectType.SelectedItem).Item2)
             {
@@ -810,11 +812,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = -100;
                     sliderEffectProperty1.Maximum = 100;
-                    sliderEffectProperty1.Value = 0;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
 
                     sliderEffectProperty2.Minimum = -100;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 0;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1;
@@ -846,15 +848,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = -180;
                     sliderEffectProperty1.Maximum = 180;
-                    sliderEffectProperty1.Value = 0;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 200;
-                    sliderEffectProperty2.Value = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
 
                     sliderEffectProperty3.Minimum = -100;
                     sliderEffectProperty3.Maximum = 100;
-                    sliderEffectProperty3.Value = 0;
+                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1;
@@ -890,15 +892,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 2;
                     sliderEffectProperty1.Maximum = 64;
-                    sliderEffectProperty1.Value = 16;
+                    if (resetSliders) { sliderEffectProperty1.Value = 16; }
 
                     sliderEffectProperty2.Minimum = 2;
                     sliderEffectProperty2.Maximum = 64;
-                    sliderEffectProperty2.Value = 16;
+                    if (resetSliders) { sliderEffectProperty2.Value = 16; }
 
                     sliderEffectProperty3.Minimum = 2;
                     sliderEffectProperty3.Maximum = 64;
-                    sliderEffectProperty3.Value = 16;
+                    if (resetSliders) { sliderEffectProperty3.Value = 16; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1;
@@ -934,11 +936,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 99;
-                    sliderEffectProperty1.Value = 50;
+                    if (resetSliders) { sliderEffectProperty1.Value = 50; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 50;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1;
@@ -970,11 +972,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 8;
-                    sliderEffectProperty1.Value = 3;
+                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
 
                     sliderEffectProperty2.Minimum = 2;
                     sliderEffectProperty2.Maximum = 255;
-                    sliderEffectProperty2.Value = 50;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1;
@@ -1006,11 +1008,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 20;
-                    sliderEffectProperty1.Value = 2;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
 
                     sliderEffectProperty2.Minimum = -20;
                     sliderEffectProperty2.Maximum = 20;
-                    sliderEffectProperty2.Value = 0;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1;
@@ -1042,15 +1044,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 2;
                     sliderEffectProperty1.Maximum = 50;
-                    sliderEffectProperty1.Value = 4;
+                    if (resetSliders) { sliderEffectProperty1.Value = 4; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 8;
+                    if (resetSliders) { sliderEffectProperty2.Value = 8; }
 
                     sliderEffectProperty3.Minimum = 0;
                     sliderEffectProperty3.Maximum = 359;
-                    sliderEffectProperty3.Value = 0;
+                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1;
@@ -1086,7 +1088,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 2;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 2;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1;
@@ -1114,11 +1116,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 359;
-                    sliderEffectProperty1.Value = 25;
+                    if (resetSliders) { sliderEffectProperty1.Value = 25; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 200;
-                    sliderEffectProperty2.Value = 10;
+                    if (resetSliders) { sliderEffectProperty2.Value = 10; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1;
@@ -1150,11 +1152,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 100;
-                    sliderEffectProperty1.Value = 6;
+                    if (resetSliders) { sliderEffectProperty1.Value = 6; }
 
                     sliderEffectProperty2.Minimum = 1;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 15;
+                    if (resetSliders) { sliderEffectProperty2.Value = 15; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1;
@@ -1186,7 +1188,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 4;
+                    if (resetSliders) { sliderEffectProperty1.Value = 4; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1;
@@ -1214,7 +1216,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 100;
-                    sliderEffectProperty1.Value = 10;
+                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1;
@@ -1242,7 +1244,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = -200;
                     sliderEffectProperty1.Maximum = 100;
-                    sliderEffectProperty1.Value = 45;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1;
@@ -1270,11 +1272,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 2;
                     sliderEffectProperty1.Maximum = 250;
-                    sliderEffectProperty1.Value = 8;
+                    if (resetSliders) { sliderEffectProperty1.Value = 8; }
 
                     sliderEffectProperty2.Minimum = 1;
                     sliderEffectProperty2.Maximum = 5;
-                    sliderEffectProperty2.Value = 2;
+                    if (resetSliders) { sliderEffectProperty2.Value = 2; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1;
@@ -1306,19 +1308,19 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 25;
+                    if (resetSliders) { sliderEffectProperty1.Value = 25; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 200;
-                    sliderEffectProperty2.Value = 50;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
 
                     sliderEffectProperty3.Minimum = 0;
                     sliderEffectProperty3.Maximum = 100;
-                    sliderEffectProperty3.Value = 10;
+                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
 
                     sliderEffectProperty4.Minimum = 0;
                     sliderEffectProperty4.Maximum = 100;
-                    sliderEffectProperty4.Value = 10;
+                    if (resetSliders) { sliderEffectProperty4.Value = 10; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1;
@@ -1358,15 +1360,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 3;
+                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 200;
-                    sliderEffectProperty2.Value = 0;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
 
                     sliderEffectProperty3.Minimum = 1;
                     sliderEffectProperty3.Maximum = 8;
-                    sliderEffectProperty3.Value = 2;
+                    if (resetSliders) { sliderEffectProperty3.Value = 2; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1;
@@ -1402,7 +1404,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 100;
-                    sliderEffectProperty1.Value = 2;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1;
@@ -1430,19 +1432,19 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 359;
-                    sliderEffectProperty1.Value = 30;
+                    if (resetSliders) { sliderEffectProperty1.Value = 30; }
 
                     sliderEffectProperty2.Minimum = 1;
                     sliderEffectProperty2.Maximum = 800;
-                    sliderEffectProperty2.Value = 40;
+                    if (resetSliders) { sliderEffectProperty2.Value = 40; }
 
                     sliderEffectProperty3.Minimum = -100;
                     sliderEffectProperty3.Maximum = 100;
-                    sliderEffectProperty3.Value = 8;
+                    if (resetSliders) { sliderEffectProperty3.Value = 8; }
 
                     sliderEffectProperty4.Minimum = 1;
                     sliderEffectProperty4.Maximum = 5;
-                    sliderEffectProperty4.Value = 2;
+                    if (resetSliders) { sliderEffectProperty4.Value = 2; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1;
@@ -1482,15 +1484,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = -200;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 30;
+                    if (resetSliders) { sliderEffectProperty1.Value = 30; }
 
                     sliderEffectProperty2.Minimum = 1;
                     sliderEffectProperty2.Maximum = 20000;
-                    sliderEffectProperty2.Value = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
 
                     sliderEffectProperty3.Minimum = 1;
                     sliderEffectProperty3.Maximum = 5;
-                    sliderEffectProperty3.Value = 2;
+                    if (resetSliders) { sliderEffectProperty3.Value = 2; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1;
@@ -1526,15 +1528,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 100;
-                    sliderEffectProperty1.Value = 64;
+                    if (resetSliders) { sliderEffectProperty1.Value = 64; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 400;
-                    sliderEffectProperty2.Value = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
 
                     sliderEffectProperty3.Minimum = 0;
                     sliderEffectProperty3.Maximum = 100;
-                    sliderEffectProperty3.Value = 100;
+                    if (resetSliders) { sliderEffectProperty3.Value = 100; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1;
@@ -1570,11 +1572,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 10;
+                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 50;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1;
@@ -1606,11 +1608,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 10;
+                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 40;
+                    if (resetSliders) { sliderEffectProperty2.Value = 40; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1;
@@ -1642,15 +1644,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 20;
-                    sliderEffectProperty1.Value = 6;
+                    if (resetSliders) { sliderEffectProperty1.Value = 6; }
 
                     sliderEffectProperty2.Minimum = -100;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 10;
+                    if (resetSliders) { sliderEffectProperty2.Value = 10; }
 
                     sliderEffectProperty3.Minimum = -100;
                     sliderEffectProperty3.Maximum = 100;
-                    sliderEffectProperty3.Value = 10;
+                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1;
@@ -1686,7 +1688,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 20;
-                    sliderEffectProperty1.Value = 2;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1;
@@ -1714,15 +1716,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 10;
-                    sliderEffectProperty1.Value = 5;
+                    if (resetSliders) { sliderEffectProperty1.Value = 5; }
 
                     sliderEffectProperty2.Minimum = -20;
                     sliderEffectProperty2.Maximum = 20;
-                    sliderEffectProperty2.Value = 0;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
 
                     sliderEffectProperty3.Minimum = 0;
                     sliderEffectProperty3.Maximum = 20;
-                    sliderEffectProperty3.Value = 10;
+                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1;
@@ -1758,11 +1760,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 40;
-                    sliderEffectProperty1.Value = 5;
+                    if (resetSliders) { sliderEffectProperty1.Value = 5; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1;
@@ -1794,11 +1796,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 2;
                     sliderEffectProperty1.Maximum = 1000;
-                    sliderEffectProperty1.Value = 65;
+                    if (resetSliders) { sliderEffectProperty1.Value = 65; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 50;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1;
@@ -1830,7 +1832,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 359;
-                    sliderEffectProperty1.Value = 45;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1;
@@ -1858,7 +1860,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 359;
-                    sliderEffectProperty1.Value = 45;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1;
@@ -1886,11 +1888,11 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 1;
                     sliderEffectProperty1.Maximum = 200;
-                    sliderEffectProperty1.Value = 3;
+                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
 
                     sliderEffectProperty2.Minimum = 0;
                     sliderEffectProperty2.Maximum = 100;
-                    sliderEffectProperty2.Value = 50;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1;
@@ -1922,7 +1924,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = 0;
                     sliderEffectProperty1.Maximum = 359;
-                    sliderEffectProperty1.Value = 45;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1;
@@ -1950,7 +1952,7 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = -50;
                     sliderEffectProperty1.Maximum = 50;
-                    sliderEffectProperty1.Value = 0;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1;
@@ -1978,15 +1980,15 @@ namespace BrushFilter
                     //Sets the range of enabled sliders.
                     sliderEffectProperty1.Minimum = -255;
                     sliderEffectProperty1.Maximum = 255;
-                    sliderEffectProperty1.Value = 0;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
 
                     sliderEffectProperty2.Minimum = -255;
                     sliderEffectProperty2.Maximum = 255;
-                    sliderEffectProperty2.Value = 0;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
 
                     sliderEffectProperty3.Minimum = -255;
                     sliderEffectProperty3.Maximum = 255;
-                    sliderEffectProperty3.Value = 0;
+                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
 
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1;
@@ -2001,6 +2003,19 @@ namespace BrushFilter
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3Tip;
                     sliderEffectProperty3_ValueChanged(this, null);
                     break;
+            }
+
+            //Forces the sliders to be in a valid range.
+            if (!resetSliders)
+            {
+                sliderEffectProperty1.Value = Utils.Clamp(sliderEffectProperty1.Value,
+                    sliderEffectProperty1.Minimum, sliderEffectProperty1.Maximum);
+                sliderEffectProperty2.Value = Utils.Clamp(sliderEffectProperty2.Value,
+                    sliderEffectProperty2.Minimum, sliderEffectProperty2.Maximum);
+                sliderEffectProperty3.Value = Utils.Clamp(sliderEffectProperty3.Value,
+                    sliderEffectProperty3.Minimum, sliderEffectProperty3.Maximum);
+                sliderEffectProperty4.Value = Utils.Clamp(sliderEffectProperty4.Value,
+                    sliderEffectProperty4.Minimum, sliderEffectProperty4.Maximum);
             }
 
             //Applies an effect to the bitmap stroke.
@@ -2170,8 +2185,8 @@ namespace BrushFilter
                 for (int x = 0; x < brushRect.Width; x++)
                 {
                     //Doesn't consider pixels outside of the canvas image.
-                    if (coords.X + x >= canvWidth ||
-                        coords.Y + y >= canvHeight)
+                    if (x >= canvWidth ||
+                        y >= canvHeight)
                     {
                         continue;
                     }
@@ -2583,6 +2598,7 @@ namespace BrushFilter
                     }
                     else
                     {
+                        effect = null;
                         Utils.CopyBitmapPure(bmpCurrentDrawing, bmpEffectDrawing);
                     }
                     break;
@@ -3883,7 +3899,7 @@ namespace BrushFilter
             Utils.CopyBitmapPure(new RenderArgs(EffectSourceSurface).Bitmap, bmpCurrentDrawing);
 
             //Sets the effect property labels, ranges, and visibility.
-            SetEffectProperties();
+            SetEffectProperties(false);
 
             //Sets the canvas dimensions.
             displayCanvas.Left = (displayCanvasBG.Width - displayCanvas.Width) / 2;
@@ -4103,6 +4119,14 @@ namespace BrushFilter
         /// </summary>
         private void displayCanvas_MouseMove(object sender, MouseEventArgs e)
         {
+            //Forcefully loads if it hasn't yet.
+            if (!hasLoaded)
+            {
+                hasLoaded = true;
+                SetEffectProperties(false);
+                return;
+            }
+
             //Updates the new location.
             mouseLoc = e.Location;
 
@@ -4658,7 +4682,7 @@ namespace BrushFilter
             //Loads effect properties if the dialog has loaded.
             if (bmpEffectAlpha != null)
             {
-                SetEffectProperties();
+                SetEffectProperties(true);
             }
         }
 
