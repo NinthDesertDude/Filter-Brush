@@ -42,7 +42,7 @@
         Outline,
         Relief,
         DodgeBurn,
-        HsvTint,
-        RgbTint
+        RgbTint,
+        Custom
     }
 }

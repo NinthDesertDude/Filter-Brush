@@ -808,6 +808,15 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This is a custom property..
+        /// </summary>
+        internal static string EffectCustomPropertyTip {
+            get {
+                return ResourceManager.GetString("EffectCustomPropertyTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scale.
         /// </summary>
         internal static string EffectDentsProperty1 {

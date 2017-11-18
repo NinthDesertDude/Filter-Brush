@@ -366,6 +366,9 @@
   <data name="EffectCrystalizeProperty2Tip" xml:space="preserve">
     <value>A higher quality usually results in better shapes.</value>
   </data>
+  <data name="EffectCustomPropertyTip" xml:space="preserve">
+    <value>This is a custom property.</value>
+  </data>
   <data name="EffectDentsProperty1" xml:space="preserve">
     <value>Scale</value>
   </data>

@@ -414,14 +414,14 @@ namespace BrushFilter
         /// Draws the name of the shift size slider.
         /// </summary>
         private Label txtShiftSize;
-        private TrackBar sliderEffectProperty2;
-        private Label txtEffectProperty2;
         private TrackBar sliderEffectProperty1;
         private Label txtEffectProperty1;
-        private TrackBar sliderEffectProperty4;
-        private Label txtEffectProperty4;
+        private TrackBar sliderEffectProperty2;
+        private Label txtEffectProperty2;
         private TrackBar sliderEffectProperty3;
         private Label txtEffectProperty3;
+        private TrackBar sliderEffectProperty4;
+        private Label txtEffectProperty4;
         private Label txtEffectType;
         private ComboBox cmbxEffectType;
 
@@ -689,1539 +689,203 @@ namespace BrushFilter
 
         #region Methods (not event handlers)
         /// <summary>
-        /// Sets the brushes to be used, clearing any that already exist and
-        /// removing all custom brushes as a result.
+        /// Applies the brush to the drawing region at the given location
+        /// with the given radius. The brush is assumed square.
         /// </summary>
-        private void InitBrushes()
+        /// <param name="loc">The location to apply the brush.</param>
+        /// <param name="radius">The size to draw the brush at.</param>
+        private void ApplyBrush(Point loc, int radius)
         {
-            bmpBrush = new Bitmap(Resources.BrCircle);
+            //Stores the differences in mouse coordinates for some settings.
+            int deltaX;
+            int deltaY;
 
-            //Configures the default list of brushes for the brush selector.
-            loadedBrushes = new BindingList<BrushSelectorItem>();
-
-            // Retrieves values from the registry for the gui.
-            Microsoft.Win32.RegistryKey key =
-                Microsoft.Win32.Registry.CurrentUser
-                .CreateSubKey("software", true)
-                .CreateSubKey("paint.net_brushfilter", true);
-
-            //Gets whether default brushes should be used.
-            bool useDefaultBrushes = true;
-            string value = (string)key.GetValue("useDefaultBrushes");
-            if (value != null)
+            //Ensures the mouse is far enough away if min drawing dist != 0.
+            if (sliderMinDrawDistance.Value != 0 &&
+                mouseLocBrush.HasValue)
             {
-                Boolean.TryParse(value, out useDefaultBrushes);
+                deltaX = mouseLocBrush.Value.X - mouseLoc.X;
+                deltaY = mouseLocBrush.Value.Y - mouseLoc.Y;
+
+                //Aborts if the minimum drawing distance isn't met.
+                if (Math.Sqrt(deltaX * deltaX + deltaY * deltaY) <
+                    sliderMinDrawDistance.Value * displayCanvasZoom)
+                {
+                    return;
+                }
             }
 
-            //Gets the desired locations to load custom brushes from.
-            string[] customBrushDirectories = { };
-            value = (string)key.GetValue("customBrushLocations");
-            if (value != null)
+            //Sets the new brush location because the brush stroke succeeded.
+            mouseLocBrush = mouseLoc;
+
+            //Shifts the size.
+            if (sliderShiftSize.Value != 0)
             {
-                customBrushDirectories = value.Split('\n');
-            }
-
-            key.Close();
-
-            //Loads stored brushes.
-            loadedBrushes.Add(new BrushSelectorItem("Circle 1", Resources.BrCircle));
-
-            if (useDefaultBrushes)
-            {
-                loadedBrushes.Add(new BrushSelectorItem("Circle 2", Resources.BrCircleMedium));
-                loadedBrushes.Add(new BrushSelectorItem("Circle 3", Resources.BrCircleHard));
-                loadedBrushes.Add(new BrushSelectorItem("Rough", Resources.BrCircleRough));
-                loadedBrushes.Add(new BrushSelectorItem("Sketchy", Resources.BrCircleSketchy));
-                loadedBrushes.Add(new BrushSelectorItem("Segments", Resources.BrCircleSegmented));
-                loadedBrushes.Add(new BrushSelectorItem("Spiral", Resources.BrSpiral));
-                loadedBrushes.Add(new BrushSelectorItem("Cracks", Resources.BrCracks));
-                loadedBrushes.Add(new BrushSelectorItem("Dirt 1", Resources.BrDirt));
-                loadedBrushes.Add(new BrushSelectorItem("Dirt 2", Resources.BrDirt2));
-                loadedBrushes.Add(new BrushSelectorItem("Dirt 3", Resources.BrDirt3));
-                loadedBrushes.Add(new BrushSelectorItem("Dirt 4", Resources.BrFractalDirt));
-                loadedBrushes.Add(new BrushSelectorItem("Scales", Resources.BrScales));
-                loadedBrushes.Add(new BrushSelectorItem("Smoke", Resources.BrSmoke));
-                loadedBrushes.Add(new BrushSelectorItem("Grass", Resources.BrGrass));
-                loadedBrushes.Add(new BrushSelectorItem("Rain", Resources.BrRain));
-                loadedBrushes.Add(new BrushSelectorItem("Gravel", Resources.BrGravel));
-                loadedBrushes.Add(new BrushSelectorItem("Spark", Resources.BrSpark));
-                loadedBrushes.Add(new BrushSelectorItem("Big Dots", Resources.BrDotsBig));
-                loadedBrushes.Add(new BrushSelectorItem("Tiny Dots", Resources.BrDotsTiny));
-                loadedBrushes.Add(new BrushSelectorItem("Line", Resources.BrLine));
-            }
-
-            loadedBrushes.Add(BrushSelectorItem.CustomBrush);
-
-            //Enables dynamic binding and sets the list.
-            bttnBrushSelector.DataSource = loadedBrushes;
-            bttnBrushSelector.DisplayMember = "Name";
-            bttnBrushSelector.ValueMember = "Brush";
-
-            //Loads any custom brushes.
-            ImportBrushes(FilesInDirectory(customBrushDirectories), true, false);
-        }
-
-        /// <summary>
-        /// Sets/resets all persistent settings in the dialog to their default
-        /// values.
-        /// </summary>
-        private void InitSettings()
-        {
-            InitialInitToken();
-            InitDialogFromToken();
-        }
-
-        /// <summary>
-        /// Updates the effect properties' labels and slider values to
-        /// reflect the current effect choice.
-        /// </summary>
-        private void SetEffectProperties(bool resetSliders)
-        {
-            switch (((Tuple<string, CmbxEffectOptions>)cmbxEffectType.SelectedItem).Item2)
-            {
-                case CmbxEffectOptions.BlackAndWhite:
-                case CmbxEffectOptions.InvertColors:
-                case CmbxEffectOptions.Sepia:
-                case CmbxEffectOptions.FlipHorizontal:
-                case CmbxEffectOptions.FlipVertical:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = false;
-                    sliderEffectProperty1.Enabled = false;
-                    txtEffectProperty1.Visible = false;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-                    break;
-                case CmbxEffectOptions.BrightnessContrast:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = -100;
-                    sliderEffectProperty1.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
-
-                    sliderEffectProperty2.Minimum = -100;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.HueSaturation:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = -180;
-                    sliderEffectProperty1.Maximum = 180;
-                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
-
-                    sliderEffectProperty3.Minimum = -100;
-                    sliderEffectProperty3.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Posterize:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 2;
-                    sliderEffectProperty1.Maximum = 64;
-                    if (resetSliders) { sliderEffectProperty1.Value = 16; }
-
-                    sliderEffectProperty2.Minimum = 2;
-                    sliderEffectProperty2.Maximum = 64;
-                    if (resetSliders) { sliderEffectProperty2.Value = 16; }
-
-                    sliderEffectProperty3.Minimum = 2;
-                    sliderEffectProperty3.Maximum = 64;
-                    if (resetSliders) { sliderEffectProperty3.Value = 16; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.InkSketch:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 99;
-                    if (resetSliders) { sliderEffectProperty1.Value = 50; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.OilPainting:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 8;
-                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
-
-                    sliderEffectProperty2.Minimum = 2;
-                    sliderEffectProperty2.Maximum = 255;
-                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.PencilSketch:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 20;
-                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
-
-                    sliderEffectProperty2.Minimum = -20;
-                    sliderEffectProperty2.Maximum = 20;
-                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Fragment:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 2;
-                    sliderEffectProperty1.Maximum = 50;
-                    if (resetSliders) { sliderEffectProperty1.Value = 4; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 8; }
-
-                    sliderEffectProperty3.Minimum = 0;
-                    sliderEffectProperty3.Maximum = 359;
-                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Blur:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 2;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.MotionBlur:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 359;
-                    if (resetSliders) { sliderEffectProperty1.Value = 25; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty2.Value = 10; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.SurfaceBlur:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty1.Value = 6; }
-
-                    sliderEffectProperty2.Minimum = 1;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 15; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Unfocus:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 4; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.ZoomBlur:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Bulge:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = -200;
-                    sliderEffectProperty1.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Crystalize:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 2;
-                    sliderEffectProperty1.Maximum = 250;
-                    if (resetSliders) { sliderEffectProperty1.Value = 8; }
-
-                    sliderEffectProperty2.Minimum = 1;
-                    sliderEffectProperty2.Maximum = 5;
-                    if (resetSliders) { sliderEffectProperty2.Value = 2; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Dents:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = true;
-                    sliderEffectProperty4.Enabled = true;
-                    txtEffectProperty4.Visible = true;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 25; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
-
-                    sliderEffectProperty3.Minimum = 0;
-                    sliderEffectProperty3.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
-
-                    sliderEffectProperty4.Minimum = 0;
-                    sliderEffectProperty4.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty4.Value = 10; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-
-                    txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4;
-                    sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4Tip;
-                    sliderEffectProperty4_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.FrostedGlass:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
-
-                    sliderEffectProperty3.Minimum = 1;
-                    sliderEffectProperty3.Maximum = 8;
-                    if (resetSliders) { sliderEffectProperty3.Value = 2; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Pixelate:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.TileReflection:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = true;
-                    sliderEffectProperty4.Enabled = true;
-                    txtEffectProperty4.Visible = true;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 359;
-                    if (resetSliders) { sliderEffectProperty1.Value = 30; }
-
-                    sliderEffectProperty2.Minimum = 1;
-                    sliderEffectProperty2.Maximum = 800;
-                    if (resetSliders) { sliderEffectProperty2.Value = 40; }
-
-                    sliderEffectProperty3.Minimum = -100;
-                    sliderEffectProperty3.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty3.Value = 8; }
-
-                    sliderEffectProperty4.Minimum = 1;
-                    sliderEffectProperty4.Maximum = 5;
-                    if (resetSliders) { sliderEffectProperty4.Value = 2; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-
-                    txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4;
-                    sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4Tip;
-                    sliderEffectProperty4_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Twist:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = -200;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 30; }
-
-                    sliderEffectProperty2.Minimum = 1;
-                    sliderEffectProperty2.Maximum = 20000;
-                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
-
-                    sliderEffectProperty3.Minimum = 1;
-                    sliderEffectProperty3.Maximum = 5;
-                    if (resetSliders) { sliderEffectProperty3.Value = 2; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.AddNoise:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty1.Value = 64; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 400;
-                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
-
-                    sliderEffectProperty3.Minimum = 0;
-                    sliderEffectProperty3.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty3.Value = 100; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Median:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.ReduceNoise:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 40; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Glow:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 20;
-                    if (resetSliders) { sliderEffectProperty1.Value = 6; }
-
-                    sliderEffectProperty2.Minimum = -100;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 10; }
-
-                    sliderEffectProperty3.Minimum = -100;
-                    sliderEffectProperty3.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Sharpen:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 20;
-                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.SoftenPortrait:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 10;
-                    if (resetSliders) { sliderEffectProperty1.Value = 5; }
-
-                    sliderEffectProperty2.Minimum = -20;
-                    sliderEffectProperty2.Maximum = 20;
-                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
-
-                    sliderEffectProperty3.Minimum = 0;
-                    sliderEffectProperty3.Maximum = 20;
-                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Vignette:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 40;
-                    if (resetSliders) { sliderEffectProperty1.Value = 5; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Clouds:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 2;
-                    sliderEffectProperty1.Maximum = 1000;
-                    if (resetSliders) { sliderEffectProperty1.Value = 65; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.EdgeDetect:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 359;
-                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Emboss:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 359;
-                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Outline:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 1;
-                    sliderEffectProperty1.Maximum = 200;
-                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
-
-                    sliderEffectProperty2.Minimum = 0;
-                    sliderEffectProperty2.Maximum = 100;
-                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.Relief:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = 0;
-                    sliderEffectProperty1.Maximum = 359;
-                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.DodgeBurn:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = false;
-                    sliderEffectProperty2.Enabled = false;
-                    txtEffectProperty2.Visible = false;
-
-                    sliderEffectProperty3.Visible = false;
-                    sliderEffectProperty3.Enabled = false;
-                    txtEffectProperty3.Visible = false;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = -50;
-                    sliderEffectProperty1.Maximum = 50;
-                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-                    break;
-                case CmbxEffectOptions.RgbTint:
-                    //Sets property visibility / enabledness.
-                    sliderEffectProperty1.Visible = true;
-                    sliderEffectProperty1.Enabled = true;
-                    txtEffectProperty1.Visible = true;
-
-                    sliderEffectProperty2.Visible = true;
-                    sliderEffectProperty2.Enabled = true;
-                    txtEffectProperty2.Visible = true;
-
-                    sliderEffectProperty3.Visible = true;
-                    sliderEffectProperty3.Enabled = true;
-                    txtEffectProperty3.Visible = true;
-
-                    sliderEffectProperty4.Visible = false;
-                    sliderEffectProperty4.Enabled = false;
-                    txtEffectProperty4.Visible = false;
-
-                    //Sets the range of enabled sliders.
-                    sliderEffectProperty1.Minimum = -255;
-                    sliderEffectProperty1.Maximum = 255;
-                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
-
-                    sliderEffectProperty2.Minimum = -255;
-                    sliderEffectProperty2.Maximum = 255;
-                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
-
-                    sliderEffectProperty3.Minimum = -255;
-                    sliderEffectProperty3.Maximum = 255;
-                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
-
-                    //Updates the text and tooltip of enabled sliders.
-                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1;
-                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
-
-                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2;
-                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
-
-                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3;
-                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
-                    break;
-            }
-
-            //Forces the sliders to be in a valid range.
-            if (!resetSliders)
-            {
-                sliderEffectProperty1.Value = Utils.Clamp(sliderEffectProperty1.Value,
-                    sliderEffectProperty1.Minimum, sliderEffectProperty1.Maximum);
-                sliderEffectProperty2.Value = Utils.Clamp(sliderEffectProperty2.Value,
-                    sliderEffectProperty2.Minimum, sliderEffectProperty2.Maximum);
-                sliderEffectProperty3.Value = Utils.Clamp(sliderEffectProperty3.Value,
-                    sliderEffectProperty3.Minimum, sliderEffectProperty3.Maximum);
-                sliderEffectProperty4.Value = Utils.Clamp(sliderEffectProperty4.Value,
-                    sliderEffectProperty4.Minimum, sliderEffectProperty4.Maximum);
-            }
-
-            //Applies an effect to the bitmap.
-            ApplyFilter();
-        }
-
-        /// <summary>
-        /// Allows the canvas to zoom in and out dependent on the mouse wheel.
-        /// </summary>
-        private void Zoom(int mouseWheelDetents, bool updateSlider)
-        {
-            //Causes the slider's update method to trigger, which calls this
-            //and doesn't repeat anything since updateSlider is then false.
-            if (updateSlider)
-            {
-                //Zooms in/out some amount for each mouse wheel movement.
-                int zoom;
-                if (sliderCanvasZoom.Value < 5)
+                int tempSize = sliderBrushSize.Value;
+                if (isGrowingSize)
                 {
-                    zoom = 1;
-                }
-                else if (sliderCanvasZoom.Value < 10)
-                {
-                    zoom = 3;
-                }
-                else if (sliderCanvasZoom.Value < 20)
-                {
-                    zoom = 5;
-                }
-                else if (sliderCanvasZoom.Value < 50)
-                {
-                    zoom = 10;
-                }
-                else if (sliderCanvasZoom.Value < 100)
-                {
-                    zoom = 15;
-                }
-                else if (sliderCanvasZoom.Value < 200)
-                {
-                    zoom = 30;
-                }
-                else if (sliderCanvasZoom.Value < 500)
-                {
-                    zoom = 50;
-                }
-                else if (sliderCanvasZoom.Value < 1000)
-                {
-                    zoom = 100;
-                }
-                else if (sliderCanvasZoom.Value < 2000)
-                {
-                    zoom = 200;
+                    tempSize += sliderShiftSize.Value;
                 }
                 else
                 {
-                    zoom = 300;
+                    tempSize -= sliderShiftSize.Value;
+                }
+                if (tempSize > sliderBrushSize.Maximum)
+                {
+                    tempSize = sliderBrushSize.Maximum;
+                    isGrowingSize = !isGrowingSize; //handles values < 0.
+                }
+                else if (tempSize < sliderBrushSize.Minimum)
+                {
+                    tempSize = sliderBrushSize.Minimum;
+                    isGrowingSize = !isGrowingSize;
                 }
 
-                zoom *= Math.Sign(mouseWheelDetents);
+                sliderBrushSize.Value = Utils.Clamp(tempSize,
+                    sliderBrushSize.Minimum, sliderBrushSize.Maximum);
+            }
 
-                //Updates the corresponding slider as well (within its range).
-                sliderCanvasZoom.Value = Utils.Clamp(
-                sliderCanvasZoom.Value + zoom,
-                sliderCanvasZoom.Minimum,
-                sliderCanvasZoom.Maximum);
+            //Shifts the intensity.
+            if (sliderShiftIntensity.Value != 0)
+            {
+                int tempIntensity = sliderBrushIntensity.Value;
+                if (isGrowingIntensity)
+                {
+                    tempIntensity += sliderShiftIntensity.Value;
+                }
+                else
+                {
+                    tempIntensity -= sliderShiftIntensity.Value;
+                }
+                if (tempIntensity > sliderBrushIntensity.Maximum)
+                {
+                    tempIntensity = sliderBrushIntensity.Maximum;
+                    isGrowingIntensity = !isGrowingIntensity; //handles values < 0.
+                }
+                else if (tempIntensity < sliderBrushIntensity.Minimum)
+                {
+                    tempIntensity = sliderBrushIntensity.Minimum;
+                    isGrowingIntensity = !isGrowingIntensity;
+                }
 
+                sliderBrushIntensity.Value = Utils.Clamp(tempIntensity,
+                    sliderBrushIntensity.Minimum, sliderBrushIntensity.Maximum);
+            }
+
+            //Shifts the rotation.
+            if (sliderShiftRotation.Value != 0)
+            {
+                int tempRot = sliderBrushRotation.Value + sliderShiftRotation.Value;
+                if (tempRot > sliderBrushRotation.Maximum)
+                {
+                    //The range goes negative, and is a total of 2 * max.
+                    tempRot -= (2 * sliderBrushRotation.Maximum);
+                }
+                else if (tempRot < sliderBrushRotation.Minimum)
+                {
+                    tempRot += (2 * sliderBrushRotation.Maximum) - Math.Abs(tempRot);
+                }
+
+                sliderBrushRotation.Value = Utils.Clamp(tempRot,
+                    sliderBrushRotation.Minimum, sliderBrushRotation.Maximum);
+            }
+
+            //Randomly shifts the image by some percent of the canvas size,
+            //horizontally and/or vertically.
+            if (sliderRandHorzShift.Value != 0 ||
+                sliderRandVertShift.Value != 0)
+            {
+                loc.X = (int)(loc.X
+                    - bmpCurrentDrawing.Width * (sliderRandHorzShift.Value / 200f)
+                    + bmpCurrentDrawing.Width * (random.Next(sliderRandHorzShift.Value) / 100f));
+
+                loc.Y = (int)(loc.Y
+                    - bmpCurrentDrawing.Height * (sliderRandVertShift.Value / 200f)
+                    + bmpCurrentDrawing.Height * (random.Next(sliderRandVertShift.Value) / 100f));
+            }
+
+            //This is used to randomly rotate the image by some amount.
+            int rotation = sliderBrushRotation.Value
+                - random.Next(sliderRandRotLeft.Value)
+                + random.Next(sliderRandRotRight.Value);
+
+            if (chkbxOrientToMouse.Checked)
+            {
+                //Adds to the rotation according to mouse direction. Uses the
+                //original rotation as an offset.
+                deltaX = mouseLoc.X - mouseLocPrev.X;
+                deltaY = mouseLoc.Y - mouseLocPrev.Y;
+                rotation += (int)(Math.Atan2(deltaY, deltaX) * 180 / Math.PI);
+            }
+
+            //Creates a brush from a rotation of the current brush.
+            Bitmap bmpBrushRot = Utils.RotateImage(bmpBrush, rotation);
+
+            //Rotating the brush increases image bounds, so brush space
+            //must increase to avoid making it visually shrink.
+            double radAngle = (Math.Abs(rotation) % 90) * Math.PI / 180;
+            float rotScaleFactor = (float)(Math.Cos(radAngle) + Math.Sin(radAngle));
+            int scaleFactor = (int)(radius * rotScaleFactor);
+
+            //If new image size is <= 0 due to random size changes, don't render.
+            if (scaleFactor <= 0)
+            {
                 return;
             }
 
-            //Calculates the zooming percent.
-            float newZoomFactor = sliderCanvasZoom.Value / 100f;
-
-            //Updates the canvas zoom factor.
-            displayCanvasZoom = newZoomFactor;
-            txtCanvasZoom.Text = String.Format(
-                "{0} {1:p0}",
-                Globalization.GlobalStrings.CanvasZoom,
-                newZoomFactor);
-
-            //Gets the new width and height, adjusted for zooming.
-            int zoomWidth = (int)(bmpCurrentDrawing.Width * newZoomFactor);
-            int zoomHeight = (int)(bmpCurrentDrawing.Height * newZoomFactor);
-
-            //Sets the new canvas position (center) and size using zoom.
-            displayCanvas.Bounds = new Rectangle(
-                (displayCanvasBG.Width - zoomWidth) / 2,
-                (displayCanvasBG.Height - zoomHeight) / 2,
-                zoomWidth, zoomHeight);
-        }
-
-        /// <summary>
-        /// Applies the brush at the specified point in the canvas.
-        /// </summary>
-        /// <param name="canvas">
-        /// The image to draw on.
-        /// </param>
-        /// <param name="brush">
-        /// The image to draw onto the canvas.
-        /// </param>
-        /// <param name="coords">
-        /// The brush drawing position.
-        /// </param>
-        /// <param name="intensityMultiplier">
-        /// A percentage, expresesd as a float, to multiply the intensity by.
-        /// </param>
-        public unsafe bool UncoverBitmap(
-            Bitmap canvas,
-            Bitmap brush,
-            Point coords)
-        {
-            //Formats must be the same.
-            if (canvas.PixelFormat != PixelFormat.Format32bppArgb ||
-            brush.PixelFormat != PixelFormat.Format32bppArgb)
+            //Draws the scaled version of the image.
+            using (Bitmap bmpSized = new Bitmap(scaleFactor, scaleFactor))
             {
-                return false;
-            }
-
-            //Locks the pixels to be edited.
-            BitmapData canvasData, brushData;
-
-            //Gets the brush area to draw.
-            int brushX = Utils.Clamp(-coords.X, 0, brush.Width);
-            int brushY = Utils.Clamp(-coords.Y, 0, brush.Height);
-            int brushWidth = Utils.Clamp(brush.Width - brushX, 0,
-                Math.Min(brush.Width, Math.Max(0, canvas.Width - coords.X)));
-            int brushHeight = Utils.Clamp(brush.Height - brushY, 0,
-                Math.Min(brush.Height, Math.Max(0, canvas.Height - coords.Y)));
-
-            Rectangle brushRect = new Rectangle(
-                brushX, brushY, brushWidth, brushHeight);
-
-            //Gets the affected area on the canvas.
-            int canvasX = Utils.Clamp(coords.X, 0, canvas.Width);
-            int canvasY = Utils.Clamp(coords.Y, 0, canvas.Height);
-            int canvasWidth = Utils.Clamp(canvasX + brushWidth / 2, 0, Math.Max(0, canvas.Width - canvasX));
-            int canvasHeight = Utils.Clamp(canvasY + brushHeight / 2, 0, Math.Max(0, canvas.Height - canvasY));
-            Rectangle canvasRect = new Rectangle(canvasX, canvasY, canvasWidth, canvasHeight);
-
-            //Does not lockbits for an invalid rectangle.
-            if (brushRect.Width <= 0 || brushRect.Height <= 0 ||
-                canvasRect.Width <= 0 || canvasRect.Height <= 0)
-            {
-                return false;
-            }
-
-            canvasData = canvas.LockBits(
-                canvasRect,
-                ImageLockMode.ReadWrite,
-                canvas.PixelFormat);
-
-            brushData = brush.LockBits(
-                brushRect,
-                ImageLockMode.ReadOnly,
-                brush.PixelFormat);
-
-            byte* canvasRow = (byte*)canvasData.Scan0;
-            byte* brushRow = (byte*)brushData.Scan0;
-
-            //Calculations performed outside loop for performance.
-            float sliderIntensity = sliderBrushIntensity.Value / 100f;
-            int canvWidth = canvas.Width;
-            int canvHeight = canvas.Height;
-
-            //Iterates through each pixel in parallel.         
-            Parallel.For(0, brushRect.Height, (y) =>
-            {
-                for (int x = 0; x < brushRect.Width; x++)
+                using (Graphics gScaled = Graphics.FromImage(bmpSized))
                 {
-                    //Doesn't consider pixels outside of the canvas image.
-                    if (x >= canvWidth ||
-                        y >= canvHeight)
-                    {
-                        continue;
-                    }
+                    gScaled.DrawRectangle(Pens.White,
+                        new Rectangle(0, 0, bmpSized.Width, bmpSized.Height));
 
-                    int brushPtr = y * brushData.Stride + x * 4;
-                    int canvasPtr = y * canvasData.Stride + x * 4;
-
-                    //Gets the pixel intensity to use for the effect strength.
-                    byte intensity = (byte)HsvColor.FromColor(ColorBgra.FromBgr(
-                        brushRow[brushPtr],
-                        brushRow[brushPtr + 1],
-                        brushRow[brushPtr + 2])).Value;
-
-                    //Increases alpha by intensity to "uncover" the surface.
-                    canvasRow[canvasPtr + 3] =
-                        (byte)Utils.Clamp(canvasRow[canvasPtr + 3] +
-                        (int)((100 - intensity) * sliderIntensity), 0,
-                            bmpEffectAlpha[canvasX + x, canvasY + y]);
+                    gScaled.DrawImage(bmpBrushRot, 0, 0, bmpSized.Width, bmpSized.Height);
                 }
-            });
 
-            canvas.UnlockBits(canvasData);
-            brush.UnlockBits(brushData);
+                float intensity = sliderBrushIntensity.Value / 100f;
 
-            return true;
+                //Applies the brush.
+                UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
+                    loc.X - (scaleFactor / 2),
+                    loc.Y - (scaleFactor / 2)));
+
+                //Draws the brush horizontally reflected.
+                if (cmbxSymmetry.SelectedIndex == 1)
+                {
+                    bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipX);
+
+                    //Applies the brush.
+                    UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
+                        bmpEffectDrawing.Width - (loc.X - scaleFactor / 2),
+                        loc.Y - (scaleFactor / 2)));
+                }
+
+                //Draws the brush vertically reflected.
+                else if (cmbxSymmetry.SelectedIndex == 2)
+                {
+                    bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+                    //Applies the brush.
+                    UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
+                        loc.X - (scaleFactor / 2),
+                        bmpEffectDrawing.Height - (loc.Y - scaleFactor / 2)));
+                }
+
+                //Draws the brush horizontally and vertically reflected.
+                else if (cmbxSymmetry.SelectedIndex == 3)
+                {
+                    bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipXY);
+
+                    //Applies the brush.
+                    UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
+                        bmpEffectDrawing.Width - (loc.X - (scaleFactor / 2)),
+                        bmpEffectDrawing.Height - (loc.Y - (scaleFactor / 2))));
+                }
+            }
+
+            //TODO: Dispose bmpBrushRot and find out why it won't let you.
         }
 
         /// <summary>
@@ -2735,203 +1399,83 @@ namespace BrushFilter
         }
 
         /// <summary>
-        /// Applies the brush to the drawing region at the given location
-        /// with the given radius. The brush is assumed square.
+        /// Returns a list of files in the given directories. Any invalid
+        /// or non-directory path is included directly in the output.
         /// </summary>
-        /// <param name="loc">The location to apply the brush.</param>
-        /// <param name="radius">The size to draw the brush at.</param>
-        private void ApplyBrush(Point loc, int radius)
+        private string[] FilesInDirectory(string[] dirs)
         {
-            //Stores the differences in mouse coordinates for some settings.
-            int deltaX;
-            int deltaY;
+            List<string> paths = new List<string>();
 
-            //Ensures the mouse is far enough away if min drawing dist != 0.
-            if (sliderMinDrawDistance.Value != 0 &&
-                mouseLocBrush.HasValue)
+            foreach (string directory in dirs)
             {
-                deltaX = mouseLocBrush.Value.X - mouseLoc.X;
-                deltaY = mouseLocBrush.Value.Y - mouseLoc.Y;
-
-                //Aborts if the minimum drawing distance isn't met.
-                if (Math.Sqrt(deltaX * deltaX + deltaY * deltaY) <
-                    sliderMinDrawDistance.Value * displayCanvasZoom)
+                try
                 {
-                    return;
+                    //The path must exist and be a directory.
+                    if (!File.Exists(directory) ||
+                        !File.GetAttributes(directory)
+                        .HasFlag(FileAttributes.Directory))
+                    {
+                        paths.Add(directory);
+                    }
+
+                    paths.AddRange(Directory.GetFiles(directory));
+                }
+                catch
+                {
+                    paths.Add(directory);
                 }
             }
 
-            //Sets the new brush location because the brush stroke succeeded.
-            mouseLocBrush = mouseLoc;
-
-            //Shifts the size.
-            if (sliderShiftSize.Value != 0)
+            //Excludes all non-image files.
+            List<string> pathsToReturn = new List<string>();
+            foreach (string str in paths)
             {
-                int tempSize = sliderBrushSize.Value;
-                if (isGrowingSize)
+                if (str.EndsWith("png") || str.EndsWith("bmp") ||
+                    str.EndsWith("jpg") || str.EndsWith("gif") ||
+                    str.EndsWith("tif") || str.EndsWith("exif") ||
+                    str.EndsWith("jpeg") || str.EndsWith("tiff"))
                 {
-                    tempSize += sliderShiftSize.Value;
-                }
-                else
-                {
-                    tempSize -= sliderShiftSize.Value;
-                }
-                if (tempSize > sliderBrushSize.Maximum)
-                {
-                    tempSize = sliderBrushSize.Maximum;
-                    isGrowingSize = !isGrowingSize; //handles values < 0.
-                }
-                else if (tempSize < sliderBrushSize.Minimum)
-                {
-                    tempSize = sliderBrushSize.Minimum;
-                    isGrowingSize = !isGrowingSize;
-                }
-
-                sliderBrushSize.Value = Utils.Clamp(tempSize,
-                    sliderBrushSize.Minimum, sliderBrushSize.Maximum);
-            }
-
-            //Shifts the intensity.
-            if (sliderShiftIntensity.Value != 0)
-            {
-                int tempIntensity = sliderBrushIntensity.Value;
-                if (isGrowingIntensity)
-                {
-                    tempIntensity += sliderShiftIntensity.Value;
-                }
-                else
-                {
-                    tempIntensity -= sliderShiftIntensity.Value;
-                }
-                if (tempIntensity > sliderBrushIntensity.Maximum)
-                {
-                    tempIntensity = sliderBrushIntensity.Maximum;
-                    isGrowingIntensity = !isGrowingIntensity; //handles values < 0.
-                }
-                else if (tempIntensity < sliderBrushIntensity.Minimum)
-                {
-                    tempIntensity = sliderBrushIntensity.Minimum;
-                    isGrowingIntensity = !isGrowingIntensity;
-                }
-
-                sliderBrushIntensity.Value = Utils.Clamp(tempIntensity,
-                    sliderBrushIntensity.Minimum, sliderBrushIntensity.Maximum);
-            }
-
-            //Shifts the rotation.
-            if (sliderShiftRotation.Value != 0)
-            {
-                int tempRot = sliderBrushRotation.Value + sliderShiftRotation.Value;
-                if (tempRot > sliderBrushRotation.Maximum)
-                {
-                    //The range goes negative, and is a total of 2 * max.
-                    tempRot -= (2 * sliderBrushRotation.Maximum);
-                }
-                else if (tempRot < sliderBrushRotation.Minimum)
-                {
-                    tempRot += (2 * sliderBrushRotation.Maximum) - Math.Abs(tempRot);
-                }
-
-                sliderBrushRotation.Value = Utils.Clamp(tempRot,
-                    sliderBrushRotation.Minimum, sliderBrushRotation.Maximum);
-            }
-
-            //Randomly shifts the image by some percent of the canvas size,
-            //horizontally and/or vertically.
-            if (sliderRandHorzShift.Value != 0 ||
-                sliderRandVertShift.Value != 0)
-            {
-                loc.X = (int)(loc.X
-                    - bmpCurrentDrawing.Width * (sliderRandHorzShift.Value / 200f)
-                    + bmpCurrentDrawing.Width * (random.Next(sliderRandHorzShift.Value) / 100f));
-
-                loc.Y = (int)(loc.Y
-                    - bmpCurrentDrawing.Height * (sliderRandVertShift.Value / 200f)
-                    + bmpCurrentDrawing.Height * (random.Next(sliderRandVertShift.Value) / 100f));
-            }
-
-            //This is used to randomly rotate the image by some amount.
-            int rotation = sliderBrushRotation.Value
-                - random.Next(sliderRandRotLeft.Value)
-                + random.Next(sliderRandRotRight.Value);
-
-            if (chkbxOrientToMouse.Checked)
-            {
-                //Adds to the rotation according to mouse direction. Uses the
-                //original rotation as an offset.
-                deltaX = mouseLoc.X - mouseLocPrev.X;
-                deltaY = mouseLoc.Y - mouseLocPrev.Y;
-                rotation += (int)(Math.Atan2(deltaY, deltaX) * 180 / Math.PI);
-            }
-
-            //Creates a brush from a rotation of the current brush.
-            Bitmap bmpBrushRot = Utils.RotateImage(bmpBrush, rotation);
-
-            //Rotating the brush increases image bounds, so brush space
-            //must increase to avoid making it visually shrink.
-            double radAngle = (Math.Abs(rotation) % 90) * Math.PI / 180;
-            float rotScaleFactor = (float)(Math.Cos(radAngle) + Math.Sin(radAngle));
-            int scaleFactor = (int)(radius * rotScaleFactor);
-
-            //If new image size is <= 0 due to random size changes, don't render.
-            if (scaleFactor <= 0)
-            {
-                return;
-            }
-
-            //Draws the scaled version of the image.
-            using (Bitmap bmpSized = new Bitmap(scaleFactor, scaleFactor))
-            {
-                using (Graphics gScaled = Graphics.FromImage(bmpSized))
-                {
-                    gScaled.DrawRectangle(Pens.White,
-                        new Rectangle(0, 0, bmpSized.Width, bmpSized.Height));
-
-                    gScaled.DrawImage(bmpBrushRot, 0, 0, bmpSized.Width, bmpSized.Height);
-                }
-
-                float intensity = sliderBrushIntensity.Value / 100f;
-
-                //Applies the brush.
-                UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
-                    loc.X - (scaleFactor / 2),
-                    loc.Y - (scaleFactor / 2)));
-
-                //Draws the brush horizontally reflected.
-                if (cmbxSymmetry.SelectedIndex == 1)
-                {
-                    bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipX);
-
-                    //Applies the brush.
-                    UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
-                        bmpEffectDrawing.Width - (loc.X - scaleFactor / 2),
-                        loc.Y - (scaleFactor / 2)));
-                }
-
-                //Draws the brush vertically reflected.
-                else if (cmbxSymmetry.SelectedIndex == 2)
-                {
-                    bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipY);
-
-                    //Applies the brush.
-                    UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
-                        loc.X - (scaleFactor / 2),
-                        bmpEffectDrawing.Height - (loc.Y - scaleFactor / 2)));
-                }
-
-                //Draws the brush horizontally and vertically reflected.
-                else if (cmbxSymmetry.SelectedIndex == 3)
-                {
-                    bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipXY);
-
-                    //Applies the brush.
-                    UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
-                        bmpEffectDrawing.Width - (loc.X - (scaleFactor / 2)),
-                        bmpEffectDrawing.Height - (loc.Y - (scaleFactor / 2))));
+                    pathsToReturn.Add(str);
                 }
             }
 
-            //TODO: Dispose bmpBrushRot and find out why it won't let you.
+            return pathsToReturn.ToArray();
+        }
+
+        /// <summary>
+        /// Returns the amount of space between the display canvas and
+        /// the display canvas background.
+        /// </summary>
+        private Rectangle GetRange()
+        {
+            //Gets the full region.
+            Rectangle range = displayCanvas.ClientRectangle;
+
+            //Calculates width.
+            if (displayCanvas.ClientRectangle.Width >= displayCanvasBG.ClientRectangle.Width)
+            {
+                range.X = displayCanvasBG.ClientRectangle.Width - displayCanvas.ClientRectangle.Width;
+                range.Width = displayCanvas.ClientRectangle.Width - displayCanvasBG.ClientRectangle.Width;
+            }
+            else
+            {
+                range.X = (displayCanvasBG.ClientRectangle.Width - displayCanvas.ClientRectangle.Width) / 2;
+                range.Width = 0;
+            }
+
+            //Calculates height.
+            if (displayCanvas.ClientRectangle.Height >= displayCanvasBG.ClientRectangle.Height)
+            {
+                range.Y = displayCanvasBG.ClientRectangle.Height - displayCanvas.ClientRectangle.Height;
+                range.Height = displayCanvas.ClientRectangle.Height - displayCanvasBG.ClientRectangle.Height;
+            }
+            else
+            {
+                range.Y = (displayCanvasBG.ClientRectangle.Height - displayCanvas.ClientRectangle.Height) / 2;
+                range.Height = 0;
+            }
+
+            return range;
         }
 
         /// <summary>
@@ -3059,83 +1603,76 @@ namespace BrushFilter
         }
 
         /// <summary>
-        /// Returns a list of files in the given directories. Any invalid
-        /// or non-directory path is included directly in the output.
+        /// Sets the brushes to be used, clearing any that already exist and
+        /// removing all custom brushes as a result.
         /// </summary>
-        private string[] FilesInDirectory(string[] dirs)
+        private void InitBrushes()
         {
-            List<string> paths = new List<string>();
+            bmpBrush = new Bitmap(Resources.BrCircle);
 
-            foreach (string directory in dirs)
+            //Configures the default list of brushes for the brush selector.
+            loadedBrushes = new BindingList<BrushSelectorItem>();
+
+            // Retrieves values from the registry for the gui.
+            Microsoft.Win32.RegistryKey key =
+                Microsoft.Win32.Registry.CurrentUser
+                .CreateSubKey("software", true)
+                .CreateSubKey("paint.net_brushfilter", true);
+
+            //Gets whether default brushes should be used.
+            bool useDefaultBrushes = true;
+            string value = (string)key.GetValue("useDefaultBrushes");
+            if (value != null)
             {
-                try
-                {
-                    //The path must exist and be a directory.
-                    if (!File.Exists(directory) ||
-                        !File.GetAttributes(directory)
-                        .HasFlag(FileAttributes.Directory))
-                    {
-                        paths.Add(directory);
-                    }
-
-                    paths.AddRange(Directory.GetFiles(directory));
-                }
-                catch
-                {
-                    paths.Add(directory);
-                }
+                Boolean.TryParse(value, out useDefaultBrushes);
             }
 
-            //Excludes all non-image files.
-            List<string> pathsToReturn = new List<string>();
-            foreach (string str in paths)
+            //Gets the desired locations to load custom brushes from.
+            string[] customBrushDirectories = { };
+            value = (string)key.GetValue("customBrushLocations");
+            if (value != null)
             {
-                if (str.EndsWith("png") || str.EndsWith("bmp") ||
-                    str.EndsWith("jpg") || str.EndsWith("gif") ||
-                    str.EndsWith("tif") || str.EndsWith("exif") ||
-                    str.EndsWith("jpeg") || str.EndsWith("tiff"))
-                {
-                    pathsToReturn.Add(str);
-                }
+                customBrushDirectories = value.Split('\n');
             }
 
-            return pathsToReturn.ToArray();
-        }
+            key.Close();
 
-        /// <summary>
-        /// Returns the amount of space between the display canvas and
-        /// the display canvas background.
-        /// </summary>
-        private Rectangle GetRange()
-        {
-            //Gets the full region.
-            Rectangle range = displayCanvas.ClientRectangle;
+            //Loads stored brushes.
+            loadedBrushes.Add(new BrushSelectorItem("Circle 1", Resources.BrCircle));
 
-            //Calculates width.
-            if (displayCanvas.ClientRectangle.Width >= displayCanvasBG.ClientRectangle.Width)
+            if (useDefaultBrushes)
             {
-                range.X = displayCanvasBG.ClientRectangle.Width - displayCanvas.ClientRectangle.Width;
-                range.Width = displayCanvas.ClientRectangle.Width - displayCanvasBG.ClientRectangle.Width;
-            }
-            else
-            {
-                range.X = (displayCanvasBG.ClientRectangle.Width - displayCanvas.ClientRectangle.Width) / 2;
-                range.Width = 0;
-            }
-
-            //Calculates height.
-            if (displayCanvas.ClientRectangle.Height >= displayCanvasBG.ClientRectangle.Height)
-            {
-                range.Y = displayCanvasBG.ClientRectangle.Height - displayCanvas.ClientRectangle.Height;
-                range.Height = displayCanvas.ClientRectangle.Height - displayCanvasBG.ClientRectangle.Height;
-            }
-            else
-            {
-                range.Y = (displayCanvasBG.ClientRectangle.Height - displayCanvas.ClientRectangle.Height) / 2;
-                range.Height = 0;
+                loadedBrushes.Add(new BrushSelectorItem("Circle 2", Resources.BrCircleMedium));
+                loadedBrushes.Add(new BrushSelectorItem("Circle 3", Resources.BrCircleHard));
+                loadedBrushes.Add(new BrushSelectorItem("Rough", Resources.BrCircleRough));
+                loadedBrushes.Add(new BrushSelectorItem("Sketchy", Resources.BrCircleSketchy));
+                loadedBrushes.Add(new BrushSelectorItem("Segments", Resources.BrCircleSegmented));
+                loadedBrushes.Add(new BrushSelectorItem("Spiral", Resources.BrSpiral));
+                loadedBrushes.Add(new BrushSelectorItem("Cracks", Resources.BrCracks));
+                loadedBrushes.Add(new BrushSelectorItem("Dirt 1", Resources.BrDirt));
+                loadedBrushes.Add(new BrushSelectorItem("Dirt 2", Resources.BrDirt2));
+                loadedBrushes.Add(new BrushSelectorItem("Dirt 3", Resources.BrDirt3));
+                loadedBrushes.Add(new BrushSelectorItem("Dirt 4", Resources.BrFractalDirt));
+                loadedBrushes.Add(new BrushSelectorItem("Scales", Resources.BrScales));
+                loadedBrushes.Add(new BrushSelectorItem("Smoke", Resources.BrSmoke));
+                loadedBrushes.Add(new BrushSelectorItem("Grass", Resources.BrGrass));
+                loadedBrushes.Add(new BrushSelectorItem("Rain", Resources.BrRain));
+                loadedBrushes.Add(new BrushSelectorItem("Gravel", Resources.BrGravel));
+                loadedBrushes.Add(new BrushSelectorItem("Spark", Resources.BrSpark));
+                loadedBrushes.Add(new BrushSelectorItem("Big Dots", Resources.BrDotsBig));
+                loadedBrushes.Add(new BrushSelectorItem("Tiny Dots", Resources.BrDotsTiny));
+                loadedBrushes.Add(new BrushSelectorItem("Line", Resources.BrLine));
             }
 
-            return range;
+            loadedBrushes.Add(BrushSelectorItem.CustomBrush);
+
+            //Enables dynamic binding and sets the list.
+            bttnBrushSelector.DataSource = loadedBrushes;
+            bttnBrushSelector.DisplayMember = "Name";
+            bttnBrushSelector.ValueMember = "Brush";
+
+            //Loads any custom brushes.
+            ImportBrushes(FilesInDirectory(customBrushDirectories), true, false);
         }
 
         /// <summary>
@@ -3795,9 +2332,16 @@ namespace BrushFilter
             // 
             // cmbxEffectType
             // 
+            this.cmbxEffectType.BackColor = System.Drawing.Color.White;
+            this.cmbxEffectType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbxEffectType.DropDownHeight = 140;
+            this.cmbxEffectType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbxEffectType.DropDownWidth = 20;
             this.cmbxEffectType.FormattingEnabled = true;
             resources.ApplyResources(this.cmbxEffectType, "cmbxEffectType");
             this.cmbxEffectType.Name = "cmbxEffectType";
+            this.cmbxEffectType.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cmbxEffectType_DrawItem);
+            this.cmbxEffectType.SelectedValueChanged += new System.EventHandler(this.cmbxEffectType_SelectedValueChanged);
             this.cmbxEffectType.MouseEnter += new System.EventHandler(this.cmbxEffectType_MouseEnter);
             // 
             // winBrushFilter
@@ -3856,6 +2400,1089 @@ namespace BrushFilter
         }
 
         /// <summary>
+        /// Sets/resets all persistent settings in the dialog to their default
+        /// values.
+        /// </summary>
+        private void InitSettings()
+        {
+            InitialInitToken();
+            InitDialogFromToken();
+        }
+
+        /// <summary>
+        /// Finds all user-based effects inheriting from Effect and returns
+        /// them. Based on pyrochild's ScriptLab code referenced from
+        /// https://forums.getpaint.net/topic/107388-how-to-access-all-effects-programatically/
+        /// </summary>
+        private List<Type> LoadUserEffects()
+        {
+            List<Assembly> assemblies = new List<Assembly>();
+            List<Type> effects = new List<Type>();
+
+            // TARGETDIR\Effects\*.dll
+            string homeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string effectsDir = Path.Combine(homeDir, "Effects");
+            bool dirExists;
+
+            //Attempts to access the effects directory.
+            try
+            {
+                dirExists = Directory.Exists(effectsDir);
+            }
+            catch
+            {
+                dirExists = false;
+            }
+
+            //Accumulates assemblies to probe.
+            if (dirExists)
+            {
+                string fileSpec = "*.dll";
+                string[] filePaths = Directory.GetFiles(effectsDir, fileSpec);
+
+                foreach (string filePath in filePaths)
+                {
+                    Assembly pluginAssembly = null;
+
+                    try
+                    {
+                        pluginAssembly = Assembly.LoadFrom(filePath);
+                        assemblies.Add(pluginAssembly);
+                    }
+                    catch { }
+                }
+            }
+
+            //Probes assemblies for Effect or Effect-derived classes.
+            for (int i = 0; i < assemblies.Count; i++)
+            {
+                try
+                {
+                    foreach (Type candidate in assemblies[i].GetTypes())
+                    {
+                        if (candidate.IsSubclassOf(typeof(Effect)) &&
+                            !candidate.IsAbstract &&
+                            !candidate.IsObsolete(false))
+                        {
+                            effects.Add(candidate);
+                        }
+                    }
+                }
+                catch
+                {
+                    //Silence access errors.
+                }
+            }
+
+            //Returns all effects found.
+            return effects;
+        }
+
+        /// <summary>
+        /// Updates the effect properties' labels and slider values to
+        /// reflect the current effect choice.
+        /// </summary>
+        private void SetEffectProperties(bool resetSliders)
+        {
+            //Hides built-in effect controls.
+            sliderEffectProperty1.Visible = false;
+            sliderEffectProperty1.Enabled = false;
+            txtEffectProperty1.Visible = false;
+
+            sliderEffectProperty2.Visible = false;
+            sliderEffectProperty2.Enabled = false;
+            txtEffectProperty2.Visible = false;
+
+            sliderEffectProperty3.Visible = false;
+            sliderEffectProperty3.Enabled = false;
+            txtEffectProperty3.Visible = false;
+
+            sliderEffectProperty4.Visible = false;
+            sliderEffectProperty4.Enabled = false;
+            txtEffectProperty4.Visible = false;
+
+            switch (((Tuple<string, CmbxEffectOptions>)cmbxEffectType.SelectedItem).Item2)
+            {
+                case CmbxEffectOptions.BrightnessContrast:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = -100;
+                    sliderEffectProperty1.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
+
+                    sliderEffectProperty2.Minimum = -100;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.HueSaturation:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = -180;
+                    sliderEffectProperty1.Maximum = 180;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
+
+                    sliderEffectProperty3.Minimum = -100;
+                    sliderEffectProperty3.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Posterize:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 2;
+                    sliderEffectProperty1.Maximum = 64;
+                    if (resetSliders) { sliderEffectProperty1.Value = 16; }
+
+                    sliderEffectProperty2.Minimum = 2;
+                    sliderEffectProperty2.Maximum = 64;
+                    if (resetSliders) { sliderEffectProperty2.Value = 16; }
+
+                    sliderEffectProperty3.Minimum = 2;
+                    sliderEffectProperty3.Maximum = 64;
+                    if (resetSliders) { sliderEffectProperty3.Value = 16; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.InkSketch:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 99;
+                    if (resetSliders) { sliderEffectProperty1.Value = 50; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.OilPainting:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 8;
+                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
+
+                    sliderEffectProperty2.Minimum = 2;
+                    sliderEffectProperty2.Maximum = 255;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.PencilSketch:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 20;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
+
+                    sliderEffectProperty2.Minimum = -20;
+                    sliderEffectProperty2.Maximum = 20;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Fragment:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 2;
+                    sliderEffectProperty1.Maximum = 50;
+                    if (resetSliders) { sliderEffectProperty1.Value = 4; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 8; }
+
+                    sliderEffectProperty3.Minimum = 0;
+                    sliderEffectProperty3.Maximum = 359;
+                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Blur:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 2;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.MotionBlur:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 359;
+                    if (resetSliders) { sliderEffectProperty1.Value = 25; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty2.Value = 10; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.SurfaceBlur:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty1.Value = 6; }
+
+                    sliderEffectProperty2.Minimum = 1;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 15; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Unfocus:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 4; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.ZoomBlur:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Bulge:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = -200;
+                    sliderEffectProperty1.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Crystalize:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 2;
+                    sliderEffectProperty1.Maximum = 250;
+                    if (resetSliders) { sliderEffectProperty1.Value = 8; }
+
+                    sliderEffectProperty2.Minimum = 1;
+                    sliderEffectProperty2.Maximum = 5;
+                    if (resetSliders) { sliderEffectProperty2.Value = 2; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Dents:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    sliderEffectProperty4.Visible = true;
+                    sliderEffectProperty4.Enabled = true;
+                    txtEffectProperty4.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 25; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
+
+                    sliderEffectProperty3.Minimum = 0;
+                    sliderEffectProperty3.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
+
+                    sliderEffectProperty4.Minimum = 0;
+                    sliderEffectProperty4.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty4.Value = 10; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+
+                    txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4;
+                    sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4Tip;
+                    sliderEffectProperty4_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.FrostedGlass:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
+
+                    sliderEffectProperty3.Minimum = 1;
+                    sliderEffectProperty3.Maximum = 8;
+                    if (resetSliders) { sliderEffectProperty3.Value = 2; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Pixelate:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.TileReflection:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    sliderEffectProperty4.Visible = true;
+                    sliderEffectProperty4.Enabled = true;
+                    txtEffectProperty4.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 359;
+                    if (resetSliders) { sliderEffectProperty1.Value = 30; }
+
+                    sliderEffectProperty2.Minimum = 1;
+                    sliderEffectProperty2.Maximum = 800;
+                    if (resetSliders) { sliderEffectProperty2.Value = 40; }
+
+                    sliderEffectProperty3.Minimum = -100;
+                    sliderEffectProperty3.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty3.Value = 8; }
+
+                    sliderEffectProperty4.Minimum = 1;
+                    sliderEffectProperty4.Maximum = 5;
+                    if (resetSliders) { sliderEffectProperty4.Value = 2; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+
+                    txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4;
+                    sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4Tip;
+                    sliderEffectProperty4_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Twist:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = -200;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 30; }
+
+                    sliderEffectProperty2.Minimum = 1;
+                    sliderEffectProperty2.Maximum = 20000;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
+
+                    sliderEffectProperty3.Minimum = 1;
+                    sliderEffectProperty3.Maximum = 5;
+                    if (resetSliders) { sliderEffectProperty3.Value = 2; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.AddNoise:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty1.Value = 64; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 400;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
+
+                    sliderEffectProperty3.Minimum = 0;
+                    sliderEffectProperty3.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty3.Value = 100; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Median:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.ReduceNoise:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 10; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 40; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Glow:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 20;
+                    if (resetSliders) { sliderEffectProperty1.Value = 6; }
+
+                    sliderEffectProperty2.Minimum = -100;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 10; }
+
+                    sliderEffectProperty3.Minimum = -100;
+                    sliderEffectProperty3.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Sharpen:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 20;
+                    if (resetSliders) { sliderEffectProperty1.Value = 2; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.SoftenPortrait:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 10;
+                    if (resetSliders) { sliderEffectProperty1.Value = 5; }
+
+                    sliderEffectProperty2.Minimum = -20;
+                    sliderEffectProperty2.Maximum = 20;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
+
+                    sliderEffectProperty3.Minimum = 0;
+                    sliderEffectProperty3.Maximum = 20;
+                    if (resetSliders) { sliderEffectProperty3.Value = 10; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Vignette:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 40;
+                    if (resetSliders) { sliderEffectProperty1.Value = 5; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 100; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Clouds:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 2;
+                    sliderEffectProperty1.Maximum = 1000;
+                    if (resetSliders) { sliderEffectProperty1.Value = 65; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.EdgeDetect:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 359;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Emboss:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 359;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Outline:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 1;
+                    sliderEffectProperty1.Maximum = 200;
+                    if (resetSliders) { sliderEffectProperty1.Value = 3; }
+
+                    sliderEffectProperty2.Minimum = 0;
+                    sliderEffectProperty2.Maximum = 100;
+                    if (resetSliders) { sliderEffectProperty2.Value = 50; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.Relief:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = 0;
+                    sliderEffectProperty1.Maximum = 359;
+                    if (resetSliders) { sliderEffectProperty1.Value = 45; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.DodgeBurn:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = -50;
+                    sliderEffectProperty1.Maximum = 50;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+                    break;
+                case CmbxEffectOptions.RgbTint:
+                    //Sets property visibility / enabledness.
+                    sliderEffectProperty1.Visible = true;
+                    sliderEffectProperty1.Enabled = true;
+                    txtEffectProperty1.Visible = true;
+
+                    sliderEffectProperty2.Visible = true;
+                    sliderEffectProperty2.Enabled = true;
+                    txtEffectProperty2.Visible = true;
+
+                    sliderEffectProperty3.Visible = true;
+                    sliderEffectProperty3.Enabled = true;
+                    txtEffectProperty3.Visible = true;
+
+                    //Sets the range of enabled sliders.
+                    sliderEffectProperty1.Minimum = -255;
+                    sliderEffectProperty1.Maximum = 255;
+                    if (resetSliders) { sliderEffectProperty1.Value = 0; }
+
+                    sliderEffectProperty2.Minimum = -255;
+                    sliderEffectProperty2.Maximum = 255;
+                    if (resetSliders) { sliderEffectProperty2.Value = 0; }
+
+                    sliderEffectProperty3.Minimum = -255;
+                    sliderEffectProperty3.Maximum = 255;
+                    if (resetSliders) { sliderEffectProperty3.Value = 0; }
+
+                    //Updates the text and tooltip of enabled sliders.
+                    txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1;
+                    sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1Tip;
+                    sliderEffectProperty1_ValueChanged(this, null);
+
+                    txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2;
+                    sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2Tip;
+                    sliderEffectProperty2_ValueChanged(this, null);
+
+                    txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3;
+                    sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3Tip;
+                    sliderEffectProperty3_ValueChanged(this, null);
+                    break;
+            }
+
+            //Forces the sliders to be in a valid range.
+            if (!resetSliders)
+            {
+                sliderEffectProperty1.Value = Utils.Clamp(sliderEffectProperty1.Value,
+                    sliderEffectProperty1.Minimum, sliderEffectProperty1.Maximum);
+                sliderEffectProperty2.Value = Utils.Clamp(sliderEffectProperty2.Value,
+                    sliderEffectProperty2.Minimum, sliderEffectProperty2.Maximum);
+                sliderEffectProperty3.Value = Utils.Clamp(sliderEffectProperty3.Value,
+                    sliderEffectProperty3.Minimum, sliderEffectProperty3.Maximum);
+                sliderEffectProperty4.Value = Utils.Clamp(sliderEffectProperty4.Value,
+                    sliderEffectProperty4.Minimum, sliderEffectProperty4.Maximum);
+            }
+
+            //Applies an effect to the bitmap.
+            ApplyFilter();
+        }
+
+        /// <summary>
         /// Displays a context menu for changing background color options.
         /// </summary>
         /// <param name="sender">
@@ -3911,6 +3538,198 @@ namespace BrushFilter
 
             contextMenu.Show(sender, location);
         }
+
+        /// <summary>
+        /// Applies the brush at the specified point in the canvas.
+        /// </summary>
+        /// <param name="canvas">
+        /// The image to draw on.
+        /// </param>
+        /// <param name="brush">
+        /// The image to draw onto the canvas.
+        /// </param>
+        /// <param name="coords">
+        /// The brush drawing position.
+        /// </param>
+        /// <param name="intensityMultiplier">
+        /// A percentage, expresesd as a float, to multiply the intensity by.
+        /// </param>
+        public unsafe bool UncoverBitmap(
+            Bitmap canvas,
+            Bitmap brush,
+            Point coords)
+        {
+            //Formats must be the same.
+            if (canvas.PixelFormat != PixelFormat.Format32bppArgb ||
+            brush.PixelFormat != PixelFormat.Format32bppArgb)
+            {
+                return false;
+            }
+
+            //Locks the pixels to be edited.
+            BitmapData canvasData, brushData;
+
+            //Gets the brush area to draw.
+            int brushX = Utils.Clamp(-coords.X, 0, brush.Width);
+            int brushY = Utils.Clamp(-coords.Y, 0, brush.Height);
+            int brushWidth = Utils.Clamp(brush.Width - brushX, 0,
+                Math.Min(brush.Width, Math.Max(0, canvas.Width - coords.X)));
+            int brushHeight = Utils.Clamp(brush.Height - brushY, 0,
+                Math.Min(brush.Height, Math.Max(0, canvas.Height - coords.Y)));
+
+            Rectangle brushRect = new Rectangle(
+                brushX, brushY, brushWidth, brushHeight);
+
+            //Gets the affected area on the canvas.
+            int canvasX = Utils.Clamp(coords.X, 0, canvas.Width);
+            int canvasY = Utils.Clamp(coords.Y, 0, canvas.Height);
+            int canvasWidth = Utils.Clamp(canvasX + brushWidth / 2, 0, Math.Max(0, canvas.Width - canvasX));
+            int canvasHeight = Utils.Clamp(canvasY + brushHeight / 2, 0, Math.Max(0, canvas.Height - canvasY));
+            Rectangle canvasRect = new Rectangle(canvasX, canvasY, canvasWidth, canvasHeight);
+
+            //Does not lockbits for an invalid rectangle.
+            if (brushRect.Width <= 0 || brushRect.Height <= 0 ||
+                canvasRect.Width <= 0 || canvasRect.Height <= 0)
+            {
+                return false;
+            }
+
+            canvasData = canvas.LockBits(
+                canvasRect,
+                ImageLockMode.ReadWrite,
+                canvas.PixelFormat);
+
+            brushData = brush.LockBits(
+                brushRect,
+                ImageLockMode.ReadOnly,
+                brush.PixelFormat);
+
+            byte* canvasRow = (byte*)canvasData.Scan0;
+            byte* brushRow = (byte*)brushData.Scan0;
+
+            //Calculations performed outside loop for performance.
+            float sliderIntensity = sliderBrushIntensity.Value / 100f;
+            int canvWidth = canvas.Width;
+            int canvHeight = canvas.Height;
+
+            //Iterates through each pixel in parallel.         
+            Parallel.For(0, brushRect.Height, (y) =>
+            {
+                for (int x = 0; x < brushRect.Width; x++)
+                {
+                    //Doesn't consider pixels outside of the canvas image.
+                    if (x >= canvWidth ||
+                        y >= canvHeight)
+                    {
+                        continue;
+                    }
+
+                    int brushPtr = y * brushData.Stride + x * 4;
+                    int canvasPtr = y * canvasData.Stride + x * 4;
+
+                    //Gets the pixel intensity to use for the effect strength.
+                    byte intensity = (byte)HsvColor.FromColor(ColorBgra.FromBgr(
+                        brushRow[brushPtr],
+                        brushRow[brushPtr + 1],
+                        brushRow[brushPtr + 2])).Value;
+
+                    //Increases alpha by intensity to "uncover" the surface.
+                    canvasRow[canvasPtr + 3] =
+                        (byte)Utils.Clamp(canvasRow[canvasPtr + 3] +
+                        (int)((100 - intensity) * sliderIntensity), 0,
+                            bmpEffectAlpha[canvasX + x, canvasY + y]);
+                }
+            });
+
+            canvas.UnlockBits(canvasData);
+            brush.UnlockBits(brushData);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Allows the canvas to zoom in and out dependent on the mouse wheel.
+        /// </summary>
+        private void Zoom(int mouseWheelDetents, bool updateSlider)
+        {
+            //Causes the slider's update method to trigger, which calls this
+            //and doesn't repeat anything since updateSlider is then false.
+            if (updateSlider)
+            {
+                //Zooms in/out some amount for each mouse wheel movement.
+                int zoom;
+                if (sliderCanvasZoom.Value < 5)
+                {
+                    zoom = 1;
+                }
+                else if (sliderCanvasZoom.Value < 10)
+                {
+                    zoom = 3;
+                }
+                else if (sliderCanvasZoom.Value < 20)
+                {
+                    zoom = 5;
+                }
+                else if (sliderCanvasZoom.Value < 50)
+                {
+                    zoom = 10;
+                }
+                else if (sliderCanvasZoom.Value < 100)
+                {
+                    zoom = 15;
+                }
+                else if (sliderCanvasZoom.Value < 200)
+                {
+                    zoom = 30;
+                }
+                else if (sliderCanvasZoom.Value < 500)
+                {
+                    zoom = 50;
+                }
+                else if (sliderCanvasZoom.Value < 1000)
+                {
+                    zoom = 100;
+                }
+                else if (sliderCanvasZoom.Value < 2000)
+                {
+                    zoom = 200;
+                }
+                else
+                {
+                    zoom = 300;
+                }
+
+                zoom *= Math.Sign(mouseWheelDetents);
+
+                //Updates the corresponding slider as well (within its range).
+                sliderCanvasZoom.Value = Utils.Clamp(
+                sliderCanvasZoom.Value + zoom,
+                sliderCanvasZoom.Minimum,
+                sliderCanvasZoom.Maximum);
+
+                return;
+            }
+
+            //Calculates the zooming percent.
+            float newZoomFactor = sliderCanvasZoom.Value / 100f;
+
+            //Updates the canvas zoom factor.
+            displayCanvasZoom = newZoomFactor;
+            txtCanvasZoom.Text = String.Format(
+                "{0} {1:p0}",
+                Globalization.GlobalStrings.CanvasZoom,
+                newZoomFactor);
+
+            //Gets the new width and height, adjusted for zooming.
+            int zoomWidth = (int)(bmpCurrentDrawing.Width * newZoomFactor);
+            int zoomHeight = (int)(bmpCurrentDrawing.Height * newZoomFactor);
+
+            //Sets the new canvas position (center) and size using zoom.
+            displayCanvas.Bounds = new Rectangle(
+                (displayCanvasBG.Width - zoomWidth) / 2,
+                (displayCanvasBG.Height - zoomHeight) / 2,
+                zoomWidth, zoomHeight);
+        }
         #endregion
 
         #region Methods (event handlers)
@@ -3935,7 +3754,7 @@ namespace BrushFilter
 
             //Adds versioning information to the window title.
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            Text = EffectPlugin.StaticName + " (version " +
+            Text = BrushFilterEffectPlugin.StaticName + " (version " +
                 version.Major + "." + version.Minor + ")";
 
             //Loads globalization texts for regional support.
@@ -4750,6 +4569,166 @@ namespace BrushFilter
             {
                 doPreview = true;
                 SetEffectProperties(true);
+            }
+        }
+
+        /// <summary>
+        /// Draws each item with its icon if possible.
+        /// </summary>
+        private void cmbxEffectType_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var item = (Tuple<string, CmbxEffectOptions>)
+                cmbxEffectType.Items[e.Index];
+
+            //If the item is a custom effect, this stores the instantiation.
+            Effect currCustomEffect = null;
+
+            //Sets the icon to display for each entry.
+            Image displayIcon = null;
+            switch (item.Item2)
+            {
+                case CmbxEffectOptions.BrightnessContrast:
+                    displayIcon = new BrightnessAndContrastAdjustment().Image;
+                    break;
+                case CmbxEffectOptions.HueSaturation:
+                    displayIcon = new HueAndSaturationAdjustment().Image;
+                    break;
+                case CmbxEffectOptions.InvertColors:
+                    displayIcon = new InvertColorsEffect().Image;
+                    break;
+                case CmbxEffectOptions.Posterize:
+                    displayIcon = new PosterizeAdjustment().Image;
+                    break;
+                case CmbxEffectOptions.Sepia:
+                    displayIcon = new SepiaEffect().Image;
+                    break;
+                case CmbxEffectOptions.InkSketch:
+                    displayIcon = new InkSketchEffect().Image;
+                    break;
+                case CmbxEffectOptions.OilPainting:
+                    displayIcon = new OilPaintingEffect().Image;
+                    break;
+                case CmbxEffectOptions.PencilSketch:
+                    displayIcon = new PencilSketchEffect().Image;
+                    break;
+                case CmbxEffectOptions.Fragment:
+                    displayIcon = new FragmentEffect().Image;
+                    break;
+                case CmbxEffectOptions.Blur:
+                    displayIcon = new GaussianBlurEffect().Image;
+                    break;
+                case CmbxEffectOptions.MotionBlur:
+                    displayIcon = new MotionBlurEffect().Image;
+                    break;
+                case CmbxEffectOptions.SurfaceBlur:
+                    displayIcon = new SurfaceBlurEffect().Image;
+                    break;
+                case CmbxEffectOptions.Unfocus:
+                    displayIcon = new UnfocusEffect().Image;
+                    break;
+                case CmbxEffectOptions.ZoomBlur:
+                    displayIcon = new ZoomBlurEffect().Image;
+                    break;
+                case CmbxEffectOptions.Bulge:
+                    displayIcon = new BulgeEffect().Image;
+                    break;
+                case CmbxEffectOptions.Crystalize:
+                    displayIcon = new CrystalizeEffect().Image;
+                    break;
+                case CmbxEffectOptions.Dents:
+                    displayIcon = new DentsEffect().Image;
+                    break;
+                case CmbxEffectOptions.FrostedGlass:
+                    displayIcon = new FrostedGlassEffect().Image;
+                    break;
+                case CmbxEffectOptions.Pixelate:
+                    displayIcon = new PixelateEffect().Image;
+                    break;
+                case CmbxEffectOptions.TileReflection:
+                    displayIcon = new TileEffect().Image;
+                    break;
+                case CmbxEffectOptions.Twist:
+                    displayIcon = new TwistEffect().Image;
+                    break;
+                case CmbxEffectOptions.AddNoise:
+                    displayIcon = new AddNoiseEffect().Image;
+                    break;
+                case CmbxEffectOptions.Median:
+                    displayIcon = new MedianEffect().Image;
+                    break;
+                case CmbxEffectOptions.ReduceNoise:
+                    displayIcon = new ReduceNoiseEffect().Image;
+                    break;
+                case CmbxEffectOptions.Glow:
+                    displayIcon = new GlowEffect().Image;
+                    break;
+                case CmbxEffectOptions.Sharpen:
+                    displayIcon = new SharpenEffect().Image;
+                    break;
+                case CmbxEffectOptions.SoftenPortrait:
+                    displayIcon = new SoftenPortraitEffect().Image;
+                    break;
+                case CmbxEffectOptions.Vignette:
+                    displayIcon = new VignetteEffect().Image;
+                    break;
+                case CmbxEffectOptions.Clouds:
+                    displayIcon = new CloudsEffect().Image;
+                    break;
+                case CmbxEffectOptions.EdgeDetect:
+                    displayIcon = new EdgeDetectEffect().Image;
+                    break;
+                case CmbxEffectOptions.Emboss:
+                    displayIcon = new EmbossEffect().Image;
+                    break;
+                case CmbxEffectOptions.Outline:
+                    displayIcon = new OutlineEffect().Image;
+                    break;
+                case CmbxEffectOptions.Relief:
+                    displayIcon = new ReliefEffect().Image;
+                    break;
+            }
+
+            //Constrains the image drawing space of each item's picture so it
+            //draws without distortion, which is why size is height * height.
+            Rectangle pictureLocation = new Rectangle(2, e.Bounds.Top,
+                e.Bounds.Height, e.Bounds.Height);
+
+            //Repaints white over the image and text area.
+            e.Graphics.FillRectangle(
+                Brushes.White,
+                new Rectangle(2, e.Bounds.Top, e.Bounds.Width, e.Bounds.Height));
+
+            //Draws the image of the current item to be repainted.
+            if (displayIcon != null)
+            {
+                e.Graphics.DrawImage(displayIcon, pictureLocation);
+            }
+
+            //Draws the text centered or right of its picture.
+            string displayName = item.Item1;
+
+            //Sets the proper text for custom effects.
+            if (currCustomEffect != null)
+            {
+                displayName = currCustomEffect?.Name;
+            }
+
+            //Displays the text next to the icon.
+            if (displayIcon == null)
+            {
+                e.Graphics.DrawString(
+                    displayName,
+                    cmbxEffectType.Font,
+                    Brushes.Black,
+                    new Point(e.Bounds.X + 4, e.Bounds.Y + 6));
+            }
+            else
+            {
+                e.Graphics.DrawString(
+                    displayName,
+                    cmbxEffectType.Font,
+                    Brushes.Black,
+                    new Point(e.Bounds.X + pictureLocation.Width + 2, e.Bounds.Y + 6));
             }
         }
 
