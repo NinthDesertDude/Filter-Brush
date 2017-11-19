@@ -21,7 +21,7 @@ namespace BrushFilter
     /// <summary>
     /// The dialog used for working with the effect.
     /// </summary>
-    public class winBrushFilter : EffectConfigDialog
+    public class WinBrushFilter : EffectConfigDialog
     {
         #region Fields
         /// <summary>
@@ -512,108 +512,112 @@ namespace BrushFilter
         /// <summary>
         /// Initializes components and brushes.
         /// </summary>
-        public winBrushFilter()
+        public WinBrushFilter()
         {
             InitializeComponent();
             InitBrushes();
 
             //Configures items for the symmetry options combobox.
-            symmetryOptions = new BindingList<Tuple<string, string>>();
-            symmetryOptions.Add(new Tuple<string, string>(
-                Globalization.GlobalStrings.CmbxSymmetryNone, "None"));
-            symmetryOptions.Add(new Tuple<string, string>(
-                Globalization.GlobalStrings.CmbxSymmetryHorz, "Horizontal"));
-            symmetryOptions.Add(new Tuple<string, string>(
-                Globalization.GlobalStrings.CmbxSymmetryVert, "Vertical"));
-            symmetryOptions.Add(new Tuple<string, string>(
-                Globalization.GlobalStrings.CmbxSymmetryBoth, "Both"));
+            symmetryOptions = new BindingList<Tuple<string, string>>
+            {
+                new Tuple<string, string>(
+                    Globalization.GlobalStrings.CmbxSymmetryNone, "None"),
+                new Tuple<string, string>(
+                    Globalization.GlobalStrings.CmbxSymmetryHorz, "Horizontal"),
+                new Tuple<string, string>(
+                    Globalization.GlobalStrings.CmbxSymmetryVert, "Vertical"),
+                new Tuple<string, string>(
+                    Globalization.GlobalStrings.CmbxSymmetryBoth, "Both")
+            };
             cmbxSymmetry.DataSource = symmetryOptions;
             cmbxSymmetry.DisplayMember = "Item1";
             cmbxSymmetry.ValueMember = "Item2";
 
             //Configures items for the effect combobox.
-            cmbxEffectType.SelectedValueChanged -= cmbxEffectType_SelectedValueChanged;
-            effectOptions = new BindingList<Tuple<string, CmbxEffectOptions>>();
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectDodgeBurn, CmbxEffectOptions.DodgeBurn));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectBlackWhite, CmbxEffectOptions.BlackAndWhite));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectBrightnessContrast, CmbxEffectOptions.BrightnessContrast));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectHueSaturation, CmbxEffectOptions.HueSaturation));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectInvertColors, CmbxEffectOptions.InvertColors));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectPosterize, CmbxEffectOptions.Posterize));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectSepia, CmbxEffectOptions.Sepia));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectRgbTint, CmbxEffectOptions.RgbTint));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectFlipHorizontal, CmbxEffectOptions.FlipHorizontal));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectFlipVertical, CmbxEffectOptions.FlipVertical));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectInkSketch, CmbxEffectOptions.InkSketch));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectOilPainting, CmbxEffectOptions.OilPainting));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectPencilSketch, CmbxEffectOptions.PencilSketch));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectFragment, CmbxEffectOptions.Fragment));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectBlur, CmbxEffectOptions.Blur));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectMotionBlur, CmbxEffectOptions.MotionBlur));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectSurfaceBlur, CmbxEffectOptions.SurfaceBlur));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectUnfocus, CmbxEffectOptions.Unfocus));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectZoomBlur, CmbxEffectOptions.ZoomBlur));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectBulge, CmbxEffectOptions.Bulge));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectCrystalize, CmbxEffectOptions.Crystalize));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectDents, CmbxEffectOptions.Dents));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectFrostedGlass, CmbxEffectOptions.FrostedGlass));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectPixelate, CmbxEffectOptions.Pixelate));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectTileReflection, CmbxEffectOptions.TileReflection));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectTwist, CmbxEffectOptions.Twist));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectAddNoise, CmbxEffectOptions.AddNoise));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectMedian, CmbxEffectOptions.Median));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectReduceNoise, CmbxEffectOptions.ReduceNoise));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectGlow, CmbxEffectOptions.Glow));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectSharpen, CmbxEffectOptions.Sharpen));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectSoftenPortrait, CmbxEffectOptions.SoftenPortrait));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectVignette, CmbxEffectOptions.Vignette));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectClouds, CmbxEffectOptions.Clouds));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectEdgeDetect, CmbxEffectOptions.EdgeDetect));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectEmboss, CmbxEffectOptions.Emboss));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectOutline, CmbxEffectOptions.Outline));
-            effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                Globalization.GlobalStrings.CmbxEffectRelief, CmbxEffectOptions.Relief));
+            cmbxEffectType.SelectedValueChanged -= CmbxEffectType_SelectedValueChanged;
+            effectOptions = new BindingList<Tuple<string, CmbxEffectOptions>>
+            {
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectDodgeBurn, CmbxEffectOptions.DodgeBurn),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectBlackWhite, CmbxEffectOptions.BlackAndWhite),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectBrightnessContrast, CmbxEffectOptions.BrightnessContrast),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectHueSaturation, CmbxEffectOptions.HueSaturation),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectInvertColors, CmbxEffectOptions.InvertColors),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectPosterize, CmbxEffectOptions.Posterize),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectSepia, CmbxEffectOptions.Sepia),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectRgbTint, CmbxEffectOptions.RgbTint),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectFlipHorizontal, CmbxEffectOptions.FlipHorizontal),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectFlipVertical, CmbxEffectOptions.FlipVertical),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectInkSketch, CmbxEffectOptions.InkSketch),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectOilPainting, CmbxEffectOptions.OilPainting),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectPencilSketch, CmbxEffectOptions.PencilSketch),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectFragment, CmbxEffectOptions.Fragment),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectBlur, CmbxEffectOptions.Blur),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectMotionBlur, CmbxEffectOptions.MotionBlur),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectSurfaceBlur, CmbxEffectOptions.SurfaceBlur),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectUnfocus, CmbxEffectOptions.Unfocus),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectZoomBlur, CmbxEffectOptions.ZoomBlur),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectBulge, CmbxEffectOptions.Bulge),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectCrystalize, CmbxEffectOptions.Crystalize),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectDents, CmbxEffectOptions.Dents),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectFrostedGlass, CmbxEffectOptions.FrostedGlass),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectPixelate, CmbxEffectOptions.Pixelate),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectTileReflection, CmbxEffectOptions.TileReflection),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectTwist, CmbxEffectOptions.Twist),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectAddNoise, CmbxEffectOptions.AddNoise),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectMedian, CmbxEffectOptions.Median),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectReduceNoise, CmbxEffectOptions.ReduceNoise),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectGlow, CmbxEffectOptions.Glow),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectSharpen, CmbxEffectOptions.Sharpen),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectSoftenPortrait, CmbxEffectOptions.SoftenPortrait),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectVignette, CmbxEffectOptions.Vignette),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectClouds, CmbxEffectOptions.Clouds),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectEdgeDetect, CmbxEffectOptions.EdgeDetect),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectEmboss, CmbxEffectOptions.Emboss),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectOutline, CmbxEffectOptions.Outline),
+                new Tuple<string, CmbxEffectOptions>(
+                    Globalization.GlobalStrings.CmbxEffectRelief, CmbxEffectOptions.Relief)
+            };
             cmbxEffectType.DataSource = effectOptions;
             cmbxEffectType.DisplayMember = "Item1";
             cmbxEffectType.ValueMember = "Item2";
-            cmbxEffectType.SelectedValueChanged += cmbxEffectType_SelectedValueChanged;
+            cmbxEffectType.SelectedValueChanged += CmbxEffectType_SelectedValueChanged;
 
             //Adds custom effects using i to identify the index.
             loadedUserEffects = LoadUserEffects();
@@ -1828,7 +1832,7 @@ namespace BrushFilter
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(winBrushFilter));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WinBrushFilter));
             this.timerRepositionUpdate = new System.Windows.Forms.Timer(this.components);
             this.txtTooltip = new System.Windows.Forms.Label();
             this.displayCanvasBG = new System.Windows.Forms.Panel();
@@ -1941,7 +1945,7 @@ namespace BrushFilter
             this.displayCanvasBG.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(207)))), ((int)(((byte)(207)))), ((int)(((byte)(207)))));
             this.displayCanvasBG.Controls.Add(this.displayCanvas);
             this.displayCanvasBG.Name = "displayCanvasBG";
-            this.displayCanvasBG.MouseEnter += new System.EventHandler(this.displayCanvasBG_MouseEnter);
+            this.displayCanvasBG.MouseEnter += new System.EventHandler(this.DisplayCanvasBG_MouseEnter);
             this.displayCanvasBG.MouseLeave += new System.EventHandler(this.EnablePreview);
             // 
             // displayCanvas
@@ -1949,11 +1953,11 @@ namespace BrushFilter
             resources.ApplyResources(this.displayCanvas, "displayCanvas");
             this.displayCanvas.Name = "displayCanvas";
             this.displayCanvas.TabStop = false;
-            this.displayCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.displayCanvas_Paint);
-            this.displayCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.displayCanvas_MouseDown);
-            this.displayCanvas.MouseEnter += new System.EventHandler(this.displayCanvas_MouseEnter);
-            this.displayCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.displayCanvas_MouseMove);
-            this.displayCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.displayCanvas_MouseUp);
+            this.displayCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.DisplayCanvas_Paint);
+            this.displayCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DisplayCanvas_MouseDown);
+            this.displayCanvas.MouseEnter += new System.EventHandler(this.DisplayCanvas_MouseEnter);
+            this.displayCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DisplayCanvas_MouseMove);
+            this.displayCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.DisplayCanvas_MouseUp);
             // 
             // tabOther
             // 
@@ -1978,24 +1982,24 @@ namespace BrushFilter
             resources.ApplyResources(this.bttnCustomBrushLocations, "bttnCustomBrushLocations");
             this.bttnCustomBrushLocations.Name = "bttnCustomBrushLocations";
             this.bttnCustomBrushLocations.UseVisualStyleBackColor = true;
-            this.bttnCustomBrushLocations.Click += new System.EventHandler(this.bttnPreferences_Click);
-            this.bttnCustomBrushLocations.MouseEnter += new System.EventHandler(this.bttnPreferences_MouseEnter);
+            this.bttnCustomBrushLocations.Click += new System.EventHandler(this.BttnPreferences_Click);
+            this.bttnCustomBrushLocations.MouseEnter += new System.EventHandler(this.BttnPreferences_MouseEnter);
             // 
             // bttnClearSettings
             // 
             resources.ApplyResources(this.bttnClearSettings, "bttnClearSettings");
             this.bttnClearSettings.Name = "bttnClearSettings";
             this.bttnClearSettings.UseVisualStyleBackColor = true;
-            this.bttnClearSettings.Click += new System.EventHandler(this.bttnClearSettings_Click);
-            this.bttnClearSettings.MouseEnter += new System.EventHandler(this.bttnClearSettings_MouseEnter);
+            this.bttnClearSettings.Click += new System.EventHandler(this.BttnClearSettings_Click);
+            this.bttnClearSettings.MouseEnter += new System.EventHandler(this.BttnClearSettings_MouseEnter);
             // 
             // bttnClearBrushes
             // 
             resources.ApplyResources(this.bttnClearBrushes, "bttnClearBrushes");
             this.bttnClearBrushes.Name = "bttnClearBrushes";
             this.bttnClearBrushes.UseVisualStyleBackColor = true;
-            this.bttnClearBrushes.Click += new System.EventHandler(this.bttnClearBrushes_Click);
-            this.bttnClearBrushes.MouseEnter += new System.EventHandler(this.bttnClearBrushes_MouseEnter);
+            this.bttnClearBrushes.Click += new System.EventHandler(this.BttnClearBrushes_Click);
+            this.bttnClearBrushes.MouseEnter += new System.EventHandler(this.BttnClearBrushes_MouseEnter);
             // 
             // sliderShiftIntensity
             // 
@@ -2005,8 +2009,8 @@ namespace BrushFilter
             this.sliderShiftIntensity.Minimum = -100;
             this.sliderShiftIntensity.Name = "sliderShiftIntensity";
             this.sliderShiftIntensity.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderShiftIntensity.ValueChanged += new System.EventHandler(this.sliderShiftIntensity_ValueChanged);
-            this.sliderShiftIntensity.MouseEnter += new System.EventHandler(this.sliderShiftIntensity_MouseEnter);
+            this.sliderShiftIntensity.ValueChanged += new System.EventHandler(this.SliderShiftIntensity_ValueChanged);
+            this.sliderShiftIntensity.MouseEnter += new System.EventHandler(this.SliderShiftIntensity_MouseEnter);
             // 
             // txtShiftIntensity
             // 
@@ -2022,8 +2026,8 @@ namespace BrushFilter
             this.sliderShiftRotation.Minimum = -180;
             this.sliderShiftRotation.Name = "sliderShiftRotation";
             this.sliderShiftRotation.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderShiftRotation.ValueChanged += new System.EventHandler(this.sliderShiftRotation_ValueChanged);
-            this.sliderShiftRotation.MouseEnter += new System.EventHandler(this.sliderShiftRotation_MouseEnter);
+            this.sliderShiftRotation.ValueChanged += new System.EventHandler(this.SliderShiftRotation_ValueChanged);
+            this.sliderShiftRotation.MouseEnter += new System.EventHandler(this.SliderShiftRotation_MouseEnter);
             // 
             // txtShiftRotation
             // 
@@ -2039,8 +2043,8 @@ namespace BrushFilter
             this.sliderShiftSize.Minimum = -500;
             this.sliderShiftSize.Name = "sliderShiftSize";
             this.sliderShiftSize.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderShiftSize.ValueChanged += new System.EventHandler(this.sliderShiftSize_ValueChanged);
-            this.sliderShiftSize.MouseEnter += new System.EventHandler(this.sliderShiftSize_MouseEnter);
+            this.sliderShiftSize.ValueChanged += new System.EventHandler(this.SliderShiftSize_ValueChanged);
+            this.sliderShiftSize.MouseEnter += new System.EventHandler(this.SliderShiftSize_MouseEnter);
             // 
             // txtShiftSize
             // 
@@ -2061,8 +2065,8 @@ namespace BrushFilter
             this.sliderMinDrawDistance.Maximum = 100;
             this.sliderMinDrawDistance.Name = "sliderMinDrawDistance";
             this.sliderMinDrawDistance.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderMinDrawDistance.ValueChanged += new System.EventHandler(this.sliderMinDrawDistance_ValueChanged);
-            this.sliderMinDrawDistance.MouseEnter += new System.EventHandler(this.sliderMinDrawDistance_MouseEnter);
+            this.sliderMinDrawDistance.ValueChanged += new System.EventHandler(this.SliderMinDrawDistance_ValueChanged);
+            this.sliderMinDrawDistance.MouseEnter += new System.EventHandler(this.SliderMinDrawDistance_MouseEnter);
             // 
             // grpbxBrushOptions
             // 
@@ -2081,14 +2085,14 @@ namespace BrushFilter
             this.cmbxSymmetry.DropDownWidth = 20;
             this.cmbxSymmetry.FormattingEnabled = true;
             this.cmbxSymmetry.Name = "cmbxSymmetry";
-            this.cmbxSymmetry.MouseEnter += new System.EventHandler(this.cmbxSymmetry_MouseEnter);
+            this.cmbxSymmetry.MouseEnter += new System.EventHandler(this.CmbxSymmetry_MouseEnter);
             // 
             // chkbxOrientToMouse
             // 
             resources.ApplyResources(this.chkbxOrientToMouse, "chkbxOrientToMouse");
             this.chkbxOrientToMouse.Name = "chkbxOrientToMouse";
             this.chkbxOrientToMouse.UseVisualStyleBackColor = true;
-            this.chkbxOrientToMouse.MouseEnter += new System.EventHandler(this.chkbxOrientToMouse_MouseEnter);
+            this.chkbxOrientToMouse.MouseEnter += new System.EventHandler(this.ChkbxOrientToMouse_MouseEnter);
             // 
             // tabJitter
             // 
@@ -2119,8 +2123,8 @@ namespace BrushFilter
             this.sliderRandVertShift.Maximum = 100;
             this.sliderRandVertShift.Name = "sliderRandVertShift";
             this.sliderRandVertShift.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandVertShift.ValueChanged += new System.EventHandler(this.sliderRandVertShift_ValueChanged);
-            this.sliderRandVertShift.MouseEnter += new System.EventHandler(this.sliderRandVertShift_MouseEnter);
+            this.sliderRandVertShift.ValueChanged += new System.EventHandler(this.SliderRandVertShift_ValueChanged);
+            this.sliderRandVertShift.MouseEnter += new System.EventHandler(this.SliderRandVertShift_MouseEnter);
             // 
             // txtRandVertShift
             // 
@@ -2135,8 +2139,8 @@ namespace BrushFilter
             this.sliderRandHorzShift.Maximum = 100;
             this.sliderRandHorzShift.Name = "sliderRandHorzShift";
             this.sliderRandHorzShift.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandHorzShift.ValueChanged += new System.EventHandler(this.sliderRandHorzShift_ValueChanged);
-            this.sliderRandHorzShift.MouseEnter += new System.EventHandler(this.sliderRandHorzShift_MouseEnter);
+            this.sliderRandHorzShift.ValueChanged += new System.EventHandler(this.SliderRandHorzShift_ValueChanged);
+            this.sliderRandHorzShift.MouseEnter += new System.EventHandler(this.SliderRandHorzShift_MouseEnter);
             // 
             // txtRandHorzShift
             // 
@@ -2151,8 +2155,8 @@ namespace BrushFilter
             this.sliderRandMaxIntensity.Maximum = 100;
             this.sliderRandMaxIntensity.Name = "sliderRandMaxIntensity";
             this.sliderRandMaxIntensity.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandMaxIntensity.ValueChanged += new System.EventHandler(this.sliderRandMaxIntensity_ValueChanged);
-            this.sliderRandMaxIntensity.MouseEnter += new System.EventHandler(this.sliderRandMaxIntensity_MouseEnter);
+            this.sliderRandMaxIntensity.ValueChanged += new System.EventHandler(this.SliderRandMaxIntensity_ValueChanged);
+            this.sliderRandMaxIntensity.MouseEnter += new System.EventHandler(this.SliderRandMaxIntensity_MouseEnter);
             // 
             // txtRandMaxIntensity
             // 
@@ -2167,8 +2171,8 @@ namespace BrushFilter
             this.sliderRandMinIntensity.Maximum = 100;
             this.sliderRandMinIntensity.Name = "sliderRandMinIntensity";
             this.sliderRandMinIntensity.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandMinIntensity.ValueChanged += new System.EventHandler(this.sliderRandMinIntensity_ValueChanged);
-            this.sliderRandMinIntensity.MouseEnter += new System.EventHandler(this.sliderRandMinIntensity_MouseEnter);
+            this.sliderRandMinIntensity.ValueChanged += new System.EventHandler(this.SliderRandMinIntensity_ValueChanged);
+            this.sliderRandMinIntensity.MouseEnter += new System.EventHandler(this.SliderRandMinIntensity_MouseEnter);
             // 
             // txtRandMinIntensity
             // 
@@ -2183,8 +2187,8 @@ namespace BrushFilter
             this.sliderRandMaxSize.Maximum = 500;
             this.sliderRandMaxSize.Name = "sliderRandMaxSize";
             this.sliderRandMaxSize.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandMaxSize.ValueChanged += new System.EventHandler(this.sliderRandMaxSize_ValueChanged);
-            this.sliderRandMaxSize.MouseEnter += new System.EventHandler(this.sliderRandMaxSize_MouseEnter);
+            this.sliderRandMaxSize.ValueChanged += new System.EventHandler(this.SliderRandMaxSize_ValueChanged);
+            this.sliderRandMaxSize.MouseEnter += new System.EventHandler(this.SliderRandMaxSize_MouseEnter);
             // 
             // txtRandMaxSize
             // 
@@ -2199,8 +2203,8 @@ namespace BrushFilter
             this.sliderRandMinSize.Maximum = 500;
             this.sliderRandMinSize.Name = "sliderRandMinSize";
             this.sliderRandMinSize.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandMinSize.ValueChanged += new System.EventHandler(this.sliderRandMinSize_ValueChanged);
-            this.sliderRandMinSize.MouseEnter += new System.EventHandler(this.sliderRandMinSize_MouseEnter);
+            this.sliderRandMinSize.ValueChanged += new System.EventHandler(this.SliderRandMinSize_ValueChanged);
+            this.sliderRandMinSize.MouseEnter += new System.EventHandler(this.SliderRandMinSize_MouseEnter);
             // 
             // txtRandMinSize
             // 
@@ -2215,8 +2219,8 @@ namespace BrushFilter
             this.sliderRandRotRight.Maximum = 180;
             this.sliderRandRotRight.Name = "sliderRandRotRight";
             this.sliderRandRotRight.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandRotRight.ValueChanged += new System.EventHandler(this.sliderRandRotRight_ValueChanged);
-            this.sliderRandRotRight.MouseEnter += new System.EventHandler(this.sliderRandRotRight_MouseEnter);
+            this.sliderRandRotRight.ValueChanged += new System.EventHandler(this.SliderRandRotRight_ValueChanged);
+            this.sliderRandRotRight.MouseEnter += new System.EventHandler(this.SliderRandRotRight_MouseEnter);
             // 
             // txtRandRotRight
             // 
@@ -2231,8 +2235,8 @@ namespace BrushFilter
             this.sliderRandRotLeft.Maximum = 180;
             this.sliderRandRotLeft.Name = "sliderRandRotLeft";
             this.sliderRandRotLeft.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderRandRotLeft.ValueChanged += new System.EventHandler(this.sliderRandRotLeft_ValueChanged);
-            this.sliderRandRotLeft.MouseEnter += new System.EventHandler(this.sliderRandRotLeft_MouseEnter);
+            this.sliderRandRotLeft.ValueChanged += new System.EventHandler(this.SliderRandRotLeft_ValueChanged);
+            this.sliderRandRotLeft.MouseEnter += new System.EventHandler(this.SliderRandRotLeft_MouseEnter);
             // 
             // txtRandRotLeft
             // 
@@ -2264,8 +2268,8 @@ namespace BrushFilter
             resources.ApplyResources(this.bttnRedo, "bttnRedo");
             this.bttnRedo.Name = "bttnRedo";
             this.bttnRedo.UseVisualStyleBackColor = true;
-            this.bttnRedo.Click += new System.EventHandler(this.bttnRedo_Click);
-            this.bttnRedo.MouseEnter += new System.EventHandler(this.bttnRedo_MouseEnter);
+            this.bttnRedo.Click += new System.EventHandler(this.BttnRedo_Click);
+            this.bttnRedo.MouseEnter += new System.EventHandler(this.BttnRedo_MouseEnter);
             // 
             // sliderBrushIntensity
             // 
@@ -2274,8 +2278,8 @@ namespace BrushFilter
             this.sliderBrushIntensity.Maximum = 100;
             this.sliderBrushIntensity.Name = "sliderBrushIntensity";
             this.sliderBrushIntensity.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderBrushIntensity.ValueChanged += new System.EventHandler(this.sliderBrushIntensity_ValueChanged);
-            this.sliderBrushIntensity.MouseEnter += new System.EventHandler(this.sliderBrushIntensity_MouseEnter);
+            this.sliderBrushIntensity.ValueChanged += new System.EventHandler(this.SliderBrushIntensity_ValueChanged);
+            this.sliderBrushIntensity.MouseEnter += new System.EventHandler(this.SliderBrushIntensity_MouseEnter);
             // 
             // txtBrushIntensity
             // 
@@ -2298,8 +2302,8 @@ namespace BrushFilter
             this.sliderBrushSize.Name = "sliderBrushSize";
             this.sliderBrushSize.TickStyle = System.Windows.Forms.TickStyle.None;
             this.sliderBrushSize.Value = 10;
-            this.sliderBrushSize.ValueChanged += new System.EventHandler(this.sliderBrushSize_ValueChanged);
-            this.sliderBrushSize.MouseEnter += new System.EventHandler(this.sliderBrushSize_MouseEnter);
+            this.sliderBrushSize.ValueChanged += new System.EventHandler(this.SliderBrushSize_ValueChanged);
+            this.sliderBrushSize.MouseEnter += new System.EventHandler(this.SliderBrushSize_MouseEnter);
             // 
             // sliderBrushRotation
             // 
@@ -2309,8 +2313,8 @@ namespace BrushFilter
             this.sliderBrushRotation.Minimum = -180;
             this.sliderBrushRotation.Name = "sliderBrushRotation";
             this.sliderBrushRotation.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderBrushRotation.ValueChanged += new System.EventHandler(this.sliderBrushRotation_ValueChanged);
-            this.sliderBrushRotation.MouseEnter += new System.EventHandler(this.sliderBrushRotation_MouseEnter);
+            this.sliderBrushRotation.ValueChanged += new System.EventHandler(this.SliderBrushRotation_ValueChanged);
+            this.sliderBrushRotation.MouseEnter += new System.EventHandler(this.SliderBrushRotation_MouseEnter);
             // 
             // txtBrushRotation
             // 
@@ -2323,16 +2327,16 @@ namespace BrushFilter
             resources.ApplyResources(this.bttnOk, "bttnOk");
             this.bttnOk.Name = "bttnOk";
             this.bttnOk.UseVisualStyleBackColor = true;
-            this.bttnOk.Click += new System.EventHandler(this.bttnOk_Click);
-            this.bttnOk.MouseEnter += new System.EventHandler(this.bttnOk_MouseEnter);
+            this.bttnOk.Click += new System.EventHandler(this.BttnOk_Click);
+            this.bttnOk.MouseEnter += new System.EventHandler(this.BttnOk_MouseEnter);
             // 
             // bttnUndo
             // 
             resources.ApplyResources(this.bttnUndo, "bttnUndo");
             this.bttnUndo.Name = "bttnUndo";
             this.bttnUndo.UseVisualStyleBackColor = true;
-            this.bttnUndo.Click += new System.EventHandler(this.bttnUndo_Click);
-            this.bttnUndo.MouseEnter += new System.EventHandler(this.bttnUndo_MouseEnter);
+            this.bttnUndo.Click += new System.EventHandler(this.BttnUndo_Click);
+            this.bttnUndo.MouseEnter += new System.EventHandler(this.BttnUndo_MouseEnter);
             // 
             // bttnCancel
             // 
@@ -2340,8 +2344,8 @@ namespace BrushFilter
             this.bttnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.bttnCancel.Name = "bttnCancel";
             this.bttnCancel.UseVisualStyleBackColor = true;
-            this.bttnCancel.Click += new System.EventHandler(this.bttnCancel_Click);
-            this.bttnCancel.MouseEnter += new System.EventHandler(this.bttnCancel_MouseEnter);
+            this.bttnCancel.Click += new System.EventHandler(this.BttnCancel_Click);
+            this.bttnCancel.MouseEnter += new System.EventHandler(this.BttnCancel_MouseEnter);
             // 
             // sliderCanvasZoom
             // 
@@ -2352,8 +2356,8 @@ namespace BrushFilter
             this.sliderCanvasZoom.Name = "sliderCanvasZoom";
             this.sliderCanvasZoom.TickStyle = System.Windows.Forms.TickStyle.None;
             this.sliderCanvasZoom.Value = 100;
-            this.sliderCanvasZoom.ValueChanged += new System.EventHandler(this.sliderCanvasZoom_ValueChanged);
-            this.sliderCanvasZoom.MouseEnter += new System.EventHandler(this.sliderCanvasZoom_MouseEnter);
+            this.sliderCanvasZoom.ValueChanged += new System.EventHandler(this.SliderCanvasZoom_ValueChanged);
+            this.sliderCanvasZoom.MouseEnter += new System.EventHandler(this.SliderCanvasZoom_MouseEnter);
             // 
             // txtCanvasZoom
             // 
@@ -2371,9 +2375,9 @@ namespace BrushFilter
             this.bttnBrushSelector.DropDownWidth = 20;
             this.bttnBrushSelector.FormattingEnabled = true;
             this.bttnBrushSelector.Name = "bttnBrushSelector";
-            this.bttnBrushSelector.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.bttnBrushSelector_DrawItem);
-            this.bttnBrushSelector.SelectedIndexChanged += new System.EventHandler(this.bttnBrushSelector_SelectedIndexChanged);
-            this.bttnBrushSelector.MouseEnter += new System.EventHandler(this.bttnBrushSelector_MouseEnter);
+            this.bttnBrushSelector.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.BttnBrushSelector_DrawItem);
+            this.bttnBrushSelector.SelectedIndexChanged += new System.EventHandler(this.BttnBrushSelector_SelectedIndexChanged);
+            this.bttnBrushSelector.MouseEnter += new System.EventHandler(this.BttnBrushSelector_MouseEnter);
             // 
             // tabBar
             // 
@@ -2409,7 +2413,7 @@ namespace BrushFilter
             resources.ApplyResources(this.chkbxOverwriteMode, "chkbxOverwriteMode");
             this.chkbxOverwriteMode.Name = "chkbxOverwriteMode";
             this.chkbxOverwriteMode.UseVisualStyleBackColor = true;
-            this.chkbxOverwriteMode.MouseEnter += new System.EventHandler(this.chkbxOverwriteMode_MouseEnter);
+            this.chkbxOverwriteMode.MouseEnter += new System.EventHandler(this.ChkbxOverwriteMode_MouseEnter);
             // 
             // sliderEffectProperty2
             // 
@@ -2418,10 +2422,10 @@ namespace BrushFilter
             this.sliderEffectProperty2.Maximum = 500;
             this.sliderEffectProperty2.Name = "sliderEffectProperty2";
             this.sliderEffectProperty2.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderEffectProperty2.ValueChanged += new System.EventHandler(this.sliderEffectProperty2_ValueChanged);
-            this.sliderEffectProperty2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
-            this.sliderEffectProperty2.MouseEnter += new System.EventHandler(this.sliderEffectProperty2_MouseEnter);
-            this.sliderEffectProperty2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
+            this.sliderEffectProperty2.ValueChanged += new System.EventHandler(this.SliderEffectProperty2_ValueChanged);
+            this.sliderEffectProperty2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SliderEffectProperty_KeyUp);
+            this.sliderEffectProperty2.MouseEnter += new System.EventHandler(this.SliderEffectProperty2_MouseEnter);
+            this.sliderEffectProperty2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SliderEffectProperty_MouseUp);
             // 
             // txtEffectProperty2
             // 
@@ -2436,10 +2440,10 @@ namespace BrushFilter
             this.sliderEffectProperty1.Maximum = 500;
             this.sliderEffectProperty1.Name = "sliderEffectProperty1";
             this.sliderEffectProperty1.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderEffectProperty1.ValueChanged += new System.EventHandler(this.sliderEffectProperty1_ValueChanged);
-            this.sliderEffectProperty1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
-            this.sliderEffectProperty1.MouseEnter += new System.EventHandler(this.sliderEffectProperty1_MouseEnter);
-            this.sliderEffectProperty1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
+            this.sliderEffectProperty1.ValueChanged += new System.EventHandler(this.SliderEffectProperty1_ValueChanged);
+            this.sliderEffectProperty1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SliderEffectProperty_KeyUp);
+            this.sliderEffectProperty1.MouseEnter += new System.EventHandler(this.SliderEffectProperty1_MouseEnter);
+            this.sliderEffectProperty1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SliderEffectProperty_MouseUp);
             // 
             // txtEffectProperty1
             // 
@@ -2454,10 +2458,10 @@ namespace BrushFilter
             this.sliderEffectProperty4.Maximum = 180;
             this.sliderEffectProperty4.Name = "sliderEffectProperty4";
             this.sliderEffectProperty4.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderEffectProperty4.ValueChanged += new System.EventHandler(this.sliderEffectProperty4_ValueChanged);
-            this.sliderEffectProperty4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
-            this.sliderEffectProperty4.MouseEnter += new System.EventHandler(this.sliderEffectProperty4_MouseEnter);
-            this.sliderEffectProperty4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
+            this.sliderEffectProperty4.ValueChanged += new System.EventHandler(this.SliderEffectProperty4_ValueChanged);
+            this.sliderEffectProperty4.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SliderEffectProperty_KeyUp);
+            this.sliderEffectProperty4.MouseEnter += new System.EventHandler(this.SliderEffectProperty4_MouseEnter);
+            this.sliderEffectProperty4.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SliderEffectProperty_MouseUp);
             // 
             // txtEffectProperty4
             // 
@@ -2472,10 +2476,10 @@ namespace BrushFilter
             this.sliderEffectProperty3.Maximum = 180;
             this.sliderEffectProperty3.Name = "sliderEffectProperty3";
             this.sliderEffectProperty3.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.sliderEffectProperty3.ValueChanged += new System.EventHandler(this.sliderEffectProperty3_ValueChanged);
-            this.sliderEffectProperty3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sliderEffectProperty_KeyUp);
-            this.sliderEffectProperty3.MouseEnter += new System.EventHandler(this.sliderEffectProperty3_MouseEnter);
-            this.sliderEffectProperty3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.sliderEffectProperty_MouseUp);
+            this.sliderEffectProperty3.ValueChanged += new System.EventHandler(this.SliderEffectProperty3_ValueChanged);
+            this.sliderEffectProperty3.KeyUp += new System.Windows.Forms.KeyEventHandler(this.SliderEffectProperty_KeyUp);
+            this.sliderEffectProperty3.MouseEnter += new System.EventHandler(this.SliderEffectProperty3_MouseEnter);
+            this.sliderEffectProperty3.MouseUp += new System.Windows.Forms.MouseEventHandler(this.SliderEffectProperty_MouseUp);
             // 
             // txtEffectProperty3
             // 
@@ -2498,9 +2502,9 @@ namespace BrushFilter
             this.cmbxEffectType.FormattingEnabled = true;
             resources.ApplyResources(this.cmbxEffectType, "cmbxEffectType");
             this.cmbxEffectType.Name = "cmbxEffectType";
-            this.cmbxEffectType.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.cmbxEffectType_DrawItem);
-            this.cmbxEffectType.SelectedValueChanged += new System.EventHandler(this.cmbxEffectType_SelectedValueChanged);
-            this.cmbxEffectType.MouseEnter += new System.EventHandler(this.cmbxEffectType_MouseEnter);
+            this.cmbxEffectType.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.CmbxEffectType_DrawItem);
+            this.cmbxEffectType.SelectedValueChanged += new System.EventHandler(this.CmbxEffectType_SelectedValueChanged);
+            this.cmbxEffectType.MouseEnter += new System.EventHandler(this.CmbxEffectType_MouseEnter);
             // 
             // pnlCustomProperties
             // 
@@ -2521,13 +2525,13 @@ namespace BrushFilter
             this.MaximizeBox = true;
             this.Name = "winBrushFilter";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.winBrushFilter_FormClosed);
-            this.Load += new System.EventHandler(this.winBrushFilter_DialogLoad);
-            this.Shown += new System.EventHandler(this.winBrushFilter_DialogShown);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.winBrushFilter_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.winBrushFilter_KeyUp);
-            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.displayCanvas_MouseWheel);
-            this.Resize += new System.EventHandler(this.winBrushFilter_Resize);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.WinBrushFilter_FormClosed);
+            this.Load += new System.EventHandler(this.WinBrushFilter_DialogLoad);
+            this.Shown += new System.EventHandler(this.WinBrushFilter_DialogShown);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.WinBrushFilter_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.WinBrushFilter_KeyUp);
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.DisplayCanvas_MouseWheel);
+            this.Resize += new System.EventHandler(this.WinBrushFilter_Resize);
             this.displayCanvasBG.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.displayCanvas)).EndInit();
             this.tabOther.ResumeLayout(false);
@@ -2734,11 +2738,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.HueSaturation:
                     //Sets property visibility / enabledness.
@@ -2770,15 +2774,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Posterize:
                     //Sets property visibility / enabledness.
@@ -2810,15 +2814,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.InkSketch:
                     //Sets property visibility / enabledness.
@@ -2842,11 +2846,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.OilPainting:
                     //Sets property visibility / enabledness.
@@ -2870,11 +2874,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.PencilSketch:
                     //Sets property visibility / enabledness.
@@ -2898,11 +2902,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Fragment:
                     //Sets property visibility / enabledness.
@@ -2934,15 +2938,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Blur:
                     //Sets property visibility / enabledness.
@@ -2958,7 +2962,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.MotionBlur:
                     //Sets property visibility / enabledness.
@@ -2982,11 +2986,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.SurfaceBlur:
                     //Sets property visibility / enabledness.
@@ -3010,11 +3014,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Unfocus:
                     //Sets property visibility / enabledness.
@@ -3030,7 +3034,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.ZoomBlur:
                     //Sets property visibility / enabledness.
@@ -3046,7 +3050,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Bulge:
                     //Sets property visibility / enabledness.
@@ -3062,7 +3066,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Crystalize:
                     //Sets property visibility / enabledness.
@@ -3086,11 +3090,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Dents:
                     //Sets property visibility / enabledness.
@@ -3130,19 +3134,19 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
 
                     txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4;
                     sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4Tip;
-                    sliderEffectProperty4_ValueChanged(this, null);
+                    SliderEffectProperty4_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.FrostedGlass:
                     //Sets property visibility / enabledness.
@@ -3174,15 +3178,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Pixelate:
                     //Sets property visibility / enabledness.
@@ -3198,7 +3202,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.TileReflection:
                     //Sets property visibility / enabledness.
@@ -3238,19 +3242,19 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
 
                     txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4;
                     sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4Tip;
-                    sliderEffectProperty4_ValueChanged(this, null);
+                    SliderEffectProperty4_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Twist:
                     //Sets property visibility / enabledness.
@@ -3282,15 +3286,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.AddNoise:
                     //Sets property visibility / enabledness.
@@ -3322,15 +3326,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Median:
                     //Sets property visibility / enabledness.
@@ -3354,11 +3358,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.ReduceNoise:
                     //Sets property visibility / enabledness.
@@ -3382,11 +3386,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Glow:
                     //Sets property visibility / enabledness.
@@ -3418,15 +3422,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Sharpen:
                     //Sets property visibility / enabledness.
@@ -3442,7 +3446,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.SoftenPortrait:
                     //Sets property visibility / enabledness.
@@ -3474,15 +3478,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Vignette:
                     //Sets property visibility / enabledness.
@@ -3506,11 +3510,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Clouds:
                     //Sets property visibility / enabledness.
@@ -3534,11 +3538,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.EdgeDetect:
                     //Sets property visibility / enabledness.
@@ -3554,7 +3558,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Emboss:
                     //Sets property visibility / enabledness.
@@ -3570,7 +3574,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Outline:
                     //Sets property visibility / enabledness.
@@ -3594,11 +3598,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Relief:
                     //Sets property visibility / enabledness.
@@ -3614,7 +3618,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.DodgeBurn:
                     //Sets property visibility / enabledness.
@@ -3630,7 +3634,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.RgbTint:
                     //Sets property visibility / enabledness.
@@ -3662,15 +3666,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1Tip;
-                    sliderEffectProperty1_ValueChanged(this, null);
+                    SliderEffectProperty1_ValueChanged(this, null);
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2Tip;
-                    sliderEffectProperty2_ValueChanged(this, null);
+                    SliderEffectProperty2_ValueChanged(this, null);
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3Tip;
-                    sliderEffectProperty3_ValueChanged(this, null);
+                    SliderEffectProperty3_ValueChanged(this, null);
                     break;
                 case CmbxEffectOptions.Custom:
                     if (customEffect is PropertyBasedEffect effect &&
@@ -4020,7 +4024,7 @@ namespace BrushFilter
         /// <summary>
         /// Configures the drawing area and loads text localizations.
         /// </summary>
-        private void winBrushFilter_DialogLoad(object sender, EventArgs e)
+        private void WinBrushFilter_DialogLoad(object sender, EventArgs e)
         {
             //Sets the sizes of the canvas and drawing region.
             displayCanvas.Size = new RenderArgs(EffectSourceSurface).Bitmap.Size;
@@ -4126,7 +4130,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets the form resize restrictions.
         /// </summary>
-        private void winBrushFilter_DialogShown(object sender, EventArgs e)
+        private void WinBrushFilter_DialogShown(object sender, EventArgs e)
         {
             MinimumSize = new Size(835, 526);
             MaximumSize = Size;
@@ -4136,7 +4140,7 @@ namespace BrushFilter
         /// Disposes resources and deletes temporary files when the window
         /// closes for any reason.
         /// </summary>
-        private void winBrushFilter_FormClosed(object sender, FormClosedEventArgs e)
+        private void WinBrushFilter_FormClosed(object sender, FormClosedEventArgs e)
         {
             //Deletes all temporary files stored as undo/redo history.
             string path = Path.GetTempPath();
@@ -4160,18 +4164,18 @@ namespace BrushFilter
         /// <summary>
         /// Handles keypresses for global commands.
         /// </summary>
-        private void winBrushFilter_KeyDown(object sender, KeyEventArgs e)
+        private void WinBrushFilter_KeyDown(object sender, KeyEventArgs e)
         {
             //Ctrl + Z: Undo.
             if (e.Control && e.KeyCode == Keys.Z)
             {
-                bttnUndo_Click(this, e);
+                BttnUndo_Click(this, e);
             }
 
             //Ctrl + Y: Redo.
             if (e.Control && e.KeyCode == Keys.Y)
             {
-                bttnRedo_Click(this, e);
+                BttnRedo_Click(this, e);
             }
 
             //Prevents alt from making the form lose focus.
@@ -4184,7 +4188,7 @@ namespace BrushFilter
         /// <summary>
         /// Re-applies a filter after undo or redo is released.
         /// </summary>
-        private void winBrushFilter_KeyUp(object sender, KeyEventArgs e)
+        private void WinBrushFilter_KeyUp(object sender, KeyEventArgs e)
         {
             //When undo or redo is released, re-apply the filter.
             if (e.Control && (e.KeyCode == Keys.Z || e.KeyCode == Keys.Y))
@@ -4196,7 +4200,7 @@ namespace BrushFilter
         /// <summary>
         /// Recalculates the drawing region to maintain accuracy on resize.
         /// </summary>
-        private void winBrushFilter_Resize(object sender, EventArgs e)
+        private void WinBrushFilter_Resize(object sender, EventArgs e)
         {
             displayCanvas.Left = (displayCanvasBG.Width - displayCanvas.Width) / 2;
             displayCanvas.Top = (displayCanvasBG.Height - displayCanvas.Height) / 2;
@@ -4205,7 +4209,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets up image panning and drawing to occur with mouse movement.
         /// </summary>
-        private void displayCanvas_MouseDown(object sender, MouseEventArgs e)
+        private void DisplayCanvas_MouseDown(object sender, MouseEventArgs e)
         {
             //Displays a context menu for the background.
             if (e.Button == MouseButtons.Right)
@@ -4250,7 +4254,7 @@ namespace BrushFilter
                 //Draws the brush on the first canvas click.
                 if (!chkbxOrientToMouse.Checked)
                 {
-                    displayCanvas_MouseMove(sender, e);
+                    DisplayCanvas_MouseMove(sender, e);
                 }
             }
         }
@@ -4259,7 +4263,7 @@ namespace BrushFilter
         /// Ensures focusable controls cannot intercept keyboard/mouse input
         /// while the user is hovered over the display canvas. Sets a tooltip.
         /// </summary>
-        private void displayCanvas_MouseEnter(object sender, EventArgs e)
+        private void DisplayCanvas_MouseEnter(object sender, EventArgs e)
         {
             displayCanvas.Focus();
 
@@ -4270,7 +4274,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets up for drawing and handles panning.
         /// </summary>
-        private void displayCanvas_MouseMove(object sender, MouseEventArgs e)
+        private void DisplayCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             //Forcefully loads if it hasn't yet.
             if (!hasLoaded)
@@ -4331,7 +4335,7 @@ namespace BrushFilter
         /// <summary>
         /// Stops tracking panning and drawing.
         /// </summary>
-        private unsafe void displayCanvas_MouseUp(object sender, MouseEventArgs e)
+        private unsafe void DisplayCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             //Finishes the brush stroke by merging the effect layer.
             if (isUserDrawing)
@@ -4413,7 +4417,7 @@ namespace BrushFilter
         /// <summary>
         /// Zooms in and out of the drawing region.
         /// </summary>
-        private void displayCanvas_MouseWheel(object sender, MouseEventArgs e)
+        private void DisplayCanvas_MouseWheel(object sender, MouseEventArgs e)
         {
             //Ctrl + Wheel: Changes the brush size.
             if (ModifierKeys == Keys.Control)
@@ -4482,7 +4486,7 @@ namespace BrushFilter
         /// <summary>
         /// Redraws the canvas and draws circles to indicate brush location.
         /// </summary>
-        private void displayCanvas_Paint(object sender, PaintEventArgs e)
+        private void DisplayCanvas_Paint(object sender, PaintEventArgs e)
         {
             //Draws the whole canvas showing pixels and without smoothing.
             e.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
@@ -4567,7 +4571,7 @@ namespace BrushFilter
         /// while the user is hovered over the display canvas's panel. Sets a
         /// tooltip.
         /// </summary>
-        private void displayCanvasBG_MouseEnter(object sender, EventArgs e)
+        private void DisplayCanvasBG_MouseEnter(object sender, EventArgs e)
         {
             displayCanvas.Focus();
 
@@ -4603,7 +4607,7 @@ namespace BrushFilter
         /// Draws the current item's image and text. This is automatically
         /// called for each item to be drawn.
         /// </summary>
-        private void bttnBrushSelector_DrawItem(object sender, DrawItemEventArgs e)
+        private void BttnBrushSelector_DrawItem(object sender, DrawItemEventArgs e)
         {
             //Constrains the image drawing space of each item's picture so it
             //draws without distortion, which is why size is height * height.
@@ -4644,7 +4648,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnBrushSelector_MouseEnter(object sender, EventArgs e)
+        private void BttnBrushSelector_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.BrushSelectorTip;
         }
@@ -4652,7 +4656,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets the brush when the user changes it with the selector.
         /// </summary>
-        private void bttnBrushSelector_SelectedIndexChanged(object sender, EventArgs e)
+        private void BttnBrushSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             //Gets the currently selected item.
             BrushSelectorItem currentItem =
@@ -4676,7 +4680,7 @@ namespace BrushFilter
         /// <summary>
         /// Cancels and doesn't apply the effect.
         /// </summary>
-        private void bttnCancel_Click(object sender, EventArgs e)
+        private void BttnCancel_Click(object sender, EventArgs e)
         {
             //Disables the button so it can't accidentally be called twice.
             bttnCancel.Enabled = false;
@@ -4687,7 +4691,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnCancel_MouseEnter(object sender, EventArgs e)
+        private void BttnCancel_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.CancelTip;
         }
@@ -4695,7 +4699,7 @@ namespace BrushFilter
         /// <summary>
         /// Removes all brushes added by the user.
         /// </summary>
-        private void bttnClearBrushes_Click(object sender, EventArgs e)
+        private void BttnClearBrushes_Click(object sender, EventArgs e)
         {
             InitBrushes();
         }
@@ -4703,7 +4707,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnClearBrushes_MouseEnter(object sender, EventArgs e)
+        private void BttnClearBrushes_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.ClearBrushesTip;
         }
@@ -4711,7 +4715,7 @@ namespace BrushFilter
         /// <summary>
         /// Resets all settings back to their default values.
         /// </summary>
-        private void bttnClearSettings_Click(object sender, EventArgs e)
+        private void BttnClearSettings_Click(object sender, EventArgs e)
         {
             InitSettings();
         }
@@ -4719,7 +4723,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnClearSettings_MouseEnter(object sender, EventArgs e)
+        private void BttnClearSettings_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.ClearSettingsTip;
         }
@@ -4727,7 +4731,7 @@ namespace BrushFilter
         /// <summary>
         /// Accepts and applies the effect.
         /// </summary>
-        private void bttnOk_Click(object sender, EventArgs e)
+        private void BttnOk_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
 
@@ -4751,7 +4755,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnOk_MouseEnter(object sender, EventArgs e)
+        private void BttnOk_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.OkTip;
         }
@@ -4759,7 +4763,7 @@ namespace BrushFilter
         /// <summary>
         /// Opens the preferences dialog to define persistent settings.
         /// </summary>
-        private void bttnPreferences_Click(object sender, EventArgs e)
+        private void BttnPreferences_Click(object sender, EventArgs e)
         {
             new Gui.BrushFilterPreferences().ShowDialog();
         }
@@ -4767,7 +4771,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnPreferences_MouseEnter(object sender, EventArgs e)
+        private void BttnPreferences_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.CustomBrushLocationsTip;
         }
@@ -4775,7 +4779,7 @@ namespace BrushFilter
         /// <summary>
         /// Reverts to a previously-undone drawing stored in a temporary file.
         /// </summary>
-        private void bttnRedo_Click(object sender, EventArgs e)
+        private void BttnRedo_Click(object sender, EventArgs e)
         {
             //Does nothing if there is nothing to redo.
             if (redoHistory.Count == 0)
@@ -4825,7 +4829,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnRedo_MouseEnter(object sender, EventArgs e)
+        private void BttnRedo_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RedoTip;
         }
@@ -4833,7 +4837,7 @@ namespace BrushFilter
         /// <summary>
         /// Reverts to a previously-saved drawing stored in a temporary file.
         /// </summary>
-        private void bttnUndo_Click(object sender, EventArgs e)
+        private void BttnUndo_Click(object sender, EventArgs e)
         {
             //Does nothing if there is nothing to undo.
             if (undoHistory.Count == 0)
@@ -4883,7 +4887,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void bttnUndo_MouseEnter(object sender, EventArgs e)
+        private void BttnUndo_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.UndoTip;
         }
@@ -4891,7 +4895,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void chkbxOrientToMouse_MouseEnter(object sender, EventArgs e)
+        private void ChkbxOrientToMouse_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.OrientToMouseTip;
         }
@@ -4899,7 +4903,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void chkbxOverwriteMode_MouseEnter(object sender, EventArgs e)
+        private void ChkbxOverwriteMode_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.OverwriteModeTip;
         }
@@ -4907,7 +4911,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void cmbxEffectType_MouseEnter(object sender, EventArgs e)
+        private void CmbxEffectType_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.EffectTypeTip;
         }
@@ -4915,7 +4919,7 @@ namespace BrushFilter
         /// <summary>
         /// Determines which properties of the effect to show.
         /// </summary>
-        private void cmbxEffectType_SelectedValueChanged(object sender, EventArgs e)
+        private void CmbxEffectType_SelectedValueChanged(object sender, EventArgs e)
         {
             //Instantiates a custom effect if one is selected.
             LoadUserEffect();
@@ -4931,7 +4935,7 @@ namespace BrushFilter
         /// <summary>
         /// Draws each item with its icon if possible.
         /// </summary>
-        private void cmbxEffectType_DrawItem(object sender, DrawItemEventArgs e)
+        private void CmbxEffectType_DrawItem(object sender, DrawItemEventArgs e)
         {
             var item = (Tuple<string, CmbxEffectOptions>)
                 cmbxEffectType.Items[e.Index];
@@ -5103,7 +5107,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void cmbxSymmetry_MouseEnter(object sender, EventArgs e)
+        private void CmbxSymmetry_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.SymmetryTip;
         }
@@ -5111,7 +5115,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderBrushIntensity_MouseEnter(object sender, EventArgs e)
+        private void SliderBrushIntensity_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.BrushIntensityTip;
         }
@@ -5119,7 +5123,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the brush intensity text when it changes.
         /// </summary>
-        private void sliderBrushIntensity_ValueChanged(object sender, EventArgs e)
+        private void SliderBrushIntensity_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtBrushIntensity.Text = String.Format("{0} {1}",
@@ -5130,7 +5134,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderBrushSize_MouseEnter(object sender, EventArgs e)
+        private void SliderBrushSize_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.BrushSizeTip;
         }
@@ -5138,7 +5142,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the brush size text when it changes.
         /// </summary>
-        private void sliderBrushSize_ValueChanged(object sender, EventArgs e)
+        private void SliderBrushSize_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtBrushSize.Text = String.Format("{0} {1}",
@@ -5152,7 +5156,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderBrushRotation_MouseEnter(object sender, EventArgs e)
+        private void SliderBrushRotation_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.BrushRotationTip;
         }
@@ -5160,7 +5164,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the brush rotation text when it changes.
         /// </summary>
-        private void sliderBrushRotation_ValueChanged(object sender, EventArgs e)
+        private void SliderBrushRotation_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtBrushRotation.Text = String.Format("{0} {1}°",
@@ -5171,7 +5175,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderCanvasZoom_MouseEnter(object sender, EventArgs e)
+        private void SliderCanvasZoom_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.CanvasZoomTip;
         }
@@ -5179,7 +5183,7 @@ namespace BrushFilter
         /// <summary>
         /// Zooms in and out of the drawing region.
         /// </summary>
-        private void sliderCanvasZoom_ValueChanged(object sender, EventArgs e)
+        private void SliderCanvasZoom_ValueChanged(object sender, EventArgs e)
         {
             Zoom(0, false);
         }
@@ -5188,7 +5192,7 @@ namespace BrushFilter
         /// Re-applies the filter after any keyboard action which may change
         /// the value of a parameter for the filter.
         /// </summary>
-        private void sliderEffectProperty_KeyUp(object sender, KeyEventArgs e)
+        private void SliderEffectProperty_KeyUp(object sender, KeyEventArgs e)
         {
             ApplyFilter();
         }
@@ -5197,7 +5201,7 @@ namespace BrushFilter
         /// Re-applies the filter after any mouse action which may change the
         /// value of a parameter for the filter.
         /// </summary>
-        private void sliderEffectProperty_MouseUp(object sender, MouseEventArgs e)
+        private void SliderEffectProperty_MouseUp(object sender, MouseEventArgs e)
         {
             ApplyFilter();
         }
@@ -5205,7 +5209,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderEffectProperty1_MouseEnter(object sender, EventArgs e)
+        private void SliderEffectProperty1_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = (string)sliderEffectProperty1?.Tag;
         }
@@ -5213,7 +5217,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the property effect 1 text when it changes.
         /// </summary>
-        private void sliderEffectProperty1_ValueChanged(object sender, EventArgs e)
+        private void SliderEffectProperty1_ValueChanged(object sender, EventArgs e)
         {
             txtEffectProperty1.Text =
                 txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
@@ -5225,7 +5229,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderEffectProperty2_MouseEnter(object sender, EventArgs e)
+        private void SliderEffectProperty2_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = (string)sliderEffectProperty2?.Tag;
         }
@@ -5233,7 +5237,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the property effect 2 text when it changes.
         /// </summary>
-        private void sliderEffectProperty2_ValueChanged(object sender, EventArgs e)
+        private void SliderEffectProperty2_ValueChanged(object sender, EventArgs e)
         {
             txtEffectProperty2.Text =
                 txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
@@ -5245,7 +5249,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderEffectProperty3_MouseEnter(object sender, EventArgs e)
+        private void SliderEffectProperty3_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = (string)sliderEffectProperty3?.Tag;
         }
@@ -5253,7 +5257,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the property effect 3 text when it changes.
         /// </summary>
-        private void sliderEffectProperty3_ValueChanged(object sender, EventArgs e)
+        private void SliderEffectProperty3_ValueChanged(object sender, EventArgs e)
         {
             txtEffectProperty3.Text =
                 txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
@@ -5265,7 +5269,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderEffectProperty4_MouseEnter(object sender, EventArgs e)
+        private void SliderEffectProperty4_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = (string)sliderEffectProperty4?.Tag;
         }
@@ -5273,7 +5277,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the property effect 4 text when it changes.
         /// </summary>
-        private void sliderEffectProperty4_ValueChanged(object sender, EventArgs e)
+        private void SliderEffectProperty4_ValueChanged(object sender, EventArgs e)
         {
             txtEffectProperty4.Text =
                 txtEffectProperty4.Tag + ": " + sliderEffectProperty4.Value;
@@ -5285,7 +5289,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderMinDrawDistance_MouseEnter(object sender, EventArgs e)
+        private void SliderMinDrawDistance_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.MinDrawDistanceTip;
         }
@@ -5293,7 +5297,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the brush minimum drawing distance text when it changes.
         /// </summary>
-        private void sliderMinDrawDistance_ValueChanged(object sender, EventArgs e)
+        private void SliderMinDrawDistance_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtMinDrawDistance.Text = String.Format("{0} {1}",
@@ -5304,7 +5308,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandHorzShift_MouseEnter(object sender, EventArgs e)
+        private void SliderRandHorzShift_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandHorzShiftTip;
         }
@@ -5312,7 +5316,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random horizontal shift text when it changes.
         /// </summary>
-        private void sliderRandHorzShift_ValueChanged(object sender, EventArgs e)
+        private void SliderRandHorzShift_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandHorzShift.Text = String.Format("{0} {1}%",
@@ -5323,7 +5327,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandMaxIntensity_MouseEnter(object sender, EventArgs e)
+        private void SliderRandMaxIntensity_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandMaxIntensityTip;
         }
@@ -5331,7 +5335,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random max intensity text when it changes.
         /// </summary>
-        private void sliderRandMaxIntensity_ValueChanged(object sender, EventArgs e)
+        private void SliderRandMaxIntensity_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandMaxIntensity.Text = String.Format("{0} {1}",
@@ -5342,7 +5346,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandMaxSize_MouseEnter(object sender, EventArgs e)
+        private void SliderRandMaxSize_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandMaxSizeTip;
         }
@@ -5350,7 +5354,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random max size text when it changes.
         /// </summary>
-        private void sliderRandMaxSize_ValueChanged(object sender, EventArgs e)
+        private void SliderRandMaxSize_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandMaxSize.Text = String.Format("{0} {1}",
@@ -5361,7 +5365,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandMinIntensity_MouseEnter(object sender, EventArgs e)
+        private void SliderRandMinIntensity_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandMinIntensityTip;
         }
@@ -5369,7 +5373,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random min intensity text when it changes.
         /// </summary>
-        private void sliderRandMinIntensity_ValueChanged(object sender, EventArgs e)
+        private void SliderRandMinIntensity_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandMinIntensity.Text = String.Format("{0} {1}",
@@ -5380,7 +5384,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandMinSize_MouseEnter(object sender, EventArgs e)
+        private void SliderRandMinSize_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandMinSizeTip;
         }
@@ -5388,7 +5392,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random min size text when it changes.
         /// </summary>
-        private void sliderRandMinSize_ValueChanged(object sender, EventArgs e)
+        private void SliderRandMinSize_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandMinSize.Text = String.Format("{0} {1}",
@@ -5399,7 +5403,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandRotLeft_MouseEnter(object sender, EventArgs e)
+        private void SliderRandRotLeft_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandRotLeftTip;
         }
@@ -5407,7 +5411,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random rotation to the left text when it changes.
         /// </summary>
-        private void sliderRandRotLeft_ValueChanged(object sender, EventArgs e)
+        private void SliderRandRotLeft_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandRotLeft.Text = String.Format("{0} {1}°",
@@ -5418,7 +5422,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandRotRight_MouseEnter(object sender, EventArgs e)
+        private void SliderRandRotRight_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandRotRightTip;
         }
@@ -5426,7 +5430,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random rotation to the right text when it changes.
         /// </summary>
-        private void sliderRandRotRight_ValueChanged(object sender, EventArgs e)
+        private void SliderRandRotRight_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandRotRight.Text = String.Format("{0} {1}°",
@@ -5437,7 +5441,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderRandVertShift_MouseEnter(object sender, EventArgs e)
+        private void SliderRandVertShift_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.RandVertShiftTip;
         }
@@ -5445,7 +5449,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the random vertical shift text when it changes.
         /// </summary>
-        private void sliderRandVertShift_ValueChanged(object sender, EventArgs e)
+        private void SliderRandVertShift_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtRandVertShift.Text = String.Format("{0} {1}%",
@@ -5456,7 +5460,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderShiftIntensity_MouseEnter(object sender, EventArgs e)
+        private void SliderShiftIntensity_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.ShiftIntensityTip;
         }
@@ -5464,7 +5468,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the slider shift intensity text when it changes.
         /// </summary>
-        private void sliderShiftIntensity_ValueChanged(object sender, EventArgs e)
+        private void SliderShiftIntensity_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtShiftIntensity.Text = String.Format("{0} {1}",
@@ -5475,7 +5479,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderShiftRotation_MouseEnter(object sender, EventArgs e)
+        private void SliderShiftRotation_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.ShiftRotationTip;
         }
@@ -5483,7 +5487,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the slider shift rotation text when it changes.
         /// </summary>
-        private void sliderShiftRotation_ValueChanged(object sender, EventArgs e)
+        private void SliderShiftRotation_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtShiftRotation.Text = String.Format("{0} {1}°",
@@ -5494,7 +5498,7 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
-        private void sliderShiftSize_MouseEnter(object sender, EventArgs e)
+        private void SliderShiftSize_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.ShiftSizeTip;
         }
@@ -5502,7 +5506,7 @@ namespace BrushFilter
         /// <summary>
         /// Adjusts the slider shift size text when it changes.
         /// </summary>
-        private void sliderShiftSize_ValueChanged(object sender, EventArgs e)
+        private void SliderShiftSize_ValueChanged(object sender, EventArgs e)
         {
             //Uses localized text drawn from a resource file.
             txtShiftSize.Text = String.Format("{0} {1}",

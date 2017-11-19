@@ -147,7 +147,7 @@ namespace BrushFilter
             RenderSettings.Clear();
 
             //Creates and returns a new dialog.
-            return new winBrushFilter();
+            return new WinBrushFilter();
         }
 
         /// <summary>
