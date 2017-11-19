@@ -65,6 +65,16 @@ namespace BrushFilter
         }
 
         /// <summary>
+        /// Whether affected pixels blend or overwrite original pixels while
+        /// drawing.
+        /// </summary>
+        public bool OverwriteMode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Randomized maximum effect intensity.
         /// </summary>
         public int RandMaxIntensity
@@ -261,6 +271,7 @@ namespace BrushFilter
             int sizeChange,
             int rotChange,
             int intensityChange,
+            bool overwriteMode,
             int symmetryMode,
             int effectMode,
             int valProperty1,
@@ -287,6 +298,7 @@ namespace BrushFilter
             SizeChange = sizeChange;
             RotChange = rotChange;
             IntensityChange = intensityChange;
+            OverwriteMode = overwriteMode;
             SymmetryMode = symmetryMode;
             EffectMode = effectMode;
             EffectProperty1 = valProperty1;
@@ -319,6 +331,7 @@ namespace BrushFilter
             SizeChange = other.SizeChange;
             RotChange = other.RotChange;
             IntensityChange = other.IntensityChange;
+            OverwriteMode = other.OverwriteMode;
             SymmetryMode = other.SymmetryMode;
             EffectMode = other.EffectMode;
             EffectProperty1 = other.EffectProperty1;

@@ -1,5 +1,4 @@
-﻿using PaintDotNet;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace BrushFilter
 {

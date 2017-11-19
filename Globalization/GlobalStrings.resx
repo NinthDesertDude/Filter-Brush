@@ -753,6 +753,12 @@
   <data name="OrientToMouseTip" xml:space="preserve">
     <value>When activated, the brush rotates with the mouse. If the brush appears to point to the right, it will look accurate. If it does not, try adjusting rotation to fix it.</value>
   </data>
+  <data name="OverwriteMode" xml:space="preserve">
+    <value>Overwrite Mode</value>
+  </data>
+  <data name="OverwriteModeTip" xml:space="preserve">
+    <value>If turned on, the areas you draw in will only use the new image transparency, rather than layering it on top of the original image.</value>
+  </data>
   <data name="RandHorzShift" xml:space="preserve">
     <value>Horizontal Spray:</value>
   </data>

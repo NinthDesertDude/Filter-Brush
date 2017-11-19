@@ -1241,7 +1241,7 @@
     <value>NoControl</value>
   </data>
   <data name="sliderBrushIntensity.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 135</value>
+    <value>11, 111</value>
   </data>
   <data name="sliderBrushIntensity.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 25</value>
@@ -1268,7 +1268,7 @@
     <value>NoControl</value>
   </data>
   <data name="txtBrushIntensity.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 117</value>
+    <value>11, 93</value>
   </data>
   <data name="txtBrushIntensity.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -1301,7 +1301,7 @@
     <value>NoControl</value>
   </data>
   <data name="txtBrushSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 203</value>
+    <value>11, 179</value>
   </data>
   <data name="txtBrushSize.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -1337,7 +1337,7 @@
     <value>NoControl</value>
   </data>
   <data name="sliderBrushSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 220</value>
+    <value>11, 196</value>
   </data>
   <data name="sliderBrushSize.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 25</value>
@@ -1367,7 +1367,7 @@
     <value>NoControl</value>
   </data>
   <data name="sliderBrushRotation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 178</value>
+    <value>11, 154</value>
   </data>
   <data name="sliderBrushRotation.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 25</value>
@@ -1394,7 +1394,7 @@
     <value>NoControl</value>
   </data>
   <data name="txtBrushRotation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 160</value>
+    <value>11, 136</value>
   </data>
   <data name="txtBrushRotation.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -1642,6 +1642,33 @@
   <data name="&gt;&gt;tabControls.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="chkbxOverwriteMode.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkbxOverwriteMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 67</value>
+  </data>
+  <data name="chkbxOverwriteMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 17</value>
+  </data>
+  <data name="chkbxOverwriteMode.TabIndex" type="System.Int32, mscorlib">
+    <value>36</value>
+  </data>
+  <data name="chkbxOverwriteMode.Text" xml:space="preserve">
+    <value>Overwrite Mode</value>
+  </data>
+  <data name="&gt;&gt;chkbxOverwriteMode.Name" xml:space="preserve">
+    <value>chkbxOverwriteMode</value>
+  </data>
+  <data name="&gt;&gt;chkbxOverwriteMode.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkbxOverwriteMode.Parent" xml:space="preserve">
+    <value>tabEffect</value>
+  </data>
+  <data name="&gt;&gt;chkbxOverwriteMode.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="sliderEffectProperty2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
@@ -1652,7 +1679,7 @@
     <value>NoControl</value>
   </data>
   <data name="sliderEffectProperty2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 132</value>
+    <value>11, 156</value>
   </data>
   <data name="sliderEffectProperty2.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 25</value>
@@ -1670,13 +1697,13 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;sliderEffectProperty2.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="txtEffectProperty2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="txtEffectProperty2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 112</value>
+    <value>11, 136</value>
   </data>
   <data name="txtEffectProperty2.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -1700,7 +1727,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;txtEffectProperty2.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="sliderEffectProperty1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1712,7 +1739,7 @@
     <value>NoControl</value>
   </data>
   <data name="sliderEffectProperty1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 87</value>
+    <value>11, 111</value>
   </data>
   <data name="sliderEffectProperty1.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 25</value>
@@ -1730,13 +1757,13 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;sliderEffectProperty1.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="txtEffectProperty1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="txtEffectProperty1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 67</value>
+    <value>11, 91</value>
   </data>
   <data name="txtEffectProperty1.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -1760,7 +1787,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;txtEffectProperty1.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="sliderEffectProperty4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1772,7 +1799,7 @@
     <value>NoControl</value>
   </data>
   <data name="sliderEffectProperty4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 222</value>
+    <value>11, 246</value>
   </data>
   <data name="sliderEffectProperty4.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 25</value>
@@ -1790,7 +1817,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;sliderEffectProperty4.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="txtEffectProperty4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1799,7 +1826,7 @@
     <value>NoControl</value>
   </data>
   <data name="txtEffectProperty4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 202</value>
+    <value>11, 226</value>
   </data>
   <data name="txtEffectProperty4.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -1823,7 +1850,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;txtEffectProperty4.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="sliderEffectProperty3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1835,7 +1862,7 @@
     <value>NoControl</value>
   </data>
   <data name="sliderEffectProperty3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 177</value>
+    <value>11, 201</value>
   </data>
   <data name="sliderEffectProperty3.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 25</value>
@@ -1853,7 +1880,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;sliderEffectProperty3.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="txtEffectProperty3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1862,7 +1889,7 @@
     <value>NoControl</value>
   </data>
   <data name="txtEffectProperty3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 157</value>
+    <value>11, 181</value>
   </data>
   <data name="txtEffectProperty3.Size" type="System.Drawing.Size, System.Drawing">
     <value>149, 17</value>
@@ -1886,7 +1913,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;txtEffectProperty3.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="txtEffectType.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1916,7 +1943,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;txtEffectType.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="cmbxEffectType.IntegralHeight" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -1943,7 +1970,28 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;cmbxEffectType.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
+  </data>
+  <data name="pnlCustomProperties.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 89</value>
+  </data>
+  <data name="pnlCustomProperties.Size" type="System.Drawing.Size, System.Drawing">
+    <value>150, 366</value>
+  </data>
+  <data name="pnlCustomProperties.TabIndex" type="System.Int32, mscorlib">
+    <value>35</value>
+  </data>
+  <data name="&gt;&gt;pnlCustomProperties.Name" xml:space="preserve">
+    <value>pnlCustomProperties</value>
+  </data>
+  <data name="&gt;&gt;pnlCustomProperties.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pnlCustomProperties.Parent" xml:space="preserve">
+    <value>tabEffect</value>
+  </data>
+  <data name="&gt;&gt;pnlCustomProperties.ZOrder" xml:space="preserve">
+    <value>11</value>
   </data>
   <data name="tabEffect.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 22</value>

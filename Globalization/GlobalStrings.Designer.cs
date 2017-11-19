@@ -1969,6 +1969,24 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overwrite Mode.
+        /// </summary>
+        internal static string OverwriteMode {
+            get {
+                return ResourceManager.GetString("OverwriteMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If turned on, the areas you draw in will only use the new image transparency, rather than layering it on top of the original image..
+        /// </summary>
+        internal static string OverwriteModeTip {
+            get {
+                return ResourceManager.GetString("OverwriteModeTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Horizontal Spray:.
         /// </summary>
         internal static string RandHorzShift {
