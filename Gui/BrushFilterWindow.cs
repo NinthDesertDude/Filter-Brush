@@ -647,7 +647,8 @@ namespace BrushFilter
         protected override void InitialInitToken()
         {
             theEffectToken = new PersistentSettings(20, "", 0, 100, 0, 0, 0, 0, 0, 0,
-                0, 0, false, 0, 0, 0, 0, false, 0, 0, 1, 1, 1, 1, new List<string>());
+                0, 0, false, 0, 0, 0, 0, false, 0, 0, 1, 1, 1, 1, new List<string>(),
+                null, null, null);
         }
 
         /// <summary>
@@ -728,8 +729,10 @@ namespace BrushFilter
                 sliderEffectProperty4.Minimum, sliderEffectProperty4.Maximum);
             EnableParameterUpdates();
 
-            //Instantiates a custom effect if one is selected.
-            LoadUserEffect();
+            //Preserves custom effect values.
+            customEffect = token.CustomEffect;
+            customEffectTokenP = token.CustomEffectTokenP;
+            customEffectToken = token.CustomEffectToken;
         }
 
         /// <summary>
@@ -765,6 +768,9 @@ namespace BrushFilter
             token.EffectProperty3 = sliderEffectProperty3.Value;
             token.EffectProperty4 = sliderEffectProperty4.Value;
             token.CustomBrushLocations = loadedBrushPaths;
+            token.CustomEffect = customEffect;
+            token.CustomEffectTokenP = customEffectTokenP;
+            token.CustomEffectToken = customEffectToken;
         }
 
         /// <summary>
@@ -2630,6 +2636,7 @@ namespace BrushFilter
                 //Casts result of first constructor to Effect. Shows icon.
                 if (ctors.Length > 0)
                 {
+                    customEffect?.Dispose();
                     customEffect = (Effect)ctors[0].Invoke(new object[] { });
 
                     //Creates an effect token for property-based effects.

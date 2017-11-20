@@ -281,7 +281,7 @@ namespace BrushFilter
             if (prop is BooleanProperty)
             {
                 var control = new CheckBox();
-                control.Checked = (bool)prop.DefaultValue;
+                control.Checked = (bool)prop.Value;
                 control.CheckedChanged += (a, b) => { prop.Value = control.Checked; };
                 return control;
             }

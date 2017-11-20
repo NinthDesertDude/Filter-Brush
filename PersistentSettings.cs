@@ -1,5 +1,5 @@
+using PaintDotNet.Effects;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace BrushFilter
 {
@@ -7,7 +7,7 @@ namespace BrushFilter
     /// Represents the settings used in the dialog so they can be stored and
     /// loaded when applying the effect consecutively for convenience.
     /// </summary>
-    public class PersistentSettings : PaintDotNet.Effects.EffectConfigToken
+    public class PersistentSettings : EffectConfigToken
     {
         #region Fields
         /// <summary>
@@ -45,6 +45,21 @@ namespace BrushFilter
             get;
             set;
         }
+
+        /// <summary>
+        /// A custom effect, if any.
+        /// </summary>
+        public Effect CustomEffect;
+
+        /// <summary>
+        /// The config details of a property-based custom effect.
+        /// </summary>
+        public PropertyBasedEffectConfigToken CustomEffectTokenP;
+
+        /// <summary>
+        /// The config details of a non-property-based custom effect.
+        /// </summary>
+        public EffectConfigToken CustomEffectToken;
 
         /// <summary>
         /// Whether the brush rotates with the mouse direction or not.
@@ -278,7 +293,10 @@ namespace BrushFilter
             int valProperty2,
             int valProperty3,
             int valProperty4,
-            List<string> customBrushLocations)
+            List<string> customBrushLocations,
+            Effect customEffect,
+            EffectConfigToken customEffectToken,
+            PropertyBasedEffectConfigToken customEffectTokenP)
             : base()
         {
             BrushSize = brushSize;
@@ -306,6 +324,9 @@ namespace BrushFilter
             EffectProperty3 = valProperty3;
             EffectProperty4 = valProperty4;
             CustomBrushLocations = new List<string>(customBrushLocations);
+            CustomEffect = customEffect;
+            CustomEffectToken = customEffectToken;
+            CustomEffectTokenP = customEffectTokenP;
         }
 
         /// <summary>
@@ -339,6 +360,9 @@ namespace BrushFilter
             EffectProperty3 = other.EffectProperty3;
             EffectProperty4 = other.EffectProperty4;
             CustomBrushLocations = new List<string>(other.CustomBrushLocations);
+            CustomEffect = other.CustomEffect;
+            CustomEffectToken = other.CustomEffectToken;
+            CustomEffectTokenP = other.CustomEffectTokenP;
         }
         #endregion
 
