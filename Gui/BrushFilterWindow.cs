@@ -3830,7 +3830,6 @@ namespace BrushFilter
             }
 
             //Applies an effect to the bitmap.
-            doRefreshEffectAlpha = true;
             ApplyFilter();
         }
 
@@ -4346,7 +4345,7 @@ namespace BrushFilter
             if (!hasLoaded)
             {
                 hasLoaded = true;
-                SetEffectProperties(false);
+                SetEffectProperties(false);                
                 return;
             }
 
