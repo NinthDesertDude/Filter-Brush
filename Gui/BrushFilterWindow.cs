@@ -137,6 +137,11 @@ namespace BrushFilter
         private byte[,] bmpEffectAlpha;
 
         /// <summary>
+        /// When true, records the effect alpha.
+        /// </summary>
+        private bool doRefreshEffectAlpha = true;
+
+        /// <summary>
         /// All non-GUI controls must register the components container as the
         /// parent so they can be disposed when the form exits.
         /// </summary>
@@ -1103,7 +1108,7 @@ namespace BrushFilter
                     break;
                 case CmbxEffectOptions.Blur:
                     //Performs the built-in Gaussian blur.
-                    if (sliderEffectProperty1.Value <= 8)
+                    if (sliderEffectProperty1.Value < 16)
                     {
                         //Creates the scaffolding for the effect.
                         srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
@@ -1114,9 +1119,12 @@ namespace BrushFilter
                     }
 
                     //Performs the fast Gaussian blur.
-                    else
+                    else if (bmpEffectDrawing.Width > 1 ||
+                        bmpEffectDrawing.Height > 1)
                     {
-                        bmpEffectDrawing = FastBlur.FastGaussianBlur(bmpCurrentDrawing, sliderEffectProperty1.Value);
+                        bmpEffectDrawing.Dispose();
+                        bmpEffectDrawing = FastBlur.Apply(
+                            bmpCurrentDrawing, sliderEffectProperty1.Value / 2d);
                     }
                     break;
                 case CmbxEffectOptions.MotionBlur:
@@ -1472,6 +1480,7 @@ namespace BrushFilter
                     effectP.Render(new Rectangle[] { bounds }, 0, 1);
                 }
 
+                bmpEffectDrawing?.Dispose();
                 bmpEffectDrawing = new Bitmap(dstArgs.Bitmap);
             }
 
@@ -1508,9 +1517,20 @@ namespace BrushFilter
                         new Rectangle[] { bounds }, 0, 1);
                 }
 
+                bmpEffectDrawing?.Dispose();
                 bmpEffectDrawing = new Bitmap(dstArgs.Bitmap);
             }
 
+            //Sets the alpha values for previewing or drawing.
+            ApplyFilterAlpha();
+        }
+
+        /// <summary>
+        /// Sets the alpha values of the effect surface for previewing or
+        /// drawing.
+        /// </summary>
+        private unsafe void ApplyFilterAlpha()
+        {
             //Doesn't compute the effect if it hasn't loaded yet.
             if (bmpEffectAlpha == null)
             {
@@ -1535,8 +1555,16 @@ namespace BrushFilter
                 for (int x = 0; x < bitmapWidth; x++)
                 {
                     int ptr = y * bmpData.Stride + x * 4;
-                    bmpEffectAlpha[x, y] = pixRow[ptr + 3];
-                    if (!doPreview)
+
+                    if (doRefreshEffectAlpha)
+                    {
+                        bmpEffectAlpha[x, y] = pixRow[ptr + 3];
+                    }
+                    else if (doPreview)
+                    {
+                        pixRow[ptr + 3] = bmpEffectAlpha[x, y];
+                    }
+                    else
                     {
                         pixRow[ptr + 3] = 0;
                     }
@@ -1544,6 +1572,7 @@ namespace BrushFilter
             });
 
             bmpEffectDrawing.UnlockBits(bmpData);
+            doRefreshEffectAlpha = false;
 
             //Updates the displayed filter.
             displayCanvas.Refresh();
@@ -1686,6 +1715,8 @@ namespace BrushFilter
                     {
                         //Creates the brush space.
                         int size = Math.Max(bmp.Width, bmp.Height);
+
+                        bmpBrush?.Dispose();
                         bmpBrush = new Bitmap(size, size);
 
                         //Pads the image to be square if needed and draws the
@@ -3767,6 +3798,7 @@ namespace BrushFilter
             }
 
             //Applies an effect to the bitmap.
+            doRefreshEffectAlpha = true;
             ApplyFilter();
         }
 
@@ -4211,17 +4243,19 @@ namespace BrushFilter
         /// </summary>
         private void DisplayCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            //Displays a context menu for the background.
-            if (e.Button == MouseButtons.Right)
-            {
-                ShowBgContextMenu(displayCanvas, e.Location);
-            }
-
             //Enables and records image panning.
-            else if (e.Button == MouseButtons.Middle)
+            if (((System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.LeftCtrl) ||
+                System.Windows.Input.Keyboard.IsKeyDown(System.Windows.Input.Key.RightCtrl)) &&
+                e.Button == MouseButtons.Left) || e.Button == MouseButtons.Middle)
             {
                 isUserPanning = true;
                 mouseLocPrev = e.Location;
+            }
+
+            //Displays a context menu for the background.
+            else if (e.Button == MouseButtons.Right)
+            {
+                ShowBgContextMenu(displayCanvas, e.Location);
             }
 
             //Enables and records brush drawing.
@@ -4232,7 +4266,7 @@ namespace BrushFilter
 
                 //Removes the preview for cases where no mouse enter event fired.
                 doPreview = false;
-                ApplyFilter();
+                ApplyFilterAlpha();
 
                 //Repositions the canvas when the user draws out-of-bounds.
                 timerRepositionUpdate.Enabled = true;
@@ -4584,11 +4618,8 @@ namespace BrushFilter
         /// </summary>
         private void EnablePreview(object sender, EventArgs e)
         {
-            if (!doPreview)
-            {
-                doPreview = true;
-                ApplyFilter();
-            }
+            doPreview = true;
+            ApplyFilterAlpha();
         }
 
         /// <summary>
@@ -4596,11 +4627,8 @@ namespace BrushFilter
         /// </summary>
         private void DisablePreview(object sender, EventArgs e)
         {
-            if (doPreview)
-            {
-                doPreview = false;
-                ApplyFilter();
-            }
+            doPreview = false;
+            ApplyFilterAlpha();
         }
 
         /// <summary>
@@ -4671,6 +4699,7 @@ namespace BrushFilter
             //Sets the brush otherwise.
             else
             {
+                bmpBrush?.Dispose();
                 bmpBrush = Utils.FormatImage(
                     new Bitmap(currentItem.Brush),
                     PixelFormat.Format32bppArgb);
@@ -4742,6 +4771,7 @@ namespace BrushFilter
             //Sets the bitmap to draw. Locks to prevent concurrency.
             lock (RenderSettings.BmpToRender)
             {
+                RenderSettings.BmpToRender.Dispose();
                 RenderSettings.BmpToRender = new Bitmap(bmpCurrentDrawing);
             }
 
