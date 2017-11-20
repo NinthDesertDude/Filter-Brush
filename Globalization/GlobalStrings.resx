@@ -759,6 +759,9 @@
   <data name="OverwriteModeTip" xml:space="preserve">
     <value>If turned on, the areas you draw in will only use the new image transparency, rather than layering it on top of the original image.</value>
   </data>
+  <data name="Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
   <data name="RandHorzShift" xml:space="preserve">
     <value>Horizontal Spray:</value>
   </data>

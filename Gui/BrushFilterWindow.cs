@@ -1014,26 +1014,17 @@ namespace BrushFilter
             switch (((Tuple<string, CmbxEffectOptions>)cmbxEffectType.SelectedItem).Item2)
             {
                 case CmbxEffectOptions.BlackAndWhite:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new HueAndSaturationAdjustment();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, 0);
                     break;
                 case CmbxEffectOptions.BrightnessContrast:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new BrightnessAndContrastAdjustment();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(BrightnessAndContrastAdjustment.PropertyNames.Brightness, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(BrightnessAndContrastAdjustment.PropertyNames.Contrast, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.HueSaturation:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new HueAndSaturationAdjustment();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Hue, sliderEffectProperty1.Value);
@@ -1041,16 +1032,10 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Lightness, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.InvertColors:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new InvertColorsEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     break;
                 case CmbxEffectOptions.Posterize:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new PosterizeAdjustment();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(PosterizeAdjustment.PropertyNames.RedLevels, sliderEffectProperty1.Value);
@@ -1058,9 +1043,6 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(PosterizeAdjustment.PropertyNames.BlueLevels, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Sepia:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new SepiaEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     break;
@@ -1073,36 +1055,24 @@ namespace BrushFilter
                     bmpEffectDrawing.RotateFlip(RotateFlipType.RotateNoneFlipY);
                     break;
                 case CmbxEffectOptions.InkSketch:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new InkSketchEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(InkSketchEffect.PropertyNames.InkOutline, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(InkSketchEffect.PropertyNames.Coloring, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.OilPainting:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new OilPaintingEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(OilPaintingEffect.PropertyNames.BrushSize, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(OilPaintingEffect.PropertyNames.Coarseness, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.PencilSketch:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new PencilSketchEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(PencilSketchEffect.PropertyNames.PencilTipSize, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(PencilSketchEffect.PropertyNames.ColorRange, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.Fragment:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new FragmentEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(FragmentEffect.PropertyNames.Fragments, sliderEffectProperty1.Value);
@@ -1113,9 +1083,6 @@ namespace BrushFilter
                     //Performs the built-in Gaussian blur.
                     if (sliderEffectProperty1.Value < 16)
                     {
-                        //Creates the scaffolding for the effect.
-                        srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                        dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                         effectP = new GaussianBlurEffect();
                         effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                         effectParamsP.SetPropertyValue(GaussianBlurEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
@@ -1131,9 +1098,6 @@ namespace BrushFilter
                     }
                     break;
                 case CmbxEffectOptions.MotionBlur:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new MotionBlurEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
 
@@ -1150,44 +1114,29 @@ namespace BrushFilter
                     }
                     break;
                 case CmbxEffectOptions.SurfaceBlur:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new SurfaceBlurEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(SurfaceBlurEffect.PropertyName.Radius, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(SurfaceBlurEffect.PropertyName.Threshold, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.Unfocus:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new UnfocusEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(UnfocusEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.ZoomBlur:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new ZoomBlurEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(ZoomBlurEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(ZoomBlurEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.Bulge:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new BulgeEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(BulgeEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(BulgeEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.Crystalize:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new CrystalizeEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(CrystalizeEffect.PropertyNames.Size, sliderEffectProperty1.Value);
@@ -1195,9 +1144,6 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(CrystalizeEffect.PropertyNames.Seed, random.NextDouble());
                     break;
                 case CmbxEffectOptions.Dents:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new DentsEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Scale, (double)sliderEffectProperty1.Value);
@@ -1208,9 +1154,6 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Seed, random.NextDouble());
                     break;
                 case CmbxEffectOptions.FrostedGlass:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new FrostedGlassEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
 
@@ -1225,17 +1168,11 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(FrostedGlassEffect.PropertyNames.NumSamples, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Pixelate:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new PixelateEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(PixelateEffect.PropertyNames.CellSize, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.TileReflection:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new TileEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(TileEffect.PropertyNames.Rotation, (double)sliderEffectProperty1.Value);
@@ -1244,9 +1181,6 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(TileEffect.PropertyNames.Quality, sliderEffectProperty4.Value);
                     break;
                 case CmbxEffectOptions.Twist:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new TwistEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(TwistEffect.PropertyNames.Amount, (double)sliderEffectProperty1.Value);
@@ -1255,9 +1189,6 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(TwistEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.AddNoise:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new AddNoiseEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(AddNoiseEffect.PropertyNames.Intensity, sliderEffectProperty1.Value);
@@ -1265,27 +1196,18 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(AddNoiseEffect.PropertyNames.Coverage, (double)sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Median:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new MedianEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(MedianEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(MedianEffect.PropertyNames.Percentile, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.ReduceNoise:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new ReduceNoiseEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(ReduceNoiseEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(ReduceNoiseEffect.PropertyNames.Strength, sliderEffectProperty2.Value / 100d);
                     break;
                 case CmbxEffectOptions.Glow:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new GlowEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(GlowEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
@@ -1293,17 +1215,11 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(GlowEffect.PropertyNames.Contrast, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Sharpen:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new SharpenEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(SharpenEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.SoftenPortrait:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new SoftenPortraitEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Softness, sliderEffectProperty1.Value);
@@ -1311,9 +1227,6 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Warmth, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Vignette:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new VignetteEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(VignetteEffect.PropertyNames.Radius, sliderEffectProperty1.Value / 100d);
@@ -1321,9 +1234,6 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(VignetteEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.Clouds:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new CloudsEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(CloudsEffect.PropertyNames.Scale, sliderEffectProperty1.Value);
@@ -1332,42 +1242,27 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(CloudsEffect.PropertyNames.Seed, random.NextDouble());
                     break;
                 case CmbxEffectOptions.EdgeDetect:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new EdgeDetectEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(EdgeDetectEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.Emboss:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new EmbossEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(EmbossEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.Outline:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new OutlineEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(OutlineEffect.PropertyNames.Thickness, sliderEffectProperty1.Value);
                     effectParamsP.SetPropertyValue(OutlineEffect.PropertyNames.Intensity, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.Relief:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new ReliefEffect();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(ReliefEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.DodgeBurn:
-                    //Creates the scaffolding for the effect.
-                    srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                    dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                     effectP = new HueAndSaturationAdjustment();
                     effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Hue, 0);
@@ -1435,19 +1330,22 @@ namespace BrushFilter
                 case CmbxEffectOptions.Custom:
                     if (customEffect is PropertyBasedEffect effectPB)
                     {
-                        srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                        dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                         effectP = effectPB;
                         effectParamsP = customEffectTokenP;
                     }
                     else
                     {
-                        srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
-                        dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
                         effect = customEffect;
                         effectParams = customEffectToken;
                     }
                     break;
+            }
+
+            //Sets the source and destination bitmaps for effects.
+            if (effectP != null || effect != null)
+            {
+                srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
+                dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
             }
 
             //Copies the rendering over the filtered drawing.
@@ -2490,6 +2388,7 @@ namespace BrushFilter
             resources.ApplyResources(this.chkbxOverwriteMode, "chkbxOverwriteMode");
             this.chkbxOverwriteMode.Name = "chkbxOverwriteMode";
             this.chkbxOverwriteMode.UseVisualStyleBackColor = true;
+            this.chkbxOverwriteMode.CheckedChanged += new System.EventHandler(this.ChkbxOverwriteMode_CheckedChanged);
             this.chkbxOverwriteMode.MouseEnter += new System.EventHandler(this.ChkbxOverwriteMode_MouseEnter);
             // 
             // sliderEffectProperty2
@@ -2588,7 +2487,7 @@ namespace BrushFilter
             resources.ApplyResources(this.pnlCustomProperties, "pnlCustomProperties");
             this.pnlCustomProperties.Name = "pnlCustomProperties";
             // 
-            // winBrushFilter
+            // WinBrushFilter
             // 
             this.AcceptButton = this.bttnOk;
             resources.ApplyResources(this, "$this");
@@ -2600,7 +2499,7 @@ namespace BrushFilter
             this.DoubleBuffered = true;
             this.KeyPreview = true;
             this.MaximizeBox = true;
-            this.Name = "winBrushFilter";
+            this.Name = "WinBrushFilter";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.WinBrushFilter_FormClosed);
             this.Load += new System.EventHandler(this.WinBrushFilter_DialogLoad);
@@ -4582,16 +4481,32 @@ namespace BrushFilter
 
             //Draws the image with an intentionally truncated extra size.
             //TODO: Remove the workaround (extra size) and find the cause.
-            e.Graphics.DrawImage(bmpCurrentDrawing, 0, 0,
-                displayCanvas.ClientRectangle.Width + (sliderCanvasZoom.Value / 100),
-                displayCanvas.ClientRectangle.Height + (sliderCanvasZoom.Value / 100));
+            if (!chkbxOverwriteMode.Checked || !doPreview)
+            {
+                e.Graphics.DrawImage(bmpCurrentDrawing, 0, 0,
+                    displayCanvas.ClientRectangle.Width + (sliderCanvasZoom.Value / 100),
+                    displayCanvas.ClientRectangle.Height + (sliderCanvasZoom.Value / 100));
+            }
 
             //Draws the effect surface for user drawing or as a preview.
-            if (isUserDrawing || doPreview)
+            if (chkbxOverwriteMode.Checked || isUserDrawing || doPreview)
             {
                 e.Graphics.DrawImage(bmpEffectDrawing, 0, 0,
                     displayCanvas.ClientRectangle.Width + (sliderCanvasZoom.Value / 100),
                     displayCanvas.ClientRectangle.Height + (sliderCanvasZoom.Value / 100));
+            }
+
+            //Informs the user when the image shown is a preview.
+            if (doPreview)
+            {
+                var fntSize = e.Graphics.MeasureString(
+                    Globalization.GlobalStrings.Preview, Font);
+
+                e.Graphics.FillRectangle(new SolidBrush(Color.FromArgb(128, 255, 255, 255)),
+                    new Rectangle(0, 0, (int)fntSize.Width, (int)fntSize.Height));
+
+                e.Graphics.DrawString(Globalization.GlobalStrings.Preview,
+                    Font, Brushes.Red, 0, 0);
             }
 
             //Draws the selection.
@@ -4664,7 +4579,7 @@ namespace BrushFilter
             displayCanvas.Focus();
 
             txtTooltip.Text = Globalization.GlobalStrings.GeneralTooltip;
-            DisablePreview(this, null);
+            EnablePreview(this, null);
         }
 
         /// <summary>
@@ -4982,6 +4897,15 @@ namespace BrushFilter
         private void ChkbxOrientToMouse_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.OrientToMouseTip;
+        }
+
+        /// <summary>
+        /// Redraws the source and/or effect surface depending on the overwrite
+        /// state.
+        /// </summary>
+        private void ChkbxOverwriteMode_CheckedChanged(object sender, EventArgs e)
+        {
+            displayCanvas.Refresh();
         }
 
         /// <summary>
