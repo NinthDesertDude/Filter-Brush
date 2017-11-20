@@ -697,12 +697,6 @@ namespace BrushFilter
                 bttnBrushSelector.SelectedIndex = brushIndex;
             }
 
-            //Prevents the effect from being calculated 4 times in a row.
-            sliderEffectProperty1.ValueChanged -= SliderEffectProperty1_ValueChanged;
-            sliderEffectProperty2.ValueChanged -= SliderEffectProperty2_ValueChanged;
-            sliderEffectProperty3.ValueChanged -= SliderEffectProperty3_ValueChanged;
-            sliderEffectProperty4.ValueChanged -= SliderEffectProperty4_ValueChanged;
-
             //Sets all other fields.
             sliderBrushRotation.Value = token.BrushRotation;
             sliderBrushIntensity.Value = token.BrushIntensity;
@@ -722,6 +716,8 @@ namespace BrushFilter
             sliderShiftIntensity.Value = token.IntensityChange;
             cmbxSymmetry.SelectedIndex = token.SymmetryMode;
             cmbxEffectType.SelectedIndex = token.EffectMode;
+
+            DisableParameterUpdates();
             sliderEffectProperty1.Value = Utils.Clamp(token.EffectProperty1,
                 sliderEffectProperty1.Minimum, sliderEffectProperty1.Maximum);
             sliderEffectProperty2.Value = Utils.Clamp(token.EffectProperty2,
@@ -730,12 +726,7 @@ namespace BrushFilter
                 sliderEffectProperty3.Minimum, sliderEffectProperty3.Maximum);
             sliderEffectProperty4.Value = Utils.Clamp(token.EffectProperty4,
                 sliderEffectProperty4.Minimum, sliderEffectProperty4.Maximum);
-
-            //Prevents the effect from being calculated 4 times in a row.
-            sliderEffectProperty1.ValueChanged += SliderEffectProperty1_ValueChanged;
-            sliderEffectProperty2.ValueChanged += SliderEffectProperty2_ValueChanged;
-            sliderEffectProperty3.ValueChanged += SliderEffectProperty3_ValueChanged;
-            sliderEffectProperty4.ValueChanged += SliderEffectProperty4_ValueChanged;
+            EnableParameterUpdates();
 
             //Instantiates a custom effect if one is selected.
             LoadUserEffect();
@@ -1562,7 +1553,7 @@ namespace BrushFilter
         private unsafe void ApplyFilterAlpha()
         {
             //Doesn't compute the effect if it hasn't loaded yet.
-            if (bmpEffectAlpha == null)
+            if (bmpEffectDrawing == null || bmpEffectAlpha == null)
             {
                 return;
             }
@@ -1606,6 +1597,31 @@ namespace BrushFilter
 
             //Updates the displayed filter.
             displayCanvas.Refresh();
+        }
+
+        /// <summary>
+        /// As parameter defaults are applied, to avoid generating the filter
+        /// every time one of its parameters is applied, this disables them.
+        /// Re-enable them when done modifying the parameter values.
+        /// </summary>
+        private void DisableParameterUpdates()
+        {
+            sliderEffectProperty1.ValueChanged -= SliderEffectProperty1_ValueChanged;
+            sliderEffectProperty2.ValueChanged -= SliderEffectProperty2_ValueChanged;
+            sliderEffectProperty3.ValueChanged -= SliderEffectProperty3_ValueChanged;
+            sliderEffectProperty4.ValueChanged -= SliderEffectProperty4_ValueChanged;
+        }
+
+        /// <summary>
+        /// Re-enables parameter updating so that changing the value of a
+        /// parameter by any means will recreate the filter.
+        /// </summary>
+        private void EnableParameterUpdates()
+        {
+            sliderEffectProperty1.ValueChanged += SliderEffectProperty1_ValueChanged;
+            sliderEffectProperty2.ValueChanged += SliderEffectProperty2_ValueChanged;
+            sliderEffectProperty3.ValueChanged += SliderEffectProperty3_ValueChanged;
+            sliderEffectProperty4.ValueChanged += SliderEffectProperty4_ValueChanged;
         }
 
         /// <summary>
@@ -2775,6 +2791,9 @@ namespace BrushFilter
             pnlCustomProperties.Enabled = false;
             pnlCustomProperties.Controls.Clear();
 
+            //Prevents redundant filter applications as parameters change.
+            DisableParameterUpdates();
+
             switch (((Tuple<string, CmbxEffectOptions>)cmbxEffectType.SelectedItem).Item2)
             {
                 case CmbxEffectOptions.BrightnessContrast:
@@ -2799,11 +2818,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectBrightnessContrastProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.HueSaturation:
                     //Sets property visibility / enabledness.
@@ -2835,15 +2854,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectHueSaturationProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Posterize:
                     //Sets property visibility / enabledness.
@@ -2875,15 +2894,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPosterizeProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPosterizeProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectPosterizeProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.InkSketch:
                     //Sets property visibility / enabledness.
@@ -2907,11 +2926,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectInkSketchProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectInkSketchProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.OilPainting:
                     //Sets property visibility / enabledness.
@@ -2935,11 +2954,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOilPaintingProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.PencilSketch:
                     //Sets property visibility / enabledness.
@@ -2963,11 +2982,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectPencilSketchProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.Fragment:
                     //Sets property visibility / enabledness.
@@ -2999,15 +3018,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFragmentProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFragmentProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFragmentProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Blur:
                     //Sets property visibility / enabledness.
@@ -3023,7 +3042,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBlurProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.MotionBlur:
                     //Sets property visibility / enabledness.
@@ -3047,11 +3066,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMotionBlurProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.SurfaceBlur:
                     //Sets property visibility / enabledness.
@@ -3075,11 +3094,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSurfaceBlurProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.Unfocus:
                     //Sets property visibility / enabledness.
@@ -3095,7 +3114,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectUnfocusProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.ZoomBlur:
                     //Sets property visibility / enabledness.
@@ -3111,7 +3130,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectZoomBlurProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.Bulge:
                     //Sets property visibility / enabledness.
@@ -3127,7 +3146,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectBulgeProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.Crystalize:
                     //Sets property visibility / enabledness.
@@ -3151,11 +3170,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCrystalizeProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.Dents:
                     //Sets property visibility / enabledness.
@@ -3195,19 +3214,19 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDentsProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectDentsProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectDentsProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
 
                     txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4;
                     sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectDentsProperty4Tip;
-                    SliderEffectProperty4_ValueChanged(this, null);
+                    txtEffectProperty4.Text = txtEffectProperty4.Tag + ": " + sliderEffectProperty4.Value;
                     break;
                 case CmbxEffectOptions.FrostedGlass:
                     //Sets property visibility / enabledness.
@@ -3239,15 +3258,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectFrostedGlassProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Pixelate:
                     //Sets property visibility / enabledness.
@@ -3263,7 +3282,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectPixelateProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.TileReflection:
                     //Sets property visibility / enabledness.
@@ -3303,19 +3322,19 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
 
                     txtEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4;
                     sliderEffectProperty4.Tag = Globalization.GlobalStrings.EffectTileReflectionProperty4Tip;
-                    SliderEffectProperty4_ValueChanged(this, null);
+                    txtEffectProperty4.Text = txtEffectProperty4.Tag + ": " + sliderEffectProperty4.Value;
                     break;
                 case CmbxEffectOptions.Twist:
                     //Sets property visibility / enabledness.
@@ -3347,15 +3366,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectTwistProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectTwistProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectTwistProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.AddNoise:
                     //Sets property visibility / enabledness.
@@ -3387,15 +3406,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectAddNoiseProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Median:
                     //Sets property visibility / enabledness.
@@ -3419,11 +3438,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectMedianProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectMedianProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.ReduceNoise:
                     //Sets property visibility / enabledness.
@@ -3447,11 +3466,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectReduceNoiseProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.Glow:
                     //Sets property visibility / enabledness.
@@ -3483,15 +3502,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectGlowProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectGlowProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectGlowProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Sharpen:
                     //Sets property visibility / enabledness.
@@ -3507,7 +3526,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSharpenProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.SoftenPortrait:
                     //Sets property visibility / enabledness.
@@ -3539,15 +3558,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectSoftenPortraitProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Vignette:
                     //Sets property visibility / enabledness.
@@ -3571,11 +3590,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectVignetteProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectVignetteProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.Clouds:
                     //Sets property visibility / enabledness.
@@ -3599,11 +3618,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectCloudsProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectCloudsProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.EdgeDetect:
                     //Sets property visibility / enabledness.
@@ -3619,7 +3638,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEdgeDetectProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.Emboss:
                     //Sets property visibility / enabledness.
@@ -3635,7 +3654,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectEmbossProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.Outline:
                     //Sets property visibility / enabledness.
@@ -3659,11 +3678,11 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectOutlineProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectOutlineProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
                     break;
                 case CmbxEffectOptions.Relief:
                     //Sets property visibility / enabledness.
@@ -3679,7 +3698,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectReliefProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.DodgeBurn:
                     //Sets property visibility / enabledness.
@@ -3695,7 +3714,7 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectDodgeBurnProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
                     break;
                 case CmbxEffectOptions.RgbTint:
                     //Sets property visibility / enabledness.
@@ -3727,15 +3746,15 @@ namespace BrushFilter
                     //Updates the text and tooltip of enabled sliders.
                     txtEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1;
                     sliderEffectProperty1.Tag = Globalization.GlobalStrings.EffectRgbTintProperty1Tip;
-                    SliderEffectProperty1_ValueChanged(this, null);
+                    txtEffectProperty1.Text = txtEffectProperty1.Tag + ": " + sliderEffectProperty1.Value;
 
                     txtEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2;
                     sliderEffectProperty2.Tag = Globalization.GlobalStrings.EffectRgbTintProperty2Tip;
-                    SliderEffectProperty2_ValueChanged(this, null);
+                    txtEffectProperty2.Text = txtEffectProperty2.Tag + ": " + sliderEffectProperty2.Value;
 
                     txtEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3;
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3Tip;
-                    SliderEffectProperty3_ValueChanged(this, null);
+                    txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Custom:
                     if (customEffect is PropertyBasedEffect effect &&
@@ -3756,8 +3775,10 @@ namespace BrushFilter
                         catch (Exception)
                         {
                             MessageBox.Show("Failed to create effect " +
-                                "settings; try switching to a different" +
+                                "settings; try switching to a different " +
                                 "effect.");
+
+                            EnableParameterUpdates();
                             return;
                         }
 
@@ -3824,12 +3845,14 @@ namespace BrushFilter
                         catch (Exception)
                         {
                             MessageBox.Show("An error occurred.");
+                            EnableParameterUpdates();
                         }
                     }
                     break;
             }
 
-            //Applies an effect to the bitmap.
+            //Re-enables parameter updating and applies an effect.
+            EnableParameterUpdates();
             ApplyFilter();
         }
 
