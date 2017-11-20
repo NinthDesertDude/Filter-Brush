@@ -697,6 +697,12 @@ namespace BrushFilter
                 bttnBrushSelector.SelectedIndex = brushIndex;
             }
 
+            //Prevents the effect from being calculated 4 times in a row.
+            sliderEffectProperty1.ValueChanged -= SliderEffectProperty1_ValueChanged;
+            sliderEffectProperty2.ValueChanged -= SliderEffectProperty2_ValueChanged;
+            sliderEffectProperty3.ValueChanged -= SliderEffectProperty3_ValueChanged;
+            sliderEffectProperty4.ValueChanged -= SliderEffectProperty4_ValueChanged;
+
             //Sets all other fields.
             sliderBrushRotation.Value = token.BrushRotation;
             sliderBrushIntensity.Value = token.BrushIntensity;
@@ -724,6 +730,12 @@ namespace BrushFilter
                 sliderEffectProperty3.Minimum, sliderEffectProperty3.Maximum);
             sliderEffectProperty4.Value = Utils.Clamp(token.EffectProperty4,
                 sliderEffectProperty4.Minimum, sliderEffectProperty4.Maximum);
+
+            //Prevents the effect from being calculated 4 times in a row.
+            sliderEffectProperty1.ValueChanged += SliderEffectProperty1_ValueChanged;
+            sliderEffectProperty2.ValueChanged += SliderEffectProperty2_ValueChanged;
+            sliderEffectProperty3.ValueChanged += SliderEffectProperty3_ValueChanged;
+            sliderEffectProperty4.ValueChanged += SliderEffectProperty4_ValueChanged;
 
             //Instantiates a custom effect if one is selected.
             LoadUserEffect();
@@ -1477,7 +1489,24 @@ namespace BrushFilter
                 }
                 else
                 {
-                    effectP.Render(new Rectangle[] { bounds }, 0, 1);
+                    try
+                    {
+                        effectP.Render(new Rectangle[] { bounds }, 0, 1);
+                    }
+                    catch
+                    {
+                        if (bounds.Width == 1 && bounds.Height == 1)
+                        {
+                            MessageBox.Show("Rendering failed. Image " +
+                                "dimensions may be too small; try switching " +
+                                "to another effect.");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Rendering failed. Try " +
+                                "switching to another effect.");
+                        }
+                    }
                 }
 
                 bmpEffectDrawing?.Dispose();
@@ -3725,7 +3754,9 @@ namespace BrushFilter
                         }
                         catch (Exception)
                         {
-                            MessageBox.Show("An error occurred.");
+                            MessageBox.Show("Failed to create effect " +
+                                "settings; try switching to a different" +
+                                "effect.");
                             return;
                         }
 
