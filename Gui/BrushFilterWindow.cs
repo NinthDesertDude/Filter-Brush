@@ -1551,6 +1551,7 @@ namespace BrushFilter
             }
 
             //Sets the alpha values for previewing or drawing.
+            doRefreshEffectAlpha = true;
             ApplyFilterAlpha();
         }
 
