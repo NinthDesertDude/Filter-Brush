@@ -102,7 +102,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CmbxEffectOptions.cs" />
-    <Compile Include="FastBlur.cs" />
     <Compile Include="Gui\BrushFilterPreferences.cs">
       <SubType>Form</SubType>
     </Compile>

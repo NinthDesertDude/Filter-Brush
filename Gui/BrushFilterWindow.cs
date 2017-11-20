@@ -1080,22 +1080,9 @@ namespace BrushFilter
                     effectParamsP.SetPropertyValue(FragmentEffect.PropertyNames.Rotation, (double)sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Blur:
-                    //Performs the built-in Gaussian blur.
-                    if (sliderEffectProperty1.Value < 16)
-                    {
-                        effectP = new GaussianBlurEffect();
-                        effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                        effectParamsP.SetPropertyValue(GaussianBlurEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
-                    }
-
-                    //Performs the fast Gaussian blur.
-                    else if (bmpEffectDrawing.Width > 1 ||
-                        bmpEffectDrawing.Height > 1)
-                    {
-                        bmpEffectDrawing.Dispose();
-                        bmpEffectDrawing = FastBlur.Apply(
-                            bmpCurrentDrawing, sliderEffectProperty1.Value / 2d);
-                    }
+                    effectP = new GaussianBlurEffect();
+                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParamsP.SetPropertyValue(GaussianBlurEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.MotionBlur:
                     effectP = new MotionBlurEffect();
