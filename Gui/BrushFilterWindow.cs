@@ -3676,6 +3676,7 @@ namespace BrushFilter
                         }
 
                         int controlNum = 0;
+                        int verticalPos = 0;
                         for (int i = 0; i < propertyList.Count; i++)
                         {
                             var property = propertyList.Properties.ElementAt(i);
@@ -3690,22 +3691,27 @@ namespace BrushFilter
                                 {
                                     control.Text = lbl.Tag.ToString();
 
-                                    control.SetBounds(4, controlNum * 70, 150, 25);
+                                    control.SetBounds(0, verticalPos, 150, 25);
+                                    verticalPos += 30;
                                 }
 
                                 //Appends a label for other controls.
                                 else
                                 {
                                     lbl.TextAlign = ContentAlignment.MiddleCenter;
-                                    lbl.Margin = new Padding(3);
-                                    lbl.SetBounds(4, controlNum * 70, 150, 17);
+                                    lbl.SetBounds(0, verticalPos, 150, 17);
+                                    verticalPos += 20;
+
                                     pnlCustomProperties.Controls.Add(lbl);
 
-                                    control.SetBounds(4, controlNum * 70 + 20, 150, 25);
+                                    control.SetBounds(0, verticalPos, 150, 25);
+                                    verticalPos += 30;
+
+                                    //Puts the label over the control.
+                                    pnlCustomProperties.Controls.SetChildIndex(lbl, 0);
                                 }
 
                                 //Appends the control.
-                                control.Margin = new Padding(3);
                                 pnlCustomProperties.Controls.Add(control);
 
                                 //Updates the preview when the property changes.
