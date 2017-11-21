@@ -52,11 +52,6 @@ namespace BrushFilter
         public Effect CustomEffect;
 
         /// <summary>
-        /// The config details of a property-based custom effect.
-        /// </summary>
-        public PropertyBasedEffectConfigToken CustomEffectTokenP;
-
-        /// <summary>
         /// The config details of a non-property-based custom effect.
         /// </summary>
         public EffectConfigToken CustomEffectToken;
@@ -295,8 +290,7 @@ namespace BrushFilter
             int valProperty4,
             List<string> customBrushLocations,
             Effect customEffect,
-            EffectConfigToken customEffectToken,
-            PropertyBasedEffectConfigToken customEffectTokenP)
+            EffectConfigToken customEffectToken)
             : base()
         {
             BrushSize = brushSize;
@@ -326,7 +320,6 @@ namespace BrushFilter
             CustomBrushLocations = new List<string>(customBrushLocations);
             CustomEffect = customEffect;
             CustomEffectToken = customEffectToken;
-            CustomEffectTokenP = customEffectTokenP;
         }
 
         /// <summary>
@@ -362,7 +355,6 @@ namespace BrushFilter
             CustomBrushLocations = new List<string>(other.CustomBrushLocations);
             CustomEffect = other.CustomEffect;
             CustomEffectToken = other.CustomEffectToken;
-            CustomEffectTokenP = other.CustomEffectTokenP;
         }
         #endregion
 

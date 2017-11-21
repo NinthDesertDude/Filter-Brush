@@ -61,12 +61,6 @@ namespace BrushFilter
 
         /// <summary>
         /// Stores an instance of the token containing parameters for a custom
-        /// effect based on properties when chosen as the filter.
-        /// </summary>
-        private PropertyBasedEffectConfigToken customEffectTokenP;
-
-        /// <summary>
-        /// Stores an instance of the token containing parameters for a custom
         /// effect not based on properties when chosen as the filter.
         /// </summary>
         private EffectConfigToken customEffectToken;
@@ -648,7 +642,7 @@ namespace BrushFilter
         {
             theEffectToken = new PersistentSettings(20, "", 0, 100, 0, 0, 0, 0, 0, 0,
                 0, 0, false, 0, 0, 0, 0, false, 0, 0, 1, 1, 1, 1, new List<string>(),
-                null, null, null);
+                null, null);
         }
 
         /// <summary>
@@ -731,7 +725,6 @@ namespace BrushFilter
 
             //Preserves custom effect values.
             customEffect = token.CustomEffect;
-            customEffectTokenP = token.CustomEffectTokenP;
             customEffectToken = token.CustomEffectToken;
         }
 
@@ -769,7 +762,6 @@ namespace BrushFilter
             token.EffectProperty4 = sliderEffectProperty4.Value;
             token.CustomBrushLocations = loadedBrushPaths;
             token.CustomEffect = customEffect;
-            token.CustomEffectTokenP = customEffectTokenP;
             token.CustomEffectToken = customEffectToken;
         }
 
@@ -1012,8 +1004,7 @@ namespace BrushFilter
             RenderArgs srcArgs = null, dstArgs = null;
             Effect effect = null;
             PropertyBasedEffect effectP = null;
-            EffectConfigToken effectParams = null;
-            PropertyBasedEffectConfigToken effectParamsP = null;
+            PropertyBasedEffectConfigToken effectParams = null;
             Rectangle bounds = new Rectangle(0, 0, bmpEffectDrawing.Width, bmpEffectDrawing.Height);
 
             //Applies an effect to the bitmap.
@@ -1021,36 +1012,36 @@ namespace BrushFilter
             {
                 case CmbxEffectOptions.BlackAndWhite:
                     effectP = new HueAndSaturationAdjustment();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, 0);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, 0);
                     break;
                 case CmbxEffectOptions.BrightnessContrast:
                     effectP = new BrightnessAndContrastAdjustment();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(BrightnessAndContrastAdjustment.PropertyNames.Brightness, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(BrightnessAndContrastAdjustment.PropertyNames.Contrast, sliderEffectProperty2.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(BrightnessAndContrastAdjustment.PropertyNames.Brightness, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(BrightnessAndContrastAdjustment.PropertyNames.Contrast, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.HueSaturation:
                     effectP = new HueAndSaturationAdjustment();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Hue, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Lightness, sliderEffectProperty3.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Hue, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Lightness, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.InvertColors:
                     effectP = new InvertColorsEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     break;
                 case CmbxEffectOptions.Posterize:
                     effectP = new PosterizeAdjustment();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(PosterizeAdjustment.PropertyNames.RedLevels, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(PosterizeAdjustment.PropertyNames.GreenLevels, sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(PosterizeAdjustment.PropertyNames.BlueLevels, sliderEffectProperty3.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(PosterizeAdjustment.PropertyNames.RedLevels, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(PosterizeAdjustment.PropertyNames.GreenLevels, sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(PosterizeAdjustment.PropertyNames.BlueLevels, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Sepia:
                     effectP = new SepiaEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
                     break;
                 case CmbxEffectOptions.FlipHorizontal:
                     Utils.CopyBitmapPure(bmpCurrentDrawing, bmpEffectDrawing);
@@ -1062,93 +1053,93 @@ namespace BrushFilter
                     break;
                 case CmbxEffectOptions.InkSketch:
                     effectP = new InkSketchEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(InkSketchEffect.PropertyNames.InkOutline, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(InkSketchEffect.PropertyNames.Coloring, sliderEffectProperty2.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(InkSketchEffect.PropertyNames.InkOutline, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(InkSketchEffect.PropertyNames.Coloring, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.OilPainting:
                     effectP = new OilPaintingEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(OilPaintingEffect.PropertyNames.BrushSize, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(OilPaintingEffect.PropertyNames.Coarseness, sliderEffectProperty2.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(OilPaintingEffect.PropertyNames.BrushSize, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(OilPaintingEffect.PropertyNames.Coarseness, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.PencilSketch:
                     effectP = new PencilSketchEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(PencilSketchEffect.PropertyNames.PencilTipSize, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(PencilSketchEffect.PropertyNames.ColorRange, sliderEffectProperty2.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(PencilSketchEffect.PropertyNames.PencilTipSize, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(PencilSketchEffect.PropertyNames.ColorRange, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.Fragment:
                     effectP = new FragmentEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(FragmentEffect.PropertyNames.Fragments, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(FragmentEffect.PropertyNames.Distance, sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(FragmentEffect.PropertyNames.Rotation, (double)sliderEffectProperty3.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(FragmentEffect.PropertyNames.Fragments, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(FragmentEffect.PropertyNames.Distance, sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(FragmentEffect.PropertyNames.Rotation, (double)sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Blur:
                     effectP = new GaussianBlurEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(GaussianBlurEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(GaussianBlurEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.MotionBlur:
                     effectP = new MotionBlurEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
 
-                    effectParamsP.SetPropertyValue(MotionBlurEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(MotionBlurEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
                     if (sliderEffectProperty2.Value == 0)
                     {
-                        effectParamsP.SetPropertyValue(MotionBlurEffect.PropertyNames.Centered, true);
-                        effectParamsP.SetPropertyValue(MotionBlurEffect.PropertyNames.Distance, 1);
+                        effectParams.SetPropertyValue(MotionBlurEffect.PropertyNames.Centered, true);
+                        effectParams.SetPropertyValue(MotionBlurEffect.PropertyNames.Distance, 1);
                     }
                     else
                     {
-                        effectParamsP.SetPropertyValue(MotionBlurEffect.PropertyNames.Centered, false);
-                        effectParamsP.SetPropertyValue(MotionBlurEffect.PropertyNames.Distance, sliderEffectProperty2.Value);
+                        effectParams.SetPropertyValue(MotionBlurEffect.PropertyNames.Centered, false);
+                        effectParams.SetPropertyValue(MotionBlurEffect.PropertyNames.Distance, sliderEffectProperty2.Value);
                     }
                     break;
                 case CmbxEffectOptions.SurfaceBlur:
                     effectP = new SurfaceBlurEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(SurfaceBlurEffect.PropertyName.Radius, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(SurfaceBlurEffect.PropertyName.Threshold, sliderEffectProperty2.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(SurfaceBlurEffect.PropertyName.Radius, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(SurfaceBlurEffect.PropertyName.Threshold, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.Unfocus:
                     effectP = new UnfocusEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(UnfocusEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(UnfocusEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.ZoomBlur:
                     effectP = new ZoomBlurEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(ZoomBlurEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(ZoomBlurEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(ZoomBlurEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(ZoomBlurEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.Bulge:
                     effectP = new BulgeEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(BulgeEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(BulgeEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(BulgeEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(BulgeEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.Crystalize:
                     effectP = new CrystalizeEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(CrystalizeEffect.PropertyNames.Size, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(CrystalizeEffect.PropertyNames.Quality, sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(CrystalizeEffect.PropertyNames.Seed, random.NextDouble());
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(CrystalizeEffect.PropertyNames.Size, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(CrystalizeEffect.PropertyNames.Quality, sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(CrystalizeEffect.PropertyNames.Seed, random.NextDouble());
                     break;
                 case CmbxEffectOptions.Dents:
                     effectP = new DentsEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Scale, (double)sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Refraction, (double)sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Roughness, (double)sliderEffectProperty3.Value);
-                    effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Tension, (double)sliderEffectProperty4.Value);
-                    effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Quality, 2);
-                    effectParamsP.SetPropertyValue(DentsEffect.PropertyNames.Seed, random.NextDouble());
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(DentsEffect.PropertyNames.Scale, (double)sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(DentsEffect.PropertyNames.Refraction, (double)sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(DentsEffect.PropertyNames.Roughness, (double)sliderEffectProperty3.Value);
+                    effectParams.SetPropertyValue(DentsEffect.PropertyNames.Tension, (double)sliderEffectProperty4.Value);
+                    effectParams.SetPropertyValue(DentsEffect.PropertyNames.Quality, 2);
+                    effectParams.SetPropertyValue(DentsEffect.PropertyNames.Seed, random.NextDouble());
                     break;
                 case CmbxEffectOptions.FrostedGlass:
                     effectP = new FrostedGlassEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
 
                     //Minimum scattering radius must be <= maximum scattering radius.
                     if (sliderEffectProperty2.Value > sliderEffectProperty1.Value)
@@ -1156,119 +1147,119 @@ namespace BrushFilter
                         sliderEffectProperty2.Value = sliderEffectProperty1.Value;
                     }
 
-                    effectParamsP.SetPropertyValue(FrostedGlassEffect.PropertyNames.MaxScatterRadius, (double)sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(FrostedGlassEffect.PropertyNames.MinScatterRadius, (double)sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(FrostedGlassEffect.PropertyNames.NumSamples, sliderEffectProperty3.Value);
+                    effectParams.SetPropertyValue(FrostedGlassEffect.PropertyNames.MaxScatterRadius, (double)sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(FrostedGlassEffect.PropertyNames.MinScatterRadius, (double)sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(FrostedGlassEffect.PropertyNames.NumSamples, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Pixelate:
                     effectP = new PixelateEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(PixelateEffect.PropertyNames.CellSize, sliderEffectProperty1.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(PixelateEffect.PropertyNames.CellSize, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.TileReflection:
                     effectP = new TileEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(TileEffect.PropertyNames.Rotation, (double)sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(TileEffect.PropertyNames.SquareSize, (double)sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(TileEffect.PropertyNames.Curvature, (double)sliderEffectProperty3.Value);
-                    effectParamsP.SetPropertyValue(TileEffect.PropertyNames.Quality, sliderEffectProperty4.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(TileEffect.PropertyNames.Rotation, (double)sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(TileEffect.PropertyNames.SquareSize, (double)sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(TileEffect.PropertyNames.Curvature, (double)sliderEffectProperty3.Value);
+                    effectParams.SetPropertyValue(TileEffect.PropertyNames.Quality, sliderEffectProperty4.Value);
                     break;
                 case CmbxEffectOptions.Twist:
                     effectP = new TwistEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(TwistEffect.PropertyNames.Amount, (double)sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(TwistEffect.PropertyNames.Size, sliderEffectProperty2.Value / 100d);
-                    effectParamsP.SetPropertyValue(TwistEffect.PropertyNames.Quality, sliderEffectProperty3.Value);
-                    effectParamsP.SetPropertyValue(TwistEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(TwistEffect.PropertyNames.Amount, (double)sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(TwistEffect.PropertyNames.Size, sliderEffectProperty2.Value / 100d);
+                    effectParams.SetPropertyValue(TwistEffect.PropertyNames.Quality, sliderEffectProperty3.Value);
+                    effectParams.SetPropertyValue(TwistEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.AddNoise:
                     effectP = new AddNoiseEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(AddNoiseEffect.PropertyNames.Intensity, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(AddNoiseEffect.PropertyNames.Saturation, sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(AddNoiseEffect.PropertyNames.Coverage, (double)sliderEffectProperty3.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(AddNoiseEffect.PropertyNames.Intensity, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(AddNoiseEffect.PropertyNames.Saturation, sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(AddNoiseEffect.PropertyNames.Coverage, (double)sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Median:
                     effectP = new MedianEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(MedianEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(MedianEffect.PropertyNames.Percentile, sliderEffectProperty2.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(MedianEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(MedianEffect.PropertyNames.Percentile, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.ReduceNoise:
                     effectP = new ReduceNoiseEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(ReduceNoiseEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(ReduceNoiseEffect.PropertyNames.Strength, sliderEffectProperty2.Value / 100d);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(ReduceNoiseEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(ReduceNoiseEffect.PropertyNames.Strength, sliderEffectProperty2.Value / 100d);
                     break;
                 case CmbxEffectOptions.Glow:
                     effectP = new GlowEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(GlowEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(GlowEffect.PropertyNames.Brightness, sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(GlowEffect.PropertyNames.Contrast, sliderEffectProperty3.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(GlowEffect.PropertyNames.Radius, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(GlowEffect.PropertyNames.Brightness, sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(GlowEffect.PropertyNames.Contrast, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Sharpen:
                     effectP = new SharpenEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(SharpenEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(SharpenEffect.PropertyNames.Amount, sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.SoftenPortrait:
                     effectP = new SoftenPortraitEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Softness, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Lighting, sliderEffectProperty2.Value);
-                    effectParamsP.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Warmth, sliderEffectProperty3.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Softness, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Lighting, sliderEffectProperty2.Value);
+                    effectParams.SetPropertyValue(SoftenPortraitEffect.PropertyNames.Warmth, sliderEffectProperty3.Value);
                     break;
                 case CmbxEffectOptions.Vignette:
                     effectP = new VignetteEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(VignetteEffect.PropertyNames.Radius, sliderEffectProperty1.Value / 100d);
-                    effectParamsP.SetPropertyValue(VignetteEffect.PropertyNames.Amount, sliderEffectProperty2.Value / 100d);
-                    effectParamsP.SetPropertyValue(VignetteEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(VignetteEffect.PropertyNames.Radius, sliderEffectProperty1.Value / 100d);
+                    effectParams.SetPropertyValue(VignetteEffect.PropertyNames.Amount, sliderEffectProperty2.Value / 100d);
+                    effectParams.SetPropertyValue(VignetteEffect.PropertyNames.Offset, new Pair<double, double>(0, 0));
                     break;
                 case CmbxEffectOptions.Clouds:
                     effectP = new CloudsEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(CloudsEffect.PropertyNames.Scale, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(CloudsEffect.PropertyNames.Power, sliderEffectProperty2.Value / 100d);
-                    effectParamsP.SetPropertyValue(CloudsEffect.PropertyNames.BlendMode, LayerBlendMode.Overlay);
-                    effectParamsP.SetPropertyValue(CloudsEffect.PropertyNames.Seed, random.NextDouble());
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(CloudsEffect.PropertyNames.Scale, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(CloudsEffect.PropertyNames.Power, sliderEffectProperty2.Value / 100d);
+                    effectParams.SetPropertyValue(CloudsEffect.PropertyNames.BlendMode, LayerBlendMode.Overlay);
+                    effectParams.SetPropertyValue(CloudsEffect.PropertyNames.Seed, random.NextDouble());
                     break;
                 case CmbxEffectOptions.EdgeDetect:
                     effectP = new EdgeDetectEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(EdgeDetectEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(EdgeDetectEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.Emboss:
                     effectP = new EmbossEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(EmbossEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(EmbossEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.Outline:
                     effectP = new OutlineEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(OutlineEffect.PropertyNames.Thickness, sliderEffectProperty1.Value);
-                    effectParamsP.SetPropertyValue(OutlineEffect.PropertyNames.Intensity, sliderEffectProperty2.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(OutlineEffect.PropertyNames.Thickness, sliderEffectProperty1.Value);
+                    effectParams.SetPropertyValue(OutlineEffect.PropertyNames.Intensity, sliderEffectProperty2.Value);
                     break;
                 case CmbxEffectOptions.Relief:
                     effectP = new ReliefEffect();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(ReliefEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(ReliefEffect.PropertyNames.Angle, (double)sliderEffectProperty1.Value);
                     break;
                 case CmbxEffectOptions.DodgeBurn:
                     effectP = new HueAndSaturationAdjustment();
-                    effectParamsP = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
-                    effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Hue, 0);
+                    effectParams = new PropertyBasedEffectConfigToken(effectP.CreatePropertyCollection());
+                    effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Hue, 0);
 
                     if (sliderEffectProperty1.Value < 0)
                     {
-                        effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, 100 - sliderEffectProperty1.Value);
-                        effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Lightness, -sliderEffectProperty1.Value / 2);
+                        effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, 100 - sliderEffectProperty1.Value);
+                        effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Lightness, -sliderEffectProperty1.Value / 2);
                     }
                     else if (sliderEffectProperty1.Value > 0)
                     {
-                        effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, 100);
-                        effectParamsP.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Lightness, -sliderEffectProperty1.Value);
+                        effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Saturation, 100);
+                        effectParams.SetPropertyValue(HueAndSaturationAdjustment.PropertyNames.Lightness, -sliderEffectProperty1.Value);
                     }
                     else
                     {
@@ -1321,16 +1312,7 @@ namespace BrushFilter
                     bmpEffectDrawing.UnlockBits(destData);
                     break;
                 case CmbxEffectOptions.Custom:
-                    if (customEffect is PropertyBasedEffect effectPB)
-                    {
-                        effectP = effectPB;
-                        effectParamsP = customEffectTokenP;
-                    }
-                    else
-                    {
-                        effect = customEffect;
-                        effectParams = customEffectToken;
-                    }
+                    effect = customEffect;
                     break;
             }
 
@@ -1344,7 +1326,7 @@ namespace BrushFilter
             //Copies the rendering over the filtered drawing.
             if (effectP != null)
             {
-                effectP.SetRenderInfo(effectParamsP, dstArgs, srcArgs);
+                effectP.SetRenderInfo(effectParams, dstArgs, srcArgs);
 
                 //Renders in segments for images of 129 x 129 or greater.
                 if (bounds.Width > 128 && bounds.Height > 128 &&
@@ -1416,7 +1398,7 @@ namespace BrushFilter
                                     Utils.Clamp(64, 0, bounds.Width - x),
                                     Utils.Clamp(64, 0, bounds.Height - y));
 
-                                effect.Render(effectParams, dstArgs, srcArgs,
+                                effect.Render(customEffectToken, dstArgs, srcArgs,
                                     new Rectangle[] { rect }, 0, 1);
                             }
                         }
@@ -1424,7 +1406,7 @@ namespace BrushFilter
                 }
                 else
                 {
-                    effect.Render(effectParams, dstArgs, srcArgs,
+                    effect.Render(customEffectToken, dstArgs, srcArgs,
                         new Rectangle[] { bounds }, 0, 1);
                 }
 
@@ -2639,18 +2621,10 @@ namespace BrushFilter
                     customEffect?.Dispose();
                     customEffect = (Effect)ctors[0].Invoke(new object[] { });
 
-                    //Creates an effect token for property-based effects.
-                    if (customEffect is PropertyBasedEffect customPropEffect)
+                    //Creates the effect token that handles settings.
+                    using (var dlg = customEffect.CreateConfigDialog())
                     {
-                        customEffectTokenP = new PropertyBasedEffectConfigToken(
-                            customPropEffect.CreatePropertyCollection());
-                    }
-                    else
-                    {
-                        using (var dlg = customEffect.CreateConfigDialog())
-                        {
-                            customEffectToken = dlg.EffectToken;
-                        }
+                        customEffectToken = dlg.EffectToken;
                     }
                 }
             }
@@ -3650,102 +3624,56 @@ namespace BrushFilter
                     txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Custom:
-                    if (customEffect is PropertyBasedEffect effect &&
-                        customEffectTokenP != null)
+                    
+                    //Shows the custom properties panel.
+                    pnlCustomProperties.Visible = true;
+                    pnlCustomProperties.Enabled = true;
+
+                    try
                     {
-                        //Enables the custom properties panel.
-                        pnlCustomProperties.Visible = true;
-                        pnlCustomProperties.Enabled = true;
-
-                        //Instantiates a control for each supported property.
-                        var propertyList = customEffectTokenP.Properties;
-                        ControlInfo dlg;
-
-                        try
+                        //Creates the dialog and loads or sets the token.
+                        using (var dlg = customEffect.CreateConfigDialog())
                         {
-                            dlg = effect.CreateConfigUI(propertyList);
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("Failed to create effect " +
-                                "settings; try switching to a different " +
-                                "effect.");
+                            dlg.EffectToken = customEffectToken;
+                            dlg.Selection = new PdnRegion(Selection.GetRegionData());
 
-                            EnableParameterUpdates();
-                            return;
-                        }
-
-                        int controlNum = 0;
-                        int verticalPos = 0;
-                        for (int i = 0; i < propertyList.Count; i++)
-                        {
-                            var property = propertyList.Properties.ElementAt(i);
-                            Control control = property.CreateControl(i, dlg);
-                            Label lbl = property.CreateLabel(i, dlg);
-
-                            //Sets visual aspects and appends the control.
-                            if (control != null)
+                            //Property effects are embedded with previewing.
+                            if (customEffect is PropertyBasedEffect)
                             {
-                                //Checkboxes do not use a separate label.
-                                if (property is BooleanProperty)
+                                //Updates the token when a property changes.
+                                dlg.EffectTokenChanged += (a, b) =>
                                 {
-                                    control.Text = lbl.Tag.ToString();
-
-                                    control.SetBounds(0, verticalPos, 150, 25);
-                                    verticalPos += 30;
-                                }
-
-                                //Appends a label for other controls.
-                                else
-                                {
-                                    lbl.TextAlign = ContentAlignment.MiddleCenter;
-                                    lbl.SetBounds(0, verticalPos, 150, 17);
-                                    verticalPos += 20;
-
-                                    pnlCustomProperties.Controls.Add(lbl);
-
-                                    control.SetBounds(0, verticalPos, 150, 25);
-                                    verticalPos += 30;
-
-                                    //Puts the label over the control.
-                                    pnlCustomProperties.Controls.SetChildIndex(lbl, 0);
-                                }
-
-                                //Appends the control.
-                                pnlCustomProperties.Controls.Add(control);
-
-                                //Updates the preview when the property changes.
-                                property.ValueChanged += (a, b) =>
-                                {
-                                    doPreview = true;
                                     ApplyFilter();
                                 };
 
-                                controlNum++;
+                                //Moves the dialog controls to the side panel.
+                                for (int i = 0; i < dlg.Controls.Count; i++)
+                                {
+                                    if (dlg.Controls[i] is Panel)
+                                    {
+                                        if (dlg.Controls[i].Controls.Count > 0)
+                                        {
+                                            pnlCustomProperties.Controls.Add(
+                                                dlg.Controls[i].Controls[0]);
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            //Non-property effects are shown as dialogs.
+                            else
+                            {
+                                dlg.EffectSourceSurface = Surface.CopyFromBitmap(bmpCurrentDrawing);
+                                dlg.ShowDialog();                                
                             }
                         }
                     }
-                    else if (customEffectToken != null)
+                    catch (Exception)
                     {
-                        //TODO: This code is a start, but the Effect class
-                        //doesn't cover static resources and other requirements
-                        //needed. It throws errors that are still uncaught.
-                        try
-                        {
-                            var dlg = customEffect.CreateConfigDialog();
-                            if (customEffect.Services == null)
-                            {
-                                customEffect.Services = Services;
-                            }
-                            dlg.EffectSourceSurface = Surface.CopyFromBitmap(bmpCurrentDrawing);
-                            dlg.Selection = new PdnRegion(Selection.GetRegionData());
-                            dlg.ShowDialog();
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("An error occurred.");
-                            EnableParameterUpdates();
-                        }
+                        MessageBox.Show("An error occurred.");
+                        EnableParameterUpdates();
                     }
                     break;
             }
