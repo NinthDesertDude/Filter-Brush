@@ -1,5 +1,4 @@
 ﻿using PaintDotNet;
-using PaintDotNet.Effects;
 using PaintDotNet.IndirectUI;
 using PaintDotNet.PropertySystem;
 using System;
@@ -303,6 +302,34 @@ namespace BrushFilter
                 control.Maximum = propKnown2.MaxValue;
                 control.Value = propKnown2.Value;
                 control.ValueChanged += (a, b) => { prop.Value = control.Value; };
+                return control;
+            }
+            else if (prop is StaticListChoiceProperty propKnown3)
+            {
+                var control = new ComboBox();
+
+                //Adds each option to the combobox as a tuple.
+                for (int i = 0; i < propKnown3.ValueChoices.Length; i++)
+                {
+                    string name = propKnown3.Value.ToString();
+                    var value = propKnown3.ValueChoices[i].ToString();
+                    control.Items.Add(new Tuple<string, object>(name, value));
+
+                    //Sets the default item in the combobox.
+                    if (name == value)
+                    {
+                        control.SelectedIndex = i;
+                    }
+                }
+
+                control.ValueMember = "Item1";
+                control.DisplayMember = "Item2";
+
+                control.SelectedValueChanged += (a, b) =>
+                {
+                    prop.Value = propKnown3.ValueChoices[control.SelectedIndex];
+                };
+
                 return control;
             }
 
