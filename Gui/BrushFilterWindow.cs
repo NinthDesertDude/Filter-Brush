@@ -1691,14 +1691,12 @@ namespace BrushFilter
                         //Creates the brush space.
                         int size = Math.Max(bmp.Width, bmp.Height);
 
-                        bmpBrush?.Dispose();
+                        //TODO: Disposing bmpBrush here throws error.
                         bmpBrush = new Bitmap(size, size);
 
-                        //Pads the image to be square if needed and draws the
-                        //altered loaded bitmap to the brush.
-                        Utils.CopyBitmapPure(Utils.MakeBitmapSquare(
-                            Utils.FormatImage(bmp, PixelFormat.Canonical)),
-                            bmpBrush);
+                        //Pads the image to be square if needed.
+                        //FIXME: Calling Utils.FormatImage in MakeBitmapSquare throws generic error.
+                        Utils.CopyBitmapPure(Utils.MakeBitmapSquare(bmp), bmpBrush);
                     }
 
                     //Gets the last word in the filename without the path.
@@ -4652,7 +4650,7 @@ namespace BrushFilter
             //Sets the brush otherwise.
             else
             {
-                bmpBrush?.Dispose();
+                //TODO: Disposing bmpBrush here throws error.
                 bmpBrush = Utils.FormatImage(
                     new Bitmap(currentItem.Brush),
                     PixelFormat.Format32bppArgb);
