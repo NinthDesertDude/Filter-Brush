@@ -82,7 +82,7 @@ namespace BrushFilter
     /// draw the final result in Render.
     /// </summary>
     [PluginSupportInfo(typeof(PluginSupportInfo), DisplayName = "Brush Filter")]
-    public class EffectPlugin : Effect
+    public class BrushFilterEffectPlugin : Effect
     {
         #region Properties
         /// <summary>
@@ -123,7 +123,7 @@ namespace BrushFilter
         /// <summary>
         /// Constructor.
         /// </summary>
-        public EffectPlugin()
+        public BrushFilterEffectPlugin()
             : base(
             StaticName,
             StaticImage,
@@ -147,7 +147,7 @@ namespace BrushFilter
             RenderSettings.Clear();
 
             //Creates and returns a new dialog.
-            return new winBrushFilter();
+            return new WinBrushFilter();
         }
 
         /// <summary>

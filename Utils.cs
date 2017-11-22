@@ -1,9 +1,13 @@
 ﻿using PaintDotNet;
+using PaintDotNet.IndirectUI;
+using PaintDotNet.PropertySystem;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace BrushFilter
 {
@@ -242,6 +246,9 @@ namespace BrushFilter
             Bitmap newBmp = new Bitmap(newWidth, newHeight);
             using (Graphics g = Graphics.FromImage(newBmp))
             {
+                //Fills the image with white.
+                g.FillRectangle(Brushes.White, new Rectangle(0, 0, newBmp.Width, newBmp.Height));
+
                 //Uses matrices to centrally-rotate the original image.
                 g.TranslateTransform(
                     (float)(newWidth - origBmp.Width) / 2,
@@ -257,11 +264,123 @@ namespace BrushFilter
                 g.TranslateTransform(-(float)origBmp.Width / 2, -(float)origBmp.Height / 2);
 
                 //Draws the image.
-                g.FillRectangle(Brushes.White, new Rectangle(0, 0, origBmp.Width, origBmp.Height));
                 g.DrawImage(origBmp, 0, 0, origBmp.Width, origBmp.Height);
             }
 
             return newBmp;
+        }
+
+        /// <summary>
+        /// Creates and returns a Winforms control for the given property
+        /// based on its type. When the control is modified, the property
+        /// is automatically updated.
+        /// </summary>
+        public static Control CreateControl(this Property prop, int propIndex, ControlInfo dlg)
+        {
+            if (prop is BooleanProperty)
+            {
+                var control = new CheckBox();
+                control.Checked = (bool)prop.Value;
+                control.CheckedChanged += (a, b) => { prop.Value = control.Checked; };
+                return control;
+            }
+            else if (prop is DoubleProperty propKnown)
+            {
+                var control = new TrackBar();
+                control.TickStyle = TickStyle.None;
+                control.Minimum = (int)(propKnown.MinValue * 100);
+                control.Maximum = (int)(propKnown.MaxValue * 100);
+                control.Value = (int)(propKnown.Value * 100);
+                control.ValueChanged += (a, b) => { prop.Value = control.Value / 100d; };
+                return control;
+            }
+            else if (prop is Int32Property propKnown2)
+            {
+                var control = new TrackBar();
+                control.TickStyle = TickStyle.None;
+                control.Minimum = propKnown2.MinValue;
+                control.Maximum = propKnown2.MaxValue;
+                control.Value = propKnown2.Value;
+                control.ValueChanged += (a, b) => { prop.Value = control.Value; };
+                return control;
+            }
+            else if (prop is StaticListChoiceProperty propKnown3)
+            {
+                var control = new ComboBox();
+
+                //Adds each option to the combobox as a tuple.
+                for (int i = 0; i < propKnown3.ValueChoices.Length; i++)
+                {
+                    string name = propKnown3.Value.ToString();
+                    var value = propKnown3.ValueChoices[i].ToString();
+                    control.Items.Add(new Tuple<string, object>(name, value));
+
+                    //Sets the default item in the combobox.
+                    if (name == value)
+                    {
+                        control.SelectedIndex = i;
+                    }
+                }
+
+                control.ValueMember = "Item1";
+                control.DisplayMember = "Item2";
+
+                control.SelectedValueChanged += (a, b) =>
+                {
+                    prop.Value = propKnown3.ValueChoices[control.SelectedIndex];
+                };
+
+                return control;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Creates and returns a Winforms label for the given property
+        /// based on its type. The label's Tag attribute contains the
+        /// name of the property.
+        /// </summary>
+        public static Label CreateLabel(this Property prop, int propIndex, ControlInfo dlg)
+        {
+            var control = new Label();
+            control.Tag = prop.Name;
+
+            //Probes for the display name or description of the property to use.
+            if (dlg.ChildControls.Count > propIndex)
+            {
+                var properties = dlg?.ChildControls[propIndex]?.ControlProperties?.Properties;
+
+                if (properties != null)
+                {
+                    for (int i = 0; i < properties.Count(); i++)
+                    {
+                        var candidate = properties.ElementAt(i);
+
+                        if (candidate.Name ==
+                            ControlInfoPropertyNames.DisplayName.ToString() &&
+                            !String.IsNullOrEmpty(candidate.Value.ToString()))
+                        {
+                            control.Tag = candidate.Value.ToString();
+                        }
+                        else if (candidate.Name ==
+                            ControlInfoPropertyNames.Description.ToString() &&
+                            !String.IsNullOrEmpty(candidate.Value.ToString()))
+                        {
+                            control.Tag = candidate.Value.ToString();
+                        }
+                    }
+                }
+            }
+
+            //The label always displays the value of the property.
+            control.Text = (string)control.Tag + ": " + prop.Value.ToString();
+            prop.ValueChanged += (a, b) =>
+            {
+                control.Text = (string)control.Tag + ": " + prop.Value.ToString();
+            };
+
+            return control;
         }
         #endregion
     }

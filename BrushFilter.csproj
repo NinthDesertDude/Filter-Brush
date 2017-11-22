@@ -101,6 +101,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CmbxEffectOptions.cs" />
     <Compile Include="Gui\BrushFilterPreferences.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,6 +114,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SymmetryMode.cs" />
     <Compile Include="UserSettings.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="PersistentSettings.cs" />

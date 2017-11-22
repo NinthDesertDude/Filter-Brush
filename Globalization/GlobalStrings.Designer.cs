@@ -214,6 +214,348 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Noise.
+        /// </summary>
+        internal static string CmbxEffectAddNoise {
+            get {
+                return ResourceManager.GetString("CmbxEffectAddNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Black and White.
+        /// </summary>
+        internal static string CmbxEffectBlackWhite {
+            get {
+                return ResourceManager.GetString("CmbxEffectBlackWhite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blur.
+        /// </summary>
+        internal static string CmbxEffectBlur {
+            get {
+                return ResourceManager.GetString("CmbxEffectBlur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brightness / Contrast.
+        /// </summary>
+        internal static string CmbxEffectBrightnessContrast {
+            get {
+                return ResourceManager.GetString("CmbxEffectBrightnessContrast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bulge.
+        /// </summary>
+        internal static string CmbxEffectBulge {
+            get {
+                return ResourceManager.GetString("CmbxEffectBulge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clouds.
+        /// </summary>
+        internal static string CmbxEffectClouds {
+            get {
+                return ResourceManager.GetString("CmbxEffectClouds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crystalize.
+        /// </summary>
+        internal static string CmbxEffectCrystalize {
+            get {
+                return ResourceManager.GetString("CmbxEffectCrystalize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dents.
+        /// </summary>
+        internal static string CmbxEffectDents {
+            get {
+                return ResourceManager.GetString("CmbxEffectDents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dodge / Burn.
+        /// </summary>
+        internal static string CmbxEffectDodgeBurn {
+            get {
+                return ResourceManager.GetString("CmbxEffectDodgeBurn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edge Detect.
+        /// </summary>
+        internal static string CmbxEffectEdgeDetect {
+            get {
+                return ResourceManager.GetString("CmbxEffectEdgeDetect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emboss.
+        /// </summary>
+        internal static string CmbxEffectEmboss {
+            get {
+                return ResourceManager.GetString("CmbxEffectEmboss", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flip Horizontal.
+        /// </summary>
+        internal static string CmbxEffectFlipHorizontal {
+            get {
+                return ResourceManager.GetString("CmbxEffectFlipHorizontal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flip Vertical.
+        /// </summary>
+        internal static string CmbxEffectFlipVertical {
+            get {
+                return ResourceManager.GetString("CmbxEffectFlipVertical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fragment.
+        /// </summary>
+        internal static string CmbxEffectFragment {
+            get {
+                return ResourceManager.GetString("CmbxEffectFragment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frosted Glass.
+        /// </summary>
+        internal static string CmbxEffectFrostedGlass {
+            get {
+                return ResourceManager.GetString("CmbxEffectFrostedGlass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Glow.
+        /// </summary>
+        internal static string CmbxEffectGlow {
+            get {
+                return ResourceManager.GetString("CmbxEffectGlow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hue / Saturation.
+        /// </summary>
+        internal static string CmbxEffectHueSaturation {
+            get {
+                return ResourceManager.GetString("CmbxEffectHueSaturation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ink Sketch.
+        /// </summary>
+        internal static string CmbxEffectInkSketch {
+            get {
+                return ResourceManager.GetString("CmbxEffectInkSketch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invert Colors.
+        /// </summary>
+        internal static string CmbxEffectInvertColors {
+            get {
+                return ResourceManager.GetString("CmbxEffectInvertColors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Median.
+        /// </summary>
+        internal static string CmbxEffectMedian {
+            get {
+                return ResourceManager.GetString("CmbxEffectMedian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Motion Blur.
+        /// </summary>
+        internal static string CmbxEffectMotionBlur {
+            get {
+                return ResourceManager.GetString("CmbxEffectMotionBlur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oil Painting.
+        /// </summary>
+        internal static string CmbxEffectOilPainting {
+            get {
+                return ResourceManager.GetString("CmbxEffectOilPainting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outline.
+        /// </summary>
+        internal static string CmbxEffectOutline {
+            get {
+                return ResourceManager.GetString("CmbxEffectOutline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pencil Sketch.
+        /// </summary>
+        internal static string CmbxEffectPencilSketch {
+            get {
+                return ResourceManager.GetString("CmbxEffectPencilSketch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pixelate.
+        /// </summary>
+        internal static string CmbxEffectPixelate {
+            get {
+                return ResourceManager.GetString("CmbxEffectPixelate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Posterize.
+        /// </summary>
+        internal static string CmbxEffectPosterize {
+            get {
+                return ResourceManager.GetString("CmbxEffectPosterize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reduce Noise.
+        /// </summary>
+        internal static string CmbxEffectReduceNoise {
+            get {
+                return ResourceManager.GetString("CmbxEffectReduceNoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Relief.
+        /// </summary>
+        internal static string CmbxEffectRelief {
+            get {
+                return ResourceManager.GetString("CmbxEffectRelief", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Tint.
+        /// </summary>
+        internal static string CmbxEffectRgbTint {
+            get {
+                return ResourceManager.GetString("CmbxEffectRgbTint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sepia.
+        /// </summary>
+        internal static string CmbxEffectSepia {
+            get {
+                return ResourceManager.GetString("CmbxEffectSepia", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sharpen.
+        /// </summary>
+        internal static string CmbxEffectSharpen {
+            get {
+                return ResourceManager.GetString("CmbxEffectSharpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Soften Portrait.
+        /// </summary>
+        internal static string CmbxEffectSoftenPortrait {
+            get {
+                return ResourceManager.GetString("CmbxEffectSoftenPortrait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Surface Blur.
+        /// </summary>
+        internal static string CmbxEffectSurfaceBlur {
+            get {
+                return ResourceManager.GetString("CmbxEffectSurfaceBlur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tile Reflection.
+        /// </summary>
+        internal static string CmbxEffectTileReflection {
+            get {
+                return ResourceManager.GetString("CmbxEffectTileReflection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Twist.
+        /// </summary>
+        internal static string CmbxEffectTwist {
+            get {
+                return ResourceManager.GetString("CmbxEffectTwist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unfocus.
+        /// </summary>
+        internal static string CmbxEffectUnfocus {
+            get {
+                return ResourceManager.GetString("CmbxEffectUnfocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vignette.
+        /// </summary>
+        internal static string CmbxEffectVignette {
+            get {
+                return ResourceManager.GetString("CmbxEffectVignette", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom Blur.
+        /// </summary>
+        internal static string CmbxEffectZoomBlur {
+            get {
+                return ResourceManager.GetString("CmbxEffectZoomBlur", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom Brush Locations.
         /// </summary>
         internal static string CustomBrushLocations {
@@ -228,6 +570,1275 @@ namespace BrushFilter.Globalization {
         internal static string CustomBrushLocationsTip {
             get {
                 return ResourceManager.GetString("CustomBrushLocationsTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intensity.
+        /// </summary>
+        internal static string EffectAddNoiseProperty1 {
+            get {
+                return ResourceManager.GetString("EffectAddNoiseProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How dark and bright the noise can be..
+        /// </summary>
+        internal static string EffectAddNoiseProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectAddNoiseProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Saturation.
+        /// </summary>
+        internal static string EffectAddNoiseProperty2 {
+            get {
+                return ResourceManager.GetString("EffectAddNoiseProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low saturation is grayscale and high saturation yields vivid colors..
+        /// </summary>
+        internal static string EffectAddNoiseProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectAddNoiseProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coverage.
+        /// </summary>
+        internal static string EffectAddNoiseProperty3 {
+            get {
+                return ResourceManager.GetString("EffectAddNoiseProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much noise to add..
+        /// </summary>
+        internal static string EffectAddNoiseProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectAddNoiseProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blur radius.
+        /// </summary>
+        internal static string EffectBlurProperty1 {
+            get {
+                return ResourceManager.GetString("EffectBlurProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A larger blur radius increases the blurring amount..
+        /// </summary>
+        internal static string EffectBlurProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectBlurProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brightness.
+        /// </summary>
+        internal static string EffectBrightnessContrastProperty1 {
+            get {
+                return ResourceManager.GetString("EffectBrightnessContrastProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes how bright or dark the image is..
+        /// </summary>
+        internal static string EffectBrightnessContrastProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectBrightnessContrastProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contrast.
+        /// </summary>
+        internal static string EffectBrightnessContrastProperty2 {
+            get {
+                return ResourceManager.GetString("EffectBrightnessContrastProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the amount of contrast across the image to be smaller or greater..
+        /// </summary>
+        internal static string EffectBrightnessContrastProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectBrightnessContrastProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bulge.
+        /// </summary>
+        internal static string EffectBulgeProperty1 {
+            get {
+                return ResourceManager.GetString("EffectBulgeProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of the bulge effect..
+        /// </summary>
+        internal static string EffectBulgeProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectBulgeProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        internal static string EffectCloudsProperty1 {
+            get {
+                return ResourceManager.GetString("EffectCloudsProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of the cloud texture to render..
+        /// </summary>
+        internal static string EffectCloudsProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectCloudsProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roughness.
+        /// </summary>
+        internal static string EffectCloudsProperty2 {
+            get {
+                return ResourceManager.GetString("EffectCloudsProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The edges of the clouds are roughened by this amount..
+        /// </summary>
+        internal static string EffectCloudsProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectCloudsProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cell Size.
+        /// </summary>
+        internal static string EffectCrystalizeProperty1 {
+            get {
+                return ResourceManager.GetString("EffectCrystalizeProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Determines how large the shapes are..
+        /// </summary>
+        internal static string EffectCrystalizeProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectCrystalizeProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quality.
+        /// </summary>
+        internal static string EffectCrystalizeProperty2 {
+            get {
+                return ResourceManager.GetString("EffectCrystalizeProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A higher quality usually results in better shapes..
+        /// </summary>
+        internal static string EffectCrystalizeProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectCrystalizeProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a custom property..
+        /// </summary>
+        internal static string EffectCustomPropertyTip {
+            get {
+                return ResourceManager.GetString("EffectCustomPropertyTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale.
+        /// </summary>
+        internal static string EffectDentsProperty1 {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of the dents..
+        /// </summary>
+        internal static string EffectDentsProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refraction.
+        /// </summary>
+        internal static string EffectDentsProperty2 {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Higher values cause each dent to be drawn within itself more and more..
+        /// </summary>
+        internal static string EffectDentsProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roughness.
+        /// </summary>
+        internal static string EffectDentsProperty3 {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much dithering to apply to the final result..
+        /// </summary>
+        internal static string EffectDentsProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tension.
+        /// </summary>
+        internal static string EffectDentsProperty4 {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much distortion should be applied to the dents..
+        /// </summary>
+        internal static string EffectDentsProperty4Tip {
+            get {
+                return ResourceManager.GetString("EffectDentsProperty4Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dodge or Burn.
+        /// </summary>
+        internal static string EffectDodgeBurnProperty1 {
+            get {
+                return ResourceManager.GetString("EffectDodgeBurnProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Negative values dodge (reduce saturation and increase value) and positive values burn (reduce value). Dodging makes things grayscale and lighter and burning makes them dark..
+        /// </summary>
+        internal static string EffectDodgeBurnProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectDodgeBurnProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle.
+        /// </summary>
+        internal static string EffectEdgeDetectProperty1 {
+            get {
+                return ResourceManager.GetString("EffectEdgeDetectProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pixels opposite to an edge at this angle will be highlighted..
+        /// </summary>
+        internal static string EffectEdgeDetectProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectEdgeDetectProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle.
+        /// </summary>
+        internal static string EffectEmbossProperty1 {
+            get {
+                return ResourceManager.GetString("EffectEmbossProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pixels opposite to an edge at this angle will be darkened..
+        /// </summary>
+        internal static string EffectEmbossProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectEmbossProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fragment Count.
+        /// </summary>
+        internal static string EffectFragmentProperty1 {
+            get {
+                return ResourceManager.GetString("EffectFragmentProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How many fragments to create. Fragments are rotated evenly around a circle based on distance..
+        /// </summary>
+        internal static string EffectFragmentProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectFragmentProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance.
+        /// </summary>
+        internal static string EffectFragmentProperty2 {
+            get {
+                return ResourceManager.GetString("EffectFragmentProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How far apart each fragment is from the other..
+        /// </summary>
+        internal static string EffectFragmentProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectFragmentProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotation.
+        /// </summary>
+        internal static string EffectFragmentProperty3 {
+            get {
+                return ResourceManager.GetString("EffectFragmentProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offsets the rotation of each fragment by an angle..
+        /// </summary>
+        internal static string EffectFragmentProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectFragmentProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum Scatter Radius.
+        /// </summary>
+        internal static string EffectFrostedGlassProperty1 {
+            get {
+                return ResourceManager.GetString("EffectFrostedGlassProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The maximum distance each pixel will be displaced by..
+        /// </summary>
+        internal static string EffectFrostedGlassProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectFrostedGlassProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum Scatter Radius.
+        /// </summary>
+        internal static string EffectFrostedGlassProperty2 {
+            get {
+                return ResourceManager.GetString("EffectFrostedGlassProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The minimum distance each pixel will be displaced by..
+        /// </summary>
+        internal static string EffectFrostedGlassProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectFrostedGlassProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smoothness.
+        /// </summary>
+        internal static string EffectFrostedGlassProperty3 {
+            get {
+                return ResourceManager.GetString("EffectFrostedGlassProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Higher values decreases the sharpness of the scattered pixels in relation to their surrounding pixels..
+        /// </summary>
+        internal static string EffectFrostedGlassProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectFrostedGlassProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radius.
+        /// </summary>
+        internal static string EffectGlowProperty1 {
+            get {
+                return ResourceManager.GetString("EffectGlowProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The distance of the glow from the pixels it&apos;s based on..
+        /// </summary>
+        internal static string EffectGlowProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectGlowProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brightness.
+        /// </summary>
+        internal static string EffectGlowProperty2 {
+            get {
+                return ResourceManager.GetString("EffectGlowProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An overall increase or decrease in brightness..
+        /// </summary>
+        internal static string EffectGlowProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectGlowProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contrast.
+        /// </summary>
+        internal static string EffectGlowProperty3 {
+            get {
+                return ResourceManager.GetString("EffectGlowProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An overall increase or decrease in contrast..
+        /// </summary>
+        internal static string EffectGlowProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectGlowProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hue.
+        /// </summary>
+        internal static string EffectHueSaturationProperty1 {
+            get {
+                return ResourceManager.GetString("EffectHueSaturationProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shifts the hue by an amount..
+        /// </summary>
+        internal static string EffectHueSaturationProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectHueSaturationProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saturation.
+        /// </summary>
+        internal static string EffectHueSaturationProperty2 {
+            get {
+                return ResourceManager.GetString("EffectHueSaturationProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the saturation. Lower values are bland and grayscale, higher values are vivid..
+        /// </summary>
+        internal static string EffectHueSaturationProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectHueSaturationProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lightness.
+        /// </summary>
+        internal static string EffectHueSaturationProperty3 {
+            get {
+                return ResourceManager.GetString("EffectHueSaturationProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the brightness. Lower values are dark and higher values are bright..
+        /// </summary>
+        internal static string EffectHueSaturationProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectHueSaturationProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ink Outline.
+        /// </summary>
+        internal static string EffectInkSketchProperty1 {
+            get {
+                return ResourceManager.GetString("EffectInkSketchProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Determines the width of the outlines..
+        /// </summary>
+        internal static string EffectInkSketchProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectInkSketchProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coloring.
+        /// </summary>
+        internal static string EffectInkSketchProperty2 {
+            get {
+                return ResourceManager.GetString("EffectInkSketchProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Determines how much color is used in the ink sketch..
+        /// </summary>
+        internal static string EffectInkSketchProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectInkSketchProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radius.
+        /// </summary>
+        internal static string EffectMedianProperty1 {
+            get {
+                return ResourceManager.GetString("EffectMedianProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Larger values increase the amount of mellowing applied to the image..
+        /// </summary>
+        internal static string EffectMedianProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectMedianProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Percentile.
+        /// </summary>
+        internal static string EffectMedianProperty2 {
+            get {
+                return ResourceManager.GetString("EffectMedianProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low values leave sharp contrasts more intact..
+        /// </summary>
+        internal static string EffectMedianProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectMedianProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle.
+        /// </summary>
+        internal static string EffectMotionBlurProperty1 {
+            get {
+                return ResourceManager.GetString("EffectMotionBlurProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Everything is smeared in this direction, based on an angle..
+        /// </summary>
+        internal static string EffectMotionBlurProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectMotionBlurProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Distance.
+        /// </summary>
+        internal static string EffectMotionBlurProperty2 {
+            get {
+                return ResourceManager.GetString("EffectMotionBlurProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The distance of the smear determines how far each pixel is smeared..
+        /// </summary>
+        internal static string EffectMotionBlurProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectMotionBlurProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Brush Size.
+        /// </summary>
+        internal static string EffectOilPaintingProperty1 {
+            get {
+                return ResourceManager.GetString("EffectOilPaintingProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A large brush size makes wide strokes, while a small brush size makes smaller strokes..
+        /// </summary>
+        internal static string EffectOilPaintingProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectOilPaintingProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coarseness.
+        /// </summary>
+        internal static string EffectOilPaintingProperty2 {
+            get {
+                return ResourceManager.GetString("EffectOilPaintingProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The amount of blending used. Small values create sharp edges in the resulting image..
+        /// </summary>
+        internal static string EffectOilPaintingProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectOilPaintingProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thickness.
+        /// </summary>
+        internal static string EffectOutlineProperty1 {
+            get {
+                return ResourceManager.GetString("EffectOutlineProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much blurring to apply before the outline effect..
+        /// </summary>
+        internal static string EffectOutlineProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectOutlineProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intensity.
+        /// </summary>
+        internal static string EffectOutlineProperty2 {
+            get {
+                return ResourceManager.GetString("EffectOutlineProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Higher values increase the effect of the outline..
+        /// </summary>
+        internal static string EffectOutlineProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectOutlineProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pencil Tip Size.
+        /// </summary>
+        internal static string EffectPencilSketchProperty1 {
+            get {
+                return ResourceManager.GetString("EffectPencilSketchProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Larger pencil tip sizes result in less detail. (On photographs, small values don&apos;t look much like a sketch.).
+        /// </summary>
+        internal static string EffectPencilSketchProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectPencilSketchProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Range.
+        /// </summary>
+        internal static string EffectPencilSketchProperty2 {
+            get {
+                return ResourceManager.GetString("EffectPencilSketchProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal pencils don&apos;t go from stark white to pitch black, but a high value here will make the resulting image like that..
+        /// </summary>
+        internal static string EffectPencilSketchProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectPencilSketchProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cell Size.
+        /// </summary>
+        internal static string EffectPixelateProperty1 {
+            get {
+                return ResourceManager.GetString("EffectPixelateProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of each cell in the effect..
+        /// </summary>
+        internal static string EffectPixelateProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectPixelateProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red.
+        /// </summary>
+        internal static string EffectPosterizeProperty1 {
+            get {
+                return ResourceManager.GetString("EffectPosterizeProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Truncates red channel values by grouping them into multiples of this value..
+        /// </summary>
+        internal static string EffectPosterizeProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectPosterizeProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Green.
+        /// </summary>
+        internal static string EffectPosterizeProperty2 {
+            get {
+                return ResourceManager.GetString("EffectPosterizeProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Truncates green channel values by grouping them into multiples of this value..
+        /// </summary>
+        internal static string EffectPosterizeProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectPosterizeProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blue.
+        /// </summary>
+        internal static string EffectPosterizeProperty3 {
+            get {
+                return ResourceManager.GetString("EffectPosterizeProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Truncates blue channel values by grouping them into multiples of this value..
+        /// </summary>
+        internal static string EffectPosterizeProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectPosterizeProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radius.
+        /// </summary>
+        internal static string EffectReduceNoiseProperty1 {
+            get {
+                return ResourceManager.GetString("EffectReduceNoiseProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of the noise reduction..
+        /// </summary>
+        internal static string EffectReduceNoiseProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectReduceNoiseProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strength.
+        /// </summary>
+        internal static string EffectReduceNoiseProperty2 {
+            get {
+                return ResourceManager.GetString("EffectReduceNoiseProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much the noise is reduced..
+        /// </summary>
+        internal static string EffectReduceNoiseProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectReduceNoiseProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle.
+        /// </summary>
+        internal static string EffectReliefProperty1 {
+            get {
+                return ResourceManager.GetString("EffectReliefProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pixels opposite to an edge at this angle will be extended from the edge to make the edge thicker..
+        /// </summary>
+        internal static string EffectReliefProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectReliefProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redness.
+        /// </summary>
+        internal static string EffectRgbTintProperty1 {
+            get {
+                return ResourceManager.GetString("EffectRgbTintProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much red to add or subtract from each pixel..
+        /// </summary>
+        internal static string EffectRgbTintProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectRgbTintProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Greenness.
+        /// </summary>
+        internal static string EffectRgbTintProperty2 {
+            get {
+                return ResourceManager.GetString("EffectRgbTintProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much green to add or subtract from each pixel..
+        /// </summary>
+        internal static string EffectRgbTintProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectRgbTintProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blueness.
+        /// </summary>
+        internal static string EffectRgbTintProperty3 {
+            get {
+                return ResourceManager.GetString("EffectRgbTintProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much blue to add or subtract from each pixel..
+        /// </summary>
+        internal static string EffectRgbTintProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectRgbTintProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        internal static string EffectSharpenProperty1 {
+            get {
+                return ResourceManager.GetString("EffectSharpenProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much sharpening should be applied..
+        /// </summary>
+        internal static string EffectSharpenProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectSharpenProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Softness.
+        /// </summary>
+        internal static string EffectSoftenPortraitProperty1 {
+            get {
+                return ResourceManager.GetString("EffectSoftenPortraitProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much more mellow the contrasts in the image are..
+        /// </summary>
+        internal static string EffectSoftenPortraitProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectSoftenPortraitProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lighting.
+        /// </summary>
+        internal static string EffectSoftenPortraitProperty2 {
+            get {
+                return ResourceManager.GetString("EffectSoftenPortraitProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A general increase or decrease in brightness..
+        /// </summary>
+        internal static string EffectSoftenPortraitProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectSoftenPortraitProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warmth.
+        /// </summary>
+        internal static string EffectSoftenPortraitProperty3 {
+            get {
+                return ResourceManager.GetString("EffectSoftenPortraitProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adds extra redness to the image to make it seem &quot;warmer&quot;..
+        /// </summary>
+        internal static string EffectSoftenPortraitProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectSoftenPortraitProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radius.
+        /// </summary>
+        internal static string EffectSurfaceBlurProperty1 {
+            get {
+                return ResourceManager.GetString("EffectSurfaceBlurProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The width of the blur..
+        /// </summary>
+        internal static string EffectSurfaceBlurProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectSurfaceBlurProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Threshold.
+        /// </summary>
+        internal static string EffectSurfaceBlurProperty2 {
+            get {
+                return ResourceManager.GetString("EffectSurfaceBlurProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low values preserve datail and higher values increase the blurring..
+        /// </summary>
+        internal static string EffectSurfaceBlurProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectSurfaceBlurProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle.
+        /// </summary>
+        internal static string EffectTileReflectionProperty1 {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tiles will be slanted at this angle..
+        /// </summary>
+        internal static string EffectTileReflectionProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tile Size.
+        /// </summary>
+        internal static string EffectTileReflectionProperty2 {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of each tile..
+        /// </summary>
+        internal static string EffectTileReflectionProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Curvature.
+        /// </summary>
+        internal static string EffectTileReflectionProperty3 {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much each tile is curved..
+        /// </summary>
+        internal static string EffectTileReflectionProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quality.
+        /// </summary>
+        internal static string EffectTileReflectionProperty4 {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The overall quality..
+        /// </summary>
+        internal static string EffectTileReflectionProperty4Tip {
+            get {
+                return ResourceManager.GetString("EffectTileReflectionProperty4Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount / Direction.
+        /// </summary>
+        internal static string EffectTwistProperty1 {
+            get {
+                return ResourceManager.GetString("EffectTwistProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The amount of twisting..
+        /// </summary>
+        internal static string EffectTwistProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectTwistProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        internal static string EffectTwistProperty2 {
+            get {
+                return ResourceManager.GetString("EffectTwistProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of the twist effect..
+        /// </summary>
+        internal static string EffectTwistProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectTwistProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quality.
+        /// </summary>
+        internal static string EffectTwistProperty3 {
+            get {
+                return ResourceManager.GetString("EffectTwistProperty3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The overall quality..
+        /// </summary>
+        internal static string EffectTwistProperty3Tip {
+            get {
+                return ResourceManager.GetString("EffectTwistProperty3Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Effect Type.
+        /// </summary>
+        internal static string EffectType {
+            get {
+                return ResourceManager.GetString("EffectType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click to select the effect to apply..
+        /// </summary>
+        internal static string EffectTypeTip {
+            get {
+                return ResourceManager.GetString("EffectTypeTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radius.
+        /// </summary>
+        internal static string EffectUnfocusProperty1 {
+            get {
+                return ResourceManager.GetString("EffectUnfocusProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of the effect..
+        /// </summary>
+        internal static string EffectUnfocusProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectUnfocusProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Radius.
+        /// </summary>
+        internal static string EffectVignetteProperty1 {
+            get {
+                return ResourceManager.GetString("EffectVignetteProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The size of the unaffected region..
+        /// </summary>
+        internal static string EffectVignetteProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectVignetteProperty1Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Density.
+        /// </summary>
+        internal static string EffectVignetteProperty2 {
+            get {
+                return ResourceManager.GetString("EffectVignetteProperty2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A high density has little fading from the black border to the image..
+        /// </summary>
+        internal static string EffectVignetteProperty2Tip {
+            get {
+                return ResourceManager.GetString("EffectVignetteProperty2Tip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zoom Amount.
+        /// </summary>
+        internal static string EffectZoomBlurProperty1 {
+            get {
+                return ResourceManager.GetString("EffectZoomBlurProperty1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The amount of zooming of the main image, the rest of which is blurred..
+        /// </summary>
+        internal static string EffectZoomBlurProperty1Tip {
+            get {
+                return ResourceManager.GetString("EffectZoomBlurProperty1Tip", resourceCulture);
             }
         }
         
@@ -318,6 +1929,33 @@ namespace BrushFilter.Globalization {
         internal static string OrientToMouseTip {
             get {
                 return ResourceManager.GetString("OrientToMouseTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overwrite Mode.
+        /// </summary>
+        internal static string OverwriteMode {
+            get {
+                return ResourceManager.GetString("OverwriteMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If turned on, the areas you draw in will only use the new image transparency, rather than layering it on top of the original image..
+        /// </summary>
+        internal static string OverwriteModeTip {
+            get {
+                return ResourceManager.GetString("OverwriteModeTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        internal static string Preview {
+            get {
+                return ResourceManager.GetString("Preview", resourceCulture);
             }
         }
         
@@ -574,11 +2212,137 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Symmetry: Both.
+        /// </summary>
+        internal static string SymmetryBoth {
+            get {
+                return ResourceManager.GetString("SymmetryBoth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: Horizontal.
+        /// </summary>
+        internal static string SymmetryHorz {
+            get {
+                return ResourceManager.GetString("SymmetryHorz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: None.
+        /// </summary>
+        internal static string SymmetryNone {
+            get {
+                return ResourceManager.GetString("SymmetryNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 10-point.
+        /// </summary>
+        internal static string SymmetryStar10 {
+            get {
+                return ResourceManager.GetString("SymmetryStar10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 11-point.
+        /// </summary>
+        internal static string SymmetryStar11 {
+            get {
+                return ResourceManager.GetString("SymmetryStar11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 12-point.
+        /// </summary>
+        internal static string SymmetryStar12 {
+            get {
+                return ResourceManager.GetString("SymmetryStar12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 3-point.
+        /// </summary>
+        internal static string SymmetryStar3 {
+            get {
+                return ResourceManager.GetString("SymmetryStar3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 4-point.
+        /// </summary>
+        internal static string SymmetryStar4 {
+            get {
+                return ResourceManager.GetString("SymmetryStar4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 5-point.
+        /// </summary>
+        internal static string SymmetryStar5 {
+            get {
+                return ResourceManager.GetString("SymmetryStar5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 6-point.
+        /// </summary>
+        internal static string SymmetryStar6 {
+            get {
+                return ResourceManager.GetString("SymmetryStar6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 7-point.
+        /// </summary>
+        internal static string SymmetryStar7 {
+            get {
+                return ResourceManager.GetString("SymmetryStar7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 8-point.
+        /// </summary>
+        internal static string SymmetryStar8 {
+            get {
+                return ResourceManager.GetString("SymmetryStar8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 9-point.
+        /// </summary>
+        internal static string SymmetryStar9 {
+            get {
+                return ResourceManager.GetString("SymmetryStar9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to While drawing, the brush can be mirrored horizontally and/or vertically..
         /// </summary>
         internal static string SymmetryTip {
             get {
                 return ResourceManager.GetString("SymmetryTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: Vertical.
+        /// </summary>
+        internal static string SymmetryVert {
+            get {
+                return ResourceManager.GetString("SymmetryVert", resourceCulture);
             }
         }
         
@@ -597,6 +2361,15 @@ namespace BrushFilter.Globalization {
         internal static string TabControls {
             get {
                 return ResourceManager.GetString("TabControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Effect.
+        /// </summary>
+        internal static string TabEffect {
+            get {
+                return ResourceManager.GetString("TabEffect", resourceCulture);
             }
         }
         
@@ -637,7 +2410,7 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Undo Shortcut: Ctrl + Z. Undo the last drawing, if possible..
+        ///   Looks up a localized string similar to Undo Shortcut: Ctrl + Z. Undo the last change, if possible..
         /// </summary>
         internal static string UndoTip {
             get {

@@ -1,5 +1,5 @@
+using PaintDotNet.Effects;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace BrushFilter
 {
@@ -7,7 +7,7 @@ namespace BrushFilter
     /// Represents the settings used in the dialog so they can be stored and
     /// loaded when applying the effect consecutively for convenience.
     /// </summary>
-    public class PersistentSettings : PaintDotNet.Effects.EffectConfigToken
+    public class PersistentSettings : EffectConfigToken
     {
         #region Fields
         /// <summary>
@@ -47,6 +47,16 @@ namespace BrushFilter
         }
 
         /// <summary>
+        /// A custom effect, if any.
+        /// </summary>
+        public Effect CustomEffect;
+
+        /// <summary>
+        /// The config details of a non-property-based custom effect.
+        /// </summary>
+        public EffectConfigToken CustomEffectToken;
+
+        /// <summary>
         /// Whether the brush rotates with the mouse direction or not.
         /// </summary>
         public bool DoRotateWithMouse
@@ -59,6 +69,16 @@ namespace BrushFilter
         /// Whether to save the settings when the effect is applied.
         /// </summary>
         public bool DoSaveSettings
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Whether affected pixels blend or overwrite original pixels while
+        /// drawing.
+        /// </summary>
+        public bool OverwriteMode
         {
             get;
             set;
@@ -174,10 +194,55 @@ namespace BrushFilter
         }
 
         /// <summary>
-        /// Sets whether to draw horizontal and/or vertical reflections of the
-        /// current image.
+        /// Sets whether to draw horizontal, vertical, or radial reflections
+        /// of the current image.
         /// </summary>
-        public int SymmetryMode
+        public SymmetryMode SymmetryMode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Sets the effect to be applied during filter drawing.
+        /// </summary>
+        public int EffectMode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the first property of the effect chosen.
+        /// </summary>
+        public int EffectProperty1
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the second property of the effect chosen.
+        /// </summary>
+        public int EffectProperty2
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the third property of the effect chosen.
+        /// </summary>
+        public int EffectProperty3
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The value for the fourth property of the effect chosen.
+        /// </summary>
+        public int EffectProperty4
         {
             get;
             set;
@@ -216,8 +281,16 @@ namespace BrushFilter
             int sizeChange,
             int rotChange,
             int intensityChange,
-            int symmetryMode,
-            List<string> customBrushLocations)
+            bool overwriteMode,
+            SymmetryMode symmetryMode,
+            int effectMode,
+            int valProperty1,
+            int valProperty2,
+            int valProperty3,
+            int valProperty4,
+            List<string> customBrushLocations,
+            Effect customEffect,
+            EffectConfigToken customEffectToken)
             : base()
         {
             BrushSize = brushSize;
@@ -237,8 +310,16 @@ namespace BrushFilter
             SizeChange = sizeChange;
             RotChange = rotChange;
             IntensityChange = intensityChange;
+            OverwriteMode = overwriteMode;
             SymmetryMode = symmetryMode;
+            EffectMode = effectMode;
+            EffectProperty1 = valProperty1;
+            EffectProperty2 = valProperty2;
+            EffectProperty3 = valProperty3;
+            EffectProperty4 = valProperty4;
             CustomBrushLocations = new List<string>(customBrushLocations);
+            CustomEffect = customEffect;
+            CustomEffectToken = customEffectToken;
         }
 
         /// <summary>
@@ -264,8 +345,16 @@ namespace BrushFilter
             SizeChange = other.SizeChange;
             RotChange = other.RotChange;
             IntensityChange = other.IntensityChange;
+            OverwriteMode = other.OverwriteMode;
             SymmetryMode = other.SymmetryMode;
+            EffectMode = other.EffectMode;
+            EffectProperty1 = other.EffectProperty1;
+            EffectProperty2 = other.EffectProperty2;
+            EffectProperty3 = other.EffectProperty3;
+            EffectProperty4 = other.EffectProperty4;
             CustomBrushLocations = new List<string>(other.CustomBrushLocations);
+            CustomEffect = other.CustomEffect;
+            CustomEffectToken = other.CustomEffectToken;
         }
         #endregion
 
