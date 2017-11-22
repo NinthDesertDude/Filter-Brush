@@ -176,7 +176,7 @@ namespace BrushFilter
         /// <summary>
         /// Contains the list of all symmetry options for using brush strokes.
         /// </summary>
-        BindingList<Tuple<string, string>> symmetryOptions;
+        BindingList<Tuple<string, SymmetryMode>> symmetryOptions;
 
         /// <summary>
         /// Contains the list of all effect choices.
@@ -517,17 +517,35 @@ namespace BrushFilter
             InitBrushes();
 
             //Configures items for the symmetry options combobox.
-            symmetryOptions = new BindingList<Tuple<string, string>>
-            {
-                new Tuple<string, string>(
-                    Globalization.GlobalStrings.CmbxSymmetryNone, "None"),
-                new Tuple<string, string>(
-                    Globalization.GlobalStrings.CmbxSymmetryHorz, "Horizontal"),
-                new Tuple<string, string>(
-                    Globalization.GlobalStrings.CmbxSymmetryVert, "Vertical"),
-                new Tuple<string, string>(
-                    Globalization.GlobalStrings.CmbxSymmetryBoth, "Both")
-            };
+            symmetryOptions = new BindingList<Tuple<string, SymmetryMode>>();
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryNone, SymmetryMode.None));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryHorz, SymmetryMode.Horizontal));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryVert, SymmetryMode.Vertical));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryBoth, SymmetryMode.Star2));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar3, SymmetryMode.Star3));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar4, SymmetryMode.Star4));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar5, SymmetryMode.Star5));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar6, SymmetryMode.Star6));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar7, SymmetryMode.Star7));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar8, SymmetryMode.Star8));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar9, SymmetryMode.Star9));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar10, SymmetryMode.Star10));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar11, SymmetryMode.Star11));
+            symmetryOptions.Add(new Tuple<string, SymmetryMode>(
+                Globalization.GlobalStrings.SymmetryStar12, SymmetryMode.Star12));
             cmbxSymmetry.DataSource = symmetryOptions;
             cmbxSymmetry.DisplayMember = "Item1";
             cmbxSymmetry.ValueMember = "Item2";
@@ -641,8 +659,8 @@ namespace BrushFilter
         protected override void InitialInitToken()
         {
             theEffectToken = new PersistentSettings(20, "", 0, 100, 0, 0, 0, 0, 0, 0,
-                0, 0, false, 0, 0, 0, 0, false, 0, 0, 1, 1, 1, 1, new List<string>(),
-                null, null);
+                0, 0, false, 0, 0, 0, 0, false, SymmetryMode.None, 0, 1, 1, 1, 1,
+                new List<string>(), null, null);
         }
 
         /// <summary>
@@ -709,7 +727,7 @@ namespace BrushFilter
             sliderShiftSize.Value = token.SizeChange;
             sliderShiftRotation.Value = token.RotChange;
             sliderShiftIntensity.Value = token.IntensityChange;
-            cmbxSymmetry.SelectedIndex = token.SymmetryMode;
+            cmbxSymmetry.SelectedIndex = (int)token.SymmetryMode;
             cmbxEffectType.SelectedIndex = token.EffectMode;
 
             DisableParameterUpdates();
@@ -754,7 +772,7 @@ namespace BrushFilter
             token.RotChange = sliderShiftRotation.Value;
             token.IntensityChange = sliderShiftIntensity.Value;
             token.OverwriteMode = chkbxOverwriteMode.Checked;
-            token.SymmetryMode = cmbxSymmetry.SelectedIndex;
+            token.SymmetryMode = (SymmetryMode)cmbxSymmetry.SelectedIndex;
             token.EffectMode = cmbxEffectType.SelectedIndex;
             token.EffectProperty1 = sliderEffectProperty1.Value;
             token.EffectProperty2 = sliderEffectProperty2.Value;
@@ -946,13 +964,16 @@ namespace BrushFilter
 
                 float intensity = sliderBrushIntensity.Value / 100f;
 
-                //Applies the brush.
-                UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
-                    loc.X - (scaleFactor / 2),
-                    loc.Y - (scaleFactor / 2)));
+                //Applies the brush for normal and non-radial symmetry.
+                if (cmbxSymmetry.SelectedIndex < 4)
+                {
+                    UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
+                        loc.X - (scaleFactor / 2),
+                        loc.Y - (scaleFactor / 2)));
+                }
 
                 //Draws the brush horizontally reflected.
-                if (cmbxSymmetry.SelectedIndex == 1)
+                if (cmbxSymmetry.SelectedIndex == (int)SymmetryMode.Horizontal)
                 {
                     bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
@@ -963,7 +984,7 @@ namespace BrushFilter
                 }
 
                 //Draws the brush vertically reflected.
-                else if (cmbxSymmetry.SelectedIndex == 2)
+                else if (cmbxSymmetry.SelectedIndex == (int)SymmetryMode.Vertical)
                 {
                     bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
@@ -974,7 +995,7 @@ namespace BrushFilter
                 }
 
                 //Draws the brush horizontally and vertically reflected.
-                else if (cmbxSymmetry.SelectedIndex == 3)
+                else if (cmbxSymmetry.SelectedIndex == (int)SymmetryMode.Star2)
                 {
                     bmpSized.RotateFlip(RotateFlipType.RotateNoneFlipXY);
 
@@ -982,6 +1003,41 @@ namespace BrushFilter
                     UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
                         bmpEffectDrawing.Width - (loc.X - (scaleFactor / 2)),
                         bmpEffectDrawing.Height - (loc.Y - (scaleFactor / 2))));
+                }
+
+                else if (cmbxSymmetry.SelectedIndex > 3)
+                {
+                    //Gets the center of the image.
+                    Point center = new Point(
+                        (bmpCurrentDrawing.Width / 2) - (radius / 2),
+                        (bmpCurrentDrawing.Height / 2) - (radius / 2));
+
+                    //Gets the drawn location relative to center.
+                    Point locRelativeToCenter = new Point(
+                        loc.X - center.X,
+                        loc.Y - center.Y);
+
+                    //Gets the distance from the drawing point to center.
+                    var dist = Math.Sqrt(
+                        Math.Pow(locRelativeToCenter.X, 2) +
+                        Math.Pow(locRelativeToCenter.Y, 2));
+
+                    //Gets the angle of the drawing point.
+                    var angle = Math.Atan2(
+                        locRelativeToCenter.Y,
+                        locRelativeToCenter.X);
+
+                    //Draws an N-pt radial reflection.
+                    int numPoints = cmbxSymmetry.SelectedIndex - 1;
+                    double angleIncrease = (2 * Math.PI) / numPoints;
+                    for (int i = 0; i < numPoints; i++)
+                    {
+                        UncoverBitmap(bmpEffectDrawing, bmpSized, new Point(
+                            (int)(center.X + dist * Math.Cos(angle)),
+                            (int)(center.Y + dist * Math.Sin(angle))));
+
+                        angle += angleIncrease;
+                    }
                 }
             }
 
@@ -3666,7 +3722,7 @@ namespace BrushFilter
                             else
                             {
                                 dlg.EffectSourceSurface = Surface.CopyFromBitmap(bmpCurrentDrawing);
-                                dlg.ShowDialog();                                
+                                dlg.ShowDialog();
                             }
                         }
                     }

@@ -556,42 +556,6 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Symmetry: Both.
-        /// </summary>
-        internal static string CmbxSymmetryBoth {
-            get {
-                return ResourceManager.GetString("CmbxSymmetryBoth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Symmetry: Horizontal.
-        /// </summary>
-        internal static string CmbxSymmetryHorz {
-            get {
-                return ResourceManager.GetString("CmbxSymmetryHorz", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Symmetry: None.
-        /// </summary>
-        internal static string CmbxSymmetryNone {
-            get {
-                return ResourceManager.GetString("CmbxSymmetryNone", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Symmetry: Vertical.
-        /// </summary>
-        internal static string CmbxSymmetryVert {
-            get {
-                return ResourceManager.GetString("CmbxSymmetryVert", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Custom Brush Locations.
         /// </summary>
         internal static string CustomBrushLocations {
@@ -2248,11 +2212,137 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Symmetry: Both.
+        /// </summary>
+        internal static string SymmetryBoth {
+            get {
+                return ResourceManager.GetString("SymmetryBoth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: Horizontal.
+        /// </summary>
+        internal static string SymmetryHorz {
+            get {
+                return ResourceManager.GetString("SymmetryHorz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: None.
+        /// </summary>
+        internal static string SymmetryNone {
+            get {
+                return ResourceManager.GetString("SymmetryNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 10-point.
+        /// </summary>
+        internal static string SymmetryStar10 {
+            get {
+                return ResourceManager.GetString("SymmetryStar10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 11-point.
+        /// </summary>
+        internal static string SymmetryStar11 {
+            get {
+                return ResourceManager.GetString("SymmetryStar11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 12-point.
+        /// </summary>
+        internal static string SymmetryStar12 {
+            get {
+                return ResourceManager.GetString("SymmetryStar12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 3-point.
+        /// </summary>
+        internal static string SymmetryStar3 {
+            get {
+                return ResourceManager.GetString("SymmetryStar3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 4-point.
+        /// </summary>
+        internal static string SymmetryStar4 {
+            get {
+                return ResourceManager.GetString("SymmetryStar4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 5-point.
+        /// </summary>
+        internal static string SymmetryStar5 {
+            get {
+                return ResourceManager.GetString("SymmetryStar5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 6-point.
+        /// </summary>
+        internal static string SymmetryStar6 {
+            get {
+                return ResourceManager.GetString("SymmetryStar6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 7-point.
+        /// </summary>
+        internal static string SymmetryStar7 {
+            get {
+                return ResourceManager.GetString("SymmetryStar7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 8-point.
+        /// </summary>
+        internal static string SymmetryStar8 {
+            get {
+                return ResourceManager.GetString("SymmetryStar8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: 9-point.
+        /// </summary>
+        internal static string SymmetryStar9 {
+            get {
+                return ResourceManager.GetString("SymmetryStar9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to While drawing, the brush can be mirrored horizontally and/or vertically..
         /// </summary>
         internal static string SymmetryTip {
             get {
                 return ResourceManager.GetString("SymmetryTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetry: Vertical.
+        /// </summary>
+        internal static string SymmetryVert {
+            get {
+                return ResourceManager.GetString("SymmetryVert", resourceCulture);
             }
         }
         

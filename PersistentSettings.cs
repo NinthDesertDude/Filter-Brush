@@ -194,10 +194,10 @@ namespace BrushFilter
         }
 
         /// <summary>
-        /// Sets whether to draw horizontal and/or vertical reflections of the
-        /// current image.
+        /// Sets whether to draw horizontal, vertical, or radial reflections
+        /// of the current image.
         /// </summary>
-        public int SymmetryMode
+        public SymmetryMode SymmetryMode
         {
             get;
             set;
@@ -282,7 +282,7 @@ namespace BrushFilter
             int rotChange,
             int intensityChange,
             bool overwriteMode,
-            int symmetryMode,
+            SymmetryMode symmetryMode,
             int effectMode,
             int valProperty1,
             int valProperty2,

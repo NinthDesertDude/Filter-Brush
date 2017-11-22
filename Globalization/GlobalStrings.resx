@@ -282,18 +282,6 @@
   <data name="CmbxEffectZoomBlur" xml:space="preserve">
     <value>Zoom Blur</value>
   </data>
-  <data name="CmbxSymmetryBoth" xml:space="preserve">
-    <value>Symmetry: Both</value>
-  </data>
-  <data name="CmbxSymmetryHorz" xml:space="preserve">
-    <value>Symmetry: Horizontal</value>
-  </data>
-  <data name="CmbxSymmetryNone" xml:space="preserve">
-    <value>Symmetry: None</value>
-  </data>
-  <data name="CmbxSymmetryVert" xml:space="preserve">
-    <value>Symmetry: Vertical</value>
-  </data>
   <data name="CustomBrushLocations" xml:space="preserve">
     <value>Custom Brush Locations</value>
   </data>
@@ -846,8 +834,50 @@
   <data name="Size" xml:space="preserve">
     <value>Brush Size:</value>
   </data>
+  <data name="SymmetryBoth" xml:space="preserve">
+    <value>Symmetry: Both</value>
+  </data>
+  <data name="SymmetryHorz" xml:space="preserve">
+    <value>Symmetry: Horizontal</value>
+  </data>
+  <data name="SymmetryNone" xml:space="preserve">
+    <value>Symmetry: None</value>
+  </data>
+  <data name="SymmetryStar10" xml:space="preserve">
+    <value>Symmetry: 10-point</value>
+  </data>
+  <data name="SymmetryStar11" xml:space="preserve">
+    <value>Symmetry: 11-point</value>
+  </data>
+  <data name="SymmetryStar12" xml:space="preserve">
+    <value>Symmetry: 12-point</value>
+  </data>
+  <data name="SymmetryStar3" xml:space="preserve">
+    <value>Symmetry: 3-point</value>
+  </data>
+  <data name="SymmetryStar4" xml:space="preserve">
+    <value>Symmetry: 4-point</value>
+  </data>
+  <data name="SymmetryStar5" xml:space="preserve">
+    <value>Symmetry: 5-point</value>
+  </data>
+  <data name="SymmetryStar6" xml:space="preserve">
+    <value>Symmetry: 6-point</value>
+  </data>
+  <data name="SymmetryStar7" xml:space="preserve">
+    <value>Symmetry: 7-point</value>
+  </data>
+  <data name="SymmetryStar8" xml:space="preserve">
+    <value>Symmetry: 8-point</value>
+  </data>
+  <data name="SymmetryStar9" xml:space="preserve">
+    <value>Symmetry: 9-point</value>
+  </data>
   <data name="SymmetryTip" xml:space="preserve">
     <value>While drawing, the brush can be mirrored horizontally and/or vertically.</value>
+  </data>
+  <data name="SymmetryVert" xml:space="preserve">
+    <value>Symmetry: Vertical</value>
   </data>
   <data name="TabColor" xml:space="preserve">
     <value>Color</value>
