@@ -1,0 +1,16 @@
+- Transparency bug
+- Transparency artifact; last row and column of pixels render as translucent. Visible with large brushes.
+- AA's Assistant somehow affects areas you don't brush in by killing outlying pixels; leaves jagged edges (despite smoothness of usual effect)
+- Support non-property-based effects
+
+-----------REQUIRES A DIALOG TO USE:
+Curves
+Levels
+Radial Blur
+Polar Inversion
+
+-----------NOT GOING TO DO
+Red Eye Removal
+Julia Fractal
+Mandelbrot Fractal
+Auto Level

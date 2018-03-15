@@ -1417,14 +1417,11 @@ namespace BrushFilter
                     {
                         if (bounds.Width == 1 && bounds.Height == 1)
                         {
-                            MessageBox.Show("Rendering failed. Image " +
-                                "dimensions may be too small; try switching " +
-                                "to another effect.");
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering1x1);
                         }
                         else
                         {
-                            MessageBox.Show("Rendering failed. Try " +
-                                "switching to another effect.");
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
                         }
                     }
                 }
@@ -1434,13 +1431,14 @@ namespace BrushFilter
             }
 
             //Copies the rendering over the filtered drawing.
-            else if (effect != null)
+            else if (effect != null && customEffectToken != null)
             {
                 //Renders in segments for images of 129 x 129 or greater.
                 if (bounds.Width > 128 && bounds.Height > 128 &&
                     !effect.CheckForEffectFlags(EffectFlags.SingleRenderCall) &&
                     !effect.CheckForEffectFlags(EffectFlags.SingleThreaded))
                 {
+                    bool didRenderFail = false;
                     Parallel.For(0, 1 + bounds.Width / 64, (row) =>
                     {
                         int x = row * 64;
@@ -1454,16 +1452,35 @@ namespace BrushFilter
                                     Utils.Clamp(64, 0, bounds.Width - x),
                                     Utils.Clamp(64, 0, bounds.Height - y));
 
-                                effect.Render(customEffectToken, dstArgs, srcArgs,
-                                    new Rectangle[] { rect }, 0, 1);
+                                try
+                                {
+                                    effect.Render(customEffectToken, dstArgs, srcArgs,
+                                        new Rectangle[] { rect }, 0, 1);
+                                }
+                                catch (Exception)
+                                {
+                                    didRenderFail = true;
+                                }
                             }
                         }
                     });
+
+                    if (didRenderFail)
+                    {
+                        MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
+                    }
                 }
                 else
                 {
-                    effect.Render(customEffectToken, dstArgs, srcArgs,
-                        new Rectangle[] { bounds }, 0, 1);
+                    try
+                    {
+                        effect.Render(customEffectToken, dstArgs, srcArgs,
+                            new Rectangle[] { bounds }, 0, 1);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
+                    }
                 }
 
                 bmpEffectDrawing?.Dispose();
@@ -1691,12 +1708,13 @@ namespace BrushFilter
                         //Creates the brush space.
                         int size = Math.Max(bmp.Width, bmp.Height);
 
-                        //TODO: Disposing bmpBrush here throws error.
+                        bmpBrush.Dispose();
                         bmpBrush = new Bitmap(size, size);
 
                         //Pads the image to be square if needed.
                         //FIXME: Calling Utils.FormatImage in MakeBitmapSquare throws generic error.
-                        Utils.CopyBitmapPure(Utils.MakeBitmapSquare(bmp), bmpBrush);
+                        Utils.CopyBitmapPure(Utils.MakeBitmapSquare(Utils.FormatImage(
+                            bmp, PixelFormat.Format32bppArgb)), bmpBrush);
                     }
 
                     //Gets the last word in the filename without the path.
@@ -1747,7 +1765,7 @@ namespace BrushFilter
                 {
                     if (doDisplayErrors)
                     {
-                        MessageBox.Show("Cannot load brush: out of memory.");
+                        MessageBox.Show(Globalization.GlobalStrings.ErrorMemoryLoadingBrush);
                     }
 
                     return false;
@@ -2676,9 +2694,18 @@ namespace BrushFilter
                     customEffect = (Effect)ctors[0].Invoke(new object[] { });
 
                     //Creates the effect token that handles settings.
-                    using (var dlg = customEffect.CreateConfigDialog())
+                    try
                     {
-                        customEffectToken = dlg.EffectToken;
+                        using (var dlg = customEffect.CreateConfigDialog())
+                        {
+                            customEffectToken = dlg.EffectToken;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        customEffect = null;
+                        customEffectToken = null;
+                        MessageBox.Show(Globalization.GlobalStrings.ErrorLoadingEffect);
                     }
                 }
             }
@@ -3726,7 +3753,7 @@ namespace BrushFilter
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("An error occurred.");
+                        MessageBox.Show(Globalization.GlobalStrings.ErrorSettingEffectProperties);
                         EnableParameterUpdates();
                     }
                     break;
@@ -3785,7 +3812,7 @@ namespace BrushFilter
                             }
                             catch
                             {
-                                MessageBox.Show("Could not use clipboard image.");
+                                MessageBox.Show(Globalization.GlobalStrings.ErrorUsingClipboardImage);
                             }
                         }
                     })));
@@ -4792,7 +4819,7 @@ namespace BrushFilter
             }
             else
             {
-                MessageBox.Show("File could not be found for redo.");
+                MessageBox.Show(Globalization.GlobalStrings.ErrorRedoingFile);
             }
 
             //Handles enabling undo or disabling redo for the user's clarity.
@@ -4850,7 +4877,7 @@ namespace BrushFilter
             }
             else
             {
-                MessageBox.Show("File could not be found for undo.");
+                MessageBox.Show(Globalization.GlobalStrings.ErrorUndoingFile);
             }
 
             //Handles enabling redo or disabling undo for the user's clarity.
@@ -4915,7 +4942,7 @@ namespace BrushFilter
             LoadUserEffect();
 
             //Loads effect properties if the dialog has loaded.
-            if (bmpEffectAlpha != null)
+            if (bmpEffectAlpha != null && customEffect != null)
             {
                 doPreview = true;
                 SetEffectProperties(true);
@@ -5043,8 +5070,15 @@ namespace BrushFilter
                     //Casts result of first constructor to Effect. Shows icon.
                     if (ctors.Length > 0)
                     {
-                        currCustomEffect = (Effect)ctors[0].Invoke(new object[] { });
-                        displayIcon = currCustomEffect.Image;
+                        try
+                        {
+                            currCustomEffect = (Effect)ctors[0].Invoke(new object[] { });
+                            displayIcon = currCustomEffect.Image;
+                        }
+                        catch (TargetInvocationException)
+                        {
+                            //Fails silently.
+                        }
                     }
 
                     break;

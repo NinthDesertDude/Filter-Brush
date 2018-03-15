@@ -1843,6 +1843,87 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load custom brush..
+        /// </summary>
+        internal static string ErrorLoadingBrush {
+            get {
+                return ResourceManager.GetString("ErrorLoadingBrush", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load the custom effect..
+        /// </summary>
+        internal static string ErrorLoadingEffect {
+            get {
+                return ResourceManager.GetString("ErrorLoadingEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load custom brush: out of memory..
+        /// </summary>
+        internal static string ErrorMemoryLoadingBrush {
+            get {
+                return ResourceManager.GetString("ErrorMemoryLoadingBrush", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the file required to redo the last operation..
+        /// </summary>
+        internal static string ErrorRedoingFile {
+            get {
+                return ResourceManager.GetString("ErrorRedoingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rendering failed. Try switching to another effect..
+        /// </summary>
+        internal static string ErrorRendering {
+            get {
+                return ResourceManager.GetString("ErrorRendering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rendering failed. Image dimensions may be too small; try switching to another effect..
+        /// </summary>
+        internal static string ErrorRendering1x1 {
+            get {
+                return ResourceManager.GetString("ErrorRendering1x1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to set effect properties..
+        /// </summary>
+        internal static string ErrorSettingEffectProperties {
+            get {
+                return ResourceManager.GetString("ErrorSettingEffectProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the file required to undo the last operation..
+        /// </summary>
+        internal static string ErrorUndoingFile {
+            get {
+                return ResourceManager.GetString("ErrorUndoingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not use clipboard image..
+        /// </summary>
+        internal static string ErrorUsingClipboardImage {
+            get {
+                return ResourceManager.GetString("ErrorUsingClipboardImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Middle click and drag to pan image. Right-click for options. Hover over items for details..
         /// </summary>
         internal static string GeneralTooltip {

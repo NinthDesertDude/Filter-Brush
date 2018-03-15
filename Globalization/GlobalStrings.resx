@@ -711,6 +711,33 @@
   <data name="EffectZoomBlurProperty1Tip" xml:space="preserve">
     <value>The amount of zooming of the main image, the rest of which is blurred.</value>
   </data>
+  <data name="ErrorLoadingBrush" xml:space="preserve">
+    <value>Failed to load custom brush.</value>
+  </data>
+  <data name="ErrorLoadingEffect" xml:space="preserve">
+    <value>Failed to load the custom effect.</value>
+  </data>
+  <data name="ErrorMemoryLoadingBrush" xml:space="preserve">
+    <value>Failed to load custom brush: out of memory.</value>
+  </data>
+  <data name="ErrorRedoingFile" xml:space="preserve">
+    <value>Could not find the file required to redo the last operation.</value>
+  </data>
+  <data name="ErrorRendering" xml:space="preserve">
+    <value>Rendering failed. Try switching to another effect.</value>
+  </data>
+  <data name="ErrorRendering1x1" xml:space="preserve">
+    <value>Rendering failed. Image dimensions may be too small; try switching to another effect.</value>
+  </data>
+  <data name="ErrorSettingEffectProperties" xml:space="preserve">
+    <value>Failed to set effect properties.</value>
+  </data>
+  <data name="ErrorUndoingFile" xml:space="preserve">
+    <value>Could not find the file required to undo the last operation.</value>
+  </data>
+  <data name="ErrorUsingClipboardImage" xml:space="preserve">
+    <value>Could not use clipboard image.</value>
+  </data>
   <data name="GeneralTooltip" xml:space="preserve">
     <value>Middle click and drag to pan image. Right-click for options. Hover over items for details.</value>
   </data>
