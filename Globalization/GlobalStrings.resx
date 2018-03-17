@@ -168,6 +168,12 @@
   <data name="ClearSettingsTip" xml:space="preserve">
     <value>Resets all settings to the default values they had when the plugin first loaded.</value>
   </data>
+  <data name="ClipboardAlphaMask" xml:space="preserve">
+    <value>Clipboard Alpha Mask</value>
+  </data>
+  <data name="ClipboardAlphaMaskTip" xml:space="preserve">
+    <value>When applying an effect, the clipboard image is drawn below the effect so transparent regions show it.</value>
+  </data>
   <data name="CmbxEffectAddNoise" xml:space="preserve">
     <value>Add Noise</value>
   </data>

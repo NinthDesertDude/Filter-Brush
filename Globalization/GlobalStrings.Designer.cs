@@ -214,6 +214,24 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clipboard Alpha Mask.
+        /// </summary>
+        internal static string ClipboardAlphaMask {
+            get {
+                return ResourceManager.GetString("ClipboardAlphaMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When applying an effect, the clipboard image is drawn below the effect so transparent regions show it..
+        /// </summary>
+        internal static string ClipboardAlphaMaskTip {
+            get {
+                return ResourceManager.GetString("ClipboardAlphaMaskTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Noise.
         /// </summary>
         internal static string CmbxEffectAddNoise {

@@ -85,6 +85,16 @@ namespace BrushFilter
         }
 
         /// <summary>
+        /// Whether to render the clipboard image below the drawing when
+        /// finalized after a brush stroke.
+        /// </summary>
+        public bool AlphaMask
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Randomized maximum effect intensity.
         /// </summary>
         public int RandMaxIntensity
@@ -282,6 +292,7 @@ namespace BrushFilter
             int rotChange,
             int intensityChange,
             bool overwriteMode,
+            bool useAlphaMask,
             SymmetryMode symmetryMode,
             int effectMode,
             int valProperty1,
@@ -311,6 +322,7 @@ namespace BrushFilter
             RotChange = rotChange;
             IntensityChange = intensityChange;
             OverwriteMode = overwriteMode;
+            AlphaMask = useAlphaMask;
             SymmetryMode = symmetryMode;
             EffectMode = effectMode;
             EffectProperty1 = valProperty1;
@@ -346,6 +358,7 @@ namespace BrushFilter
             RotChange = other.RotChange;
             IntensityChange = other.IntensityChange;
             OverwriteMode = other.OverwriteMode;
+            AlphaMask = other.AlphaMask;
             SymmetryMode = other.SymmetryMode;
             EffectMode = other.EffectMode;
             EffectProperty1 = other.EffectProperty1;

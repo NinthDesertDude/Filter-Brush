@@ -54,6 +54,63 @@ namespace BrushFilter
         }
 
         /// <summary>
+        /// Overwrites alpha channel information in the dstImage with the
+        /// alpha information from the srcImage. Both images must be the
+        /// same size and Format32bppArgb. Returns success.
+        /// </summary>
+        /// <param name="srcImg">
+        /// The image to copy from.
+        /// </param>
+        /// <param name="dstImg">
+        /// The image to be overwritten.
+        /// </param>
+        public static unsafe bool CopyBitmapAlpha(Bitmap srcImg, Bitmap dstImg)
+        {
+            //Formats and size must be the same.
+            if (srcImg.PixelFormat != PixelFormat.Format32bppArgb ||
+            dstImg.PixelFormat != PixelFormat.Format32bppArgb ||
+            srcImg.Width != dstImg.Width ||
+            srcImg.Height != dstImg.Height)
+            {
+                return false;
+            }
+
+            BitmapData srcData = srcImg.LockBits(
+                new Rectangle(0, 0,
+                    srcImg.Width,
+                    srcImg.Height),
+                ImageLockMode.ReadOnly,
+                srcImg.PixelFormat);
+
+            BitmapData destData = dstImg.LockBits(
+                new Rectangle(0, 0,
+                    dstImg.Width,
+                    dstImg.Height),
+                ImageLockMode.WriteOnly,
+                dstImg.PixelFormat);
+
+            //Copies each pixel.
+            byte* srcRow = (byte*)srcData.Scan0;
+            byte* dstRow = (byte*)destData.Scan0;
+
+            int srcImgHeight = srcImg.Height;
+            int srcImgWidth = srcImg.Width;
+            Parallel.For(0, srcImgHeight, (y) =>
+            {
+                for (int x = 0; x < srcImgWidth; x++)
+                {
+                    int ptr = y * srcData.Stride + x * 4;
+                    dstRow[ptr + 3] = srcRow[ptr + 3];
+                }
+            });
+
+            srcImg.UnlockBits(srcData);
+            dstImg.UnlockBits(destData);
+
+            return true;
+        }
+
+        /// <summary>
         /// Strictly copies all data from one bitmap over the other. They
         /// must have the same size and pixel format. The image can be made
         /// fully transparent without reducing color, which is used for an

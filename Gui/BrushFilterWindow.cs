@@ -230,6 +230,12 @@ namespace BrushFilter
         private Button bttnUndo;
 
         /// <summary>
+        /// If true, the clipboard image is rendered beneath the effect
+        /// surface after it renders.
+        /// </summary>
+        private CheckBox chkbxAlphaMask;
+
+        /// <summary>
         /// When active, the brush will be affected by the mouse angle. By
         /// default, brushes "facing" to the right (like an 'arrow brush')
         /// will point in the same direction as the mouse, while brushes that
@@ -659,7 +665,7 @@ namespace BrushFilter
         protected override void InitialInitToken()
         {
             theEffectToken = new PersistentSettings(20, "", 0, 100, 0, 0, 0, 0, 0, 0,
-                0, 0, false, 0, 0, 0, 0, false, SymmetryMode.None, 0, 1, 1, 1, 1,
+                0, 0, false, 0, 0, 0, 0, false, false, SymmetryMode.None, 0, 1, 1, 1, 1,
                 new List<string>(), null, null);
         }
 
@@ -723,6 +729,7 @@ namespace BrushFilter
             sliderRandVertShift.Value = token.RandVertShift;
             chkbxOrientToMouse.Checked = token.DoRotateWithMouse;
             chkbxOverwriteMode.Checked = token.OverwriteMode;
+            chkbxAlphaMask.Checked = token.AlphaMask;
             sliderMinDrawDistance.Value = token.MinDrawDistance;
             sliderShiftSize.Value = token.SizeChange;
             sliderShiftRotation.Value = token.RotChange;
@@ -772,6 +779,7 @@ namespace BrushFilter
             token.RotChange = sliderShiftRotation.Value;
             token.IntensityChange = sliderShiftIntensity.Value;
             token.OverwriteMode = chkbxOverwriteMode.Checked;
+            token.AlphaMask = chkbxAlphaMask.Checked;
             token.SymmetryMode = (SymmetryMode)cmbxSymmetry.SelectedIndex;
             token.EffectMode = cmbxEffectType.SelectedIndex;
             token.EffectProperty1 = sliderEffectProperty1.Value;
@@ -1487,6 +1495,27 @@ namespace BrushFilter
                 bmpEffectDrawing = new Bitmap(dstArgs.Bitmap);
             }
 
+            //Underlays the clipboard image if alpha cutaway is used.
+            if (chkbxAlphaMask.Checked)
+            {
+                try
+                {
+                    using (Bitmap bmpEffect = new Bitmap(bmpEffectDrawing))
+                    {
+                        using (Graphics g = Graphics.FromImage(bmpEffectDrawing))
+                        {
+                            g.Clear(Color.Transparent);
+                            g.DrawImage(Clipboard.GetImage(), 0, 0, bmpEffectDrawing.Width, bmpEffectDrawing.Height);
+                            g.DrawImage(bmpEffect, 0, 0);
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show(Globalization.GlobalStrings.ErrorUsingClipboardImage);
+                }
+            }
+
             //Sets the alpha values for previewing or drawing.
             doRefreshEffectAlpha = true;
             ApplyFilterAlpha();
@@ -1907,6 +1936,7 @@ namespace BrushFilter
             this.bttnBrushSelector = new System.Windows.Forms.ComboBox();
             this.tabBar = new System.Windows.Forms.TabControl();
             this.tabEffect = new System.Windows.Forms.TabPage();
+            this.chkbxAlphaMask = new System.Windows.Forms.CheckBox();
             this.chkbxOverwriteMode = new System.Windows.Forms.CheckBox();
             this.sliderEffectProperty2 = new System.Windows.Forms.TrackBar();
             this.txtEffectProperty2 = new System.Windows.Forms.Label();
@@ -2415,6 +2445,7 @@ namespace BrushFilter
             // tabEffect
             // 
             this.tabEffect.BackColor = System.Drawing.SystemColors.Menu;
+            this.tabEffect.Controls.Add(this.chkbxAlphaMask);
             this.tabEffect.Controls.Add(this.chkbxOverwriteMode);
             this.tabEffect.Controls.Add(this.sliderEffectProperty2);
             this.tabEffect.Controls.Add(this.txtEffectProperty2);
@@ -2429,6 +2460,13 @@ namespace BrushFilter
             this.tabEffect.Controls.Add(this.pnlCustomProperties);
             resources.ApplyResources(this.tabEffect, "tabEffect");
             this.tabEffect.Name = "tabEffect";
+            // 
+            // chkbxAlphaMask
+            // 
+            resources.ApplyResources(this.chkbxAlphaMask, "chkbxAlphaMask");
+            this.chkbxAlphaMask.Name = "chkbxAlphaMask";
+            this.chkbxAlphaMask.UseVisualStyleBackColor = true;
+            this.chkbxAlphaMask.MouseEnter += new System.EventHandler(this.ChkbxAlphaMask_MouseEnter);
             // 
             // chkbxOverwriteMode
             // 
@@ -3705,6 +3743,11 @@ namespace BrushFilter
                     txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
                 case CmbxEffectOptions.Custom:
+
+                    if (customEffect == null)
+                    {
+                        break;
+                    }
                     
                     //Shows the custom properties panel.
                     pnlCustomProperties.Visible = true;
@@ -4118,6 +4161,8 @@ namespace BrushFilter
 
             chkbxOverwriteMode.Text = Globalization.GlobalStrings.OverwriteMode;
 
+            chkbxAlphaMask.Text = Globalization.GlobalStrings.ClipboardAlphaMask;
+
             grpbxBrushOptions.Text = Globalization.GlobalStrings.BrushOptions;
         }
 
@@ -4498,7 +4543,7 @@ namespace BrushFilter
             }
 
             //Draws the effect surface for user drawing or as a preview.
-            if (chkbxOverwriteMode.Checked || isUserDrawing || doPreview)
+            if (isUserDrawing || doPreview)
             {
                 e.Graphics.DrawImage(bmpEffectDrawing, 0, 0,
                     displayCanvas.ClientRectangle.Width + (sliderCanvasZoom.Value / 100),
@@ -4903,6 +4948,14 @@ namespace BrushFilter
         /// <summary>
         /// Sets a tooltip.
         /// </summary>
+        private void ChkbxAlphaMask_MouseEnter(object sender, EventArgs e)
+        {
+            txtTooltip.Text = Globalization.GlobalStrings.ClipboardAlphaMaskTip;
+        }
+
+        /// <summary>
+        /// Sets a tooltip.
+        /// </summary>
         private void ChkbxOrientToMouse_MouseEnter(object sender, EventArgs e)
         {
             txtTooltip.Text = Globalization.GlobalStrings.OrientToMouseTip;
@@ -4942,7 +4995,7 @@ namespace BrushFilter
             LoadUserEffect();
 
             //Loads effect properties if the dialog has loaded.
-            if (bmpEffectAlpha != null && customEffect != null)
+            if (bmpEffectAlpha != null)
             {
                 doPreview = true;
                 SetEffectProperties(true);
