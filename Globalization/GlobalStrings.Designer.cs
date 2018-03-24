@@ -592,6 +592,24 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This filter may be taking a long time to render, or it may be frozen. Do you want to wait?.
+        /// </summary>
+        internal static string DlgRenderTimeoutRequest {
+            get {
+                return ResourceManager.GetString("DlgRenderTimeoutRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taking awhile to render.
+        /// </summary>
+        internal static string DlgRenderTimeoutTitle {
+            get {
+                return ResourceManager.GetString("DlgRenderTimeoutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Intensity.
         /// </summary>
         internal static string EffectAddNoiseProperty1 {
@@ -1870,7 +1888,7 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to load the custom effect..
+        ///   Looks up a localized string similar to Failed to load the custom effect. Try switching to a different effect..
         /// </summary>
         internal static string ErrorLoadingEffect {
             get {
@@ -1938,6 +1956,15 @@ namespace BrushFilter.Globalization {
         internal static string ErrorUsingClipboardImage {
             get {
                 return ResourceManager.GetString("ErrorUsingClipboardImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to use the custom effect. Try switching to a different effect..
+        /// </summary>
+        internal static string ErrorUsingEffect {
+            get {
+                return ResourceManager.GetString("ErrorUsingEffect", resourceCulture);
             }
         }
         

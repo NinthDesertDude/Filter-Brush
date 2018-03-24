@@ -294,6 +294,12 @@
   <data name="CustomBrushLocationsTip" xml:space="preserve">
     <value>Define where to look for brushes when this plugin loads.</value>
   </data>
+  <data name="DlgRenderTimeoutRequest" xml:space="preserve">
+    <value>This filter may be taking a long time to render, or it may be frozen. Do you want to wait?</value>
+  </data>
+  <data name="DlgRenderTimeoutTitle" xml:space="preserve">
+    <value>Taking awhile to render</value>
+  </data>
   <data name="EffectAddNoiseProperty1" xml:space="preserve">
     <value>Intensity</value>
   </data>
@@ -721,7 +727,7 @@
     <value>Failed to load custom brush.</value>
   </data>
   <data name="ErrorLoadingEffect" xml:space="preserve">
-    <value>Failed to load the custom effect.</value>
+    <value>Failed to load the custom effect. Try switching to a different effect.</value>
   </data>
   <data name="ErrorMemoryLoadingBrush" xml:space="preserve">
     <value>Failed to load custom brush: out of memory.</value>
@@ -743,6 +749,9 @@
   </data>
   <data name="ErrorUsingClipboardImage" xml:space="preserve">
     <value>Could not use clipboard image.</value>
+  </data>
+  <data name="ErrorUsingEffect" xml:space="preserve">
+    <value>Failed to use the custom effect. Try switching to a different effect.</value>
   </data>
   <data name="GeneralTooltip" xml:space="preserve">
     <value>Middle click and drag to pan image. Right-click for options. Hover over items for details.</value>
