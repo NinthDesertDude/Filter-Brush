@@ -1068,15 +1068,13 @@ namespace BrushFilter
 
         /// <summary>
         /// Generates the effect bitmap from the original with a filter applied
-        /// across it.
+        /// across it. Don't call directly; use ApplyFilterAsync() instead.
         /// </summary>
         /// <param name="effectType">
         /// The type of effect chosen.
         /// </param>
         private unsafe void ApplyFilter(
             CmbxEffectOptions effectType,
-            int bmpWidth,
-            int bmpHeight,
             int propVal1,
             int propVal2,
             int propVal3,
@@ -1356,8 +1354,6 @@ namespace BrushFilter
                     }
                     break;
                 case CmbxEffectOptions.RgbTint:
-
-                    //Locks bits.
                     BitmapData srcData = bmpCurrentDrawing.LockBits(
                         new Rectangle(0, 0,
                             bmpCurrentDrawing.Width,
@@ -1421,27 +1417,62 @@ namespace BrushFilter
                     !effectP.CheckForEffectFlags(EffectFlags.SingleRenderCall) &&
                     !effectP.CheckForEffectFlags(EffectFlags.SingleThreaded))
                 {
+                    bool renderFailed = false;
+
                     Parallel.For(0, 1 + bounds.Width / 64, (row) =>
                     {
                         int x = row * 64;
                         for (int y = 0; y < bounds.Height; y += 64)
                         {
                             //Only adds rectangles with valid width and height.
-                            if (bounds.Width - x > 0 &&
-                                        bounds.Height - y > 0)
+                            if (bounds.Width - x > 0 && bounds.Height - y > 0)
                             {
                                 var rect = new Rectangle(x, y,
                                     Utils.Clamp(64, 0, bounds.Width - x),
                                     Utils.Clamp(64, 0, bounds.Height - y));
 
-                                ApplyFilterRender(effectP, rect);
+                                try
+                                {
+                                    effectP.Render(new Rectangle[] { rect }, 0, 1);
+                                }
+                                catch
+                                {
+                                    renderFailed = true;
+                                    return;
+                                }
                             }
                         }
                     });
+
+                    if (renderFailed)
+                    {
+                        if (bounds.Width == 1 && bounds.Height == 1)
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering1x1);
+                        }
+                        else
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
+                        }
+                    }
                 }
                 else
                 {
-                    ApplyFilterRender(effectP, bounds);
+                    try
+                    {
+                        effectP.Render(new Rectangle[] { bounds }, 0, 1);
+                    }
+                    catch
+                    {
+                        if (bounds.Width == 1 && bounds.Height == 1)
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering1x1);
+                        }
+                        else
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
+                        }
+                    }
                 }
 
                 bmpEffectDrawing?.Dispose();
@@ -1460,6 +1491,8 @@ namespace BrushFilter
                     var exceptionHandler = new ThreadExceptionEventHandler(RenderFailureHandler);
                     Application.ThreadException += exceptionHandler;
 
+                    bool renderFailed = false;
+
                     Parallel.For(0, 1 + bounds.Width / 64, (row) =>
                     {
                         int x = row * 64;
@@ -1467,17 +1500,37 @@ namespace BrushFilter
                         {
                             //Only adds rectangles with valid width and height.
                             if (bounds.Width - x > 0 &&
-                                bounds.Height - y > 0)
+                                        bounds.Height - y > 0)
                             {
                                 var rect = new Rectangle(x, y,
                                     Utils.Clamp(64, 0, bounds.Width - x),
                                     Utils.Clamp(64, 0, bounds.Height - y));
 
-                                ApplyFilterRender(effect, customEffectToken,
-                                    dstArgs, srcArgs, rect);
+                                try
+                                {
+                                    effect.Render(customEffectToken,
+                                        dstArgs, srcArgs, new Rectangle[] { rect }, 0, 1);
+                                }
+                                catch
+                                {
+                                    renderFailed = true;
+                                    return;
+                                }
                             }
                         }
                     });
+
+                    if (renderFailed)
+                    {
+                        if (bounds.Width == 1 && bounds.Height == 1)
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering1x1);
+                        }
+                        else
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
+                        }
+                    }
 
                     Application.ThreadException -= exceptionHandler;
                 }
@@ -1487,8 +1540,22 @@ namespace BrushFilter
                     var exceptionHandler = new ThreadExceptionEventHandler(RenderFailureHandler);
                     Application.ThreadException += exceptionHandler;
 
-                    ApplyFilterRender(effect, customEffectToken,
-                        dstArgs, srcArgs, bounds);
+                    try
+                    {
+                        effect.Render(customEffectToken,
+                            dstArgs, srcArgs, new Rectangle[] { bounds }, 0, 1);
+                    }
+                    catch
+                    {
+                        if (bounds.Width == 1 && bounds.Height == 1)
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering1x1);
+                        }
+                        else
+                        {
+                            MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
+                        }
+                    }
 
                     Application.ThreadException -= exceptionHandler;
                 }
@@ -1516,11 +1583,7 @@ namespace BrushFilter
                 {
                     MessageBox.Show(Globalization.GlobalStrings.ErrorUsingClipboardImage);
                 }
-            }
-
-            //Sets the alpha values for previewing or drawing.
-            doRefreshEffectAlpha = true;
-            ApplyFilterAlpha();
+            }            
         }
 
         /// <summary>
@@ -1530,7 +1593,8 @@ namespace BrushFilter
         private unsafe void ApplyFilterAlpha()
         {
             //Doesn't compute the effect if it hasn't loaded yet.
-            if (bmpEffectDrawing == null || bmpEffectAlpha == null)
+            if (bmpEffectDrawing == null ||
+                bmpEffectAlpha == null)
             {
                 return;
             }
@@ -1606,87 +1670,37 @@ namespace BrushFilter
                 {
                     asyncRender.DoWork += (c, d) =>
                     {
-                        ApplyFilter(effectType, bmpWidth, bmpHeight,
-                            propVal1, propVal2, propVal3, propVal4);
+                        ApplyFilter(effectType, propVal1,
+                            propVal2, propVal3, propVal4);
                     };
 
                     asyncRender.RunWorkerCompleted += (c, d) =>
                     {
-                        displayCanvas.Refresh();
-                        isRendering = false;
                         renderTimeout.Stop();
+                        isRendering = false;
+
+                        //Updates the preview.
+                        doRefreshEffectAlpha = true;
+                        ApplyFilterAlpha();
+                        displayCanvas.Refresh();                        
                     };
 
                     asyncRender.RunWorkerAsync();
                 }
 
-                //Asks the user if they want to stop rendering on timeout.
+                //Asks the user if they want to stop the plugin on timeout.
                 renderTimeout.Elapsed += (a, b) =>
                 {
-                    DialogResult timeoutRequested = MessageBox.Show(
+                    if (MessageBox.Show(
                         Globalization.GlobalStrings.DlgRenderTimeoutRequest,
                         Globalization.GlobalStrings.DlgRenderTimeoutTitle,
-                        MessageBoxButtons.YesNo);
-
-                    if (timeoutRequested == DialogResult.Yes)
+                        MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        isRendering = false;
+                        BttnCancel_Click(this, null);
                     }
                 };
 
                 renderTimeout.Start();
-            }
-        }
-
-        /// <summary>
-        /// Attempts to render the filter.
-        /// </summary>
-        private void ApplyFilterRender(
-            PropertyBasedEffect effect,
-            Rectangle bounds)
-        {
-            try
-            {
-                effect.Render(new Rectangle[] { bounds }, 0, 1);
-            }
-            catch
-            {
-                if (bounds.Width == 1 && bounds.Height == 1)
-                {
-                    MessageBox.Show(Globalization.GlobalStrings.ErrorRendering1x1);
-                }
-                else
-                {
-                    MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Attempts to render the filter.
-        /// </summary>
-        private void ApplyFilterRender(
-            Effect effect,
-            EffectConfigToken configToken,
-            RenderArgs dstArgs,
-            RenderArgs srcArgs,
-            Rectangle bounds)
-        {
-            try
-            {
-                effect.Render(configToken, dstArgs, srcArgs,
-                    new Rectangle[] { bounds }, 0, 1);
-            }
-            catch
-            {
-                if (bounds.Width == 1 && bounds.Height == 1)
-                {
-                    MessageBox.Show(Globalization.GlobalStrings.ErrorRendering1x1);
-                }
-                else
-                {
-                    MessageBox.Show(Globalization.GlobalStrings.ErrorRendering);
-                }
             }
         }
 
@@ -4118,8 +4132,7 @@ namespace BrushFilter
                 for (int x = 0; x < brushRect.Width; x++)
                 {
                     //Doesn't consider pixels outside of the canvas image.
-                    if (x >= canvWidth ||
-                        y >= canvHeight)
+                    if (x >= canvWidth || y >= canvHeight)
                     {
                         continue;
                     }
@@ -4521,7 +4534,6 @@ namespace BrushFilter
                 //Updates the position of the canvas.
                 Point loc = new Point(locx, locy);
                 displayCanvas.Location = loc;
-                displayCanvas.Refresh();
             }
             else if (isUserDrawing)
             {
@@ -4539,13 +4551,10 @@ namespace BrushFilter
                 ApplyBrush(brushPoint, newRadius);
 
                 mouseLocPrev = e.Location;
-                displayCanvas.Refresh();
             }
-            else
-            {
-                //Redraws to update the brush indicator (ellipse).
-                displayCanvas.Refresh();
-            }
+
+            //Redraws to update the brush indicator (ellipse).
+            displayCanvas.Refresh();
         }
 
         /// <summary>
@@ -4603,7 +4612,7 @@ namespace BrushFilter
 
                             //Underlying opacity is the reciprocal of that effort.
                             srcRow[ptr + 3] = (byte)Math.Min(srcRow[ptr + 3],
-                                srcRow[ptr + 3] - srcRow[ptr + 3] * percentFill);
+                                        srcRow[ptr + 3] - srcRow[ptr + 3] * percentFill);
                         }
                     });
 
@@ -4809,6 +4818,7 @@ namespace BrushFilter
 
             txtTooltip.Text = Globalization.GlobalStrings.GeneralTooltip;
             EnablePreview(this, null);
+            displayCanvas.Refresh();
         }
 
         /// <summary>

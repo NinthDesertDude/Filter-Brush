@@ -592,7 +592,7 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This filter may be taking a long time to render, or it may be frozen. Do you want to wait?.
+        ///   Looks up a localized string similar to This filter may be taking a long time to render, or it may be frozen. Do you want to abort and close the plugin?.
         /// </summary>
         internal static string DlgRenderTimeoutRequest {
             get {

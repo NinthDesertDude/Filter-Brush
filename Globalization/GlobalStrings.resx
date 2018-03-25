@@ -295,7 +295,7 @@
     <value>Define where to look for brushes when this plugin loads.</value>
   </data>
   <data name="DlgRenderTimeoutRequest" xml:space="preserve">
-    <value>This filter may be taking a long time to render, or it may be frozen. Do you want to wait?</value>
+    <value>This filter may be taking a long time to render, or it may be frozen. Do you want to abort and close the plugin?</value>
   </data>
   <data name="DlgRenderTimeoutTitle" xml:space="preserve">
     <value>Taking awhile to render</value>
