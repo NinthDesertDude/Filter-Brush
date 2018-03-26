@@ -1,8 +1,6 @@
 ﻿using BrushFilter.Properties;
 using PaintDotNet;
 using PaintDotNet.Effects;
-using PaintDotNet.IndirectUI;
-using PaintDotNet.PropertySystem;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -2444,6 +2442,7 @@ namespace BrushFilter
             // 
             // tabEffect
             // 
+            resources.ApplyResources(this.tabEffect, "tabEffect");
             this.tabEffect.BackColor = System.Drawing.SystemColors.Menu;
             this.tabEffect.Controls.Add(this.chkbxAlphaMask);
             this.tabEffect.Controls.Add(this.chkbxOverwriteMode);
@@ -2458,7 +2457,6 @@ namespace BrushFilter
             this.tabEffect.Controls.Add(this.txtEffectType);
             this.tabEffect.Controls.Add(this.cmbxEffectType);
             this.tabEffect.Controls.Add(this.pnlCustomProperties);
-            resources.ApplyResources(this.tabEffect, "tabEffect");
             this.tabEffect.Name = "tabEffect";
             // 
             // chkbxAlphaMask
@@ -2649,24 +2647,45 @@ namespace BrushFilter
 
             // TARGETDIR\Effects\*.dll
             string homeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string effectsDir = Path.Combine(homeDir, "Effects");
+            string builtInEffectsDir = Path.Combine(homeDir, "PaintDotNet.Effects.dll");
+            string customEffectsDir = Path.Combine(homeDir, "Effects");
             bool dirExists;
 
             //Attempts to access the effects directory.
             try
             {
-                dirExists = Directory.Exists(effectsDir);
+                dirExists = Directory.Exists(customEffectsDir);
             }
             catch
             {
                 dirExists = false;
             }
 
+            //Adds the built-in effects assembly.
+            //TODO: Until environment variables can be passed
+            //correctly and the 11 built-in effects that fail
+            //start to work, they must be explicitly supported.
+            /*try
+            {
+                if (File.Exists(builtInEffectsDir))
+                {
+                    Assembly pluginAssembly = null;
+
+                    try
+                    {
+                        pluginAssembly = Assembly.LoadFrom(builtInEffectsDir);
+                        assemblies.Add(pluginAssembly);
+                    }
+                    catch { }
+                }
+            }
+            catch { }*/
+
             //Accumulates assemblies to probe.
             if (dirExists)
             {
                 string fileSpec = "*.dll";
-                string[] filePaths = Directory.GetFiles(effectsDir, fileSpec);
+                string[] filePaths = Directory.GetFiles(customEffectsDir, fileSpec);
 
                 foreach (string filePath in filePaths)
                 {
@@ -2688,12 +2707,7 @@ namespace BrushFilter
                 {
                     foreach (Type candidate in assemblies[i].GetTypes())
                     {
-                        //TODO: Everything is set up to handle typeof(Effect),
-                        //meaning non-token effects, but they are not included
-                        //yet because they throw exceptions in other assemblies
-                        //which I cannot handle.
-
-                        if (candidate.IsSubclassOf(typeof(PropertyBasedEffect)) &&
+                        if (candidate.IsSubclassOf(typeof(Effect)) &&
                             !candidate.IsAbstract &&
                             !candidate.IsObsolete(false))
                         {
@@ -2719,7 +2733,7 @@ namespace BrushFilter
             var cmbxItem = ((Tuple<string, CmbxEffectOptions>)
                 cmbxEffectType.SelectedItem);
 
-            if (cmbxItem.Item2 == CmbxEffectOptions.Custom)
+            if (cmbxItem?.Item2 == CmbxEffectOptions.Custom)
             {
                 //Uses reflection to get the unknown type's constructors.
                 var ctors = loadedUserEffects[int.Parse(cmbxItem.Item1)]
@@ -2728,12 +2742,12 @@ namespace BrushFilter
                 //Casts result of first constructor to Effect. Shows icon.
                 if (ctors.Length > 0)
                 {
-                    customEffect?.Dispose();
-                    customEffect = (Effect)ctors[0].Invoke(new object[] { });
-
-                    //Creates the effect token that handles settings.
                     try
                     {
+                        //Creates the effect token that handles settings.
+                        customEffect?.Dispose();
+                        customEffect = (Effect)ctors[0].Invoke(new object[] { });
+
                         using (var dlg = customEffect.CreateConfigDialog())
                         {
                             customEffectToken = dlg.EffectToken;
@@ -3770,16 +3784,19 @@ namespace BrushFilter
                                     ApplyFilter();
                                 };
 
-                                //Moves the dialog controls to the side panel.
+                                //Moves the dialog controls to the side panel,
+                                //maintaining its intended width.
                                 for (int i = 0; i < dlg.Controls.Count; i++)
                                 {
                                     if (dlg.Controls[i] is Panel)
                                     {
                                         if (dlg.Controls[i].Controls.Count > 0)
                                         {
-                                            pnlCustomProperties.Controls.Add(
-                                                dlg.Controls[i].Controls[0]);
+                                            var control = dlg.Controls[i].Controls[0];
+                                            int prevWidth = control.Parent.Width;
 
+                                            pnlCustomProperties.Controls.Add(control);
+                                            control.Width = prevWidth;
                                             break;
                                         }
                                     }
