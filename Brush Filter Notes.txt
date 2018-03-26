@@ -3,14 +3,21 @@
 - AA's Assistant somehow affects areas you don't brush in by killing outlying pixels; leaves jagged edges (despite smoothness of usual effect)
 - Support non-property-based effects
 
------------REQUIRES A DIALOG TO USE:
-Curves
-Levels
-Radial Blur
-Polar Inversion
+Remove all direct support for built-in plugins.
+Organize loaded DLLs by name.
+Continue the grind of supporting plugins.
 
------------NOT GOING TO DO
-Red Eye Removal
-Julia Fractal
-Mandelbrot Fractal
-Auto Level
+REQUIRES SINGLE-THREADED
+ArtyThing, Cuboids, Film, Fur Blur, Object Bevel, Poster, Shaped Gradient, Shatters, Seam Carving - Horizontal, Stipple, Alpha Blur, Bidirectional Blur, Rounded Rectangle, Grain, Kaleidoscope, Local Contrast, Roses, Shadow / Highlight Recovery, Sharpen+, Splashes, TR's Plasmatics, Bulge, Emboss, Glow, Polar Inversion, Radial Blur, Rotate/Zoom, Pencil Sketch, Soften Portrait, Twist, Vignette, Zoom Blur
+
+CRASHES PAINT.NET
+ColorToAlpha, Effects Lab, TR's Displacement Map 3D, Color Tint, Color Filter, Filtered Black and White, Vitrious, Single Hue, White Balance, GridWarp, Rounded Rectangle, Liquify, Plugin Browser, Random Effect, ScriptLab, Segment Image, Smudge, Splatter, TileWorld, TR's Morpher, Twist, ClipDisplace, ClipWarpNew, TR's Copy with Alpha, From Clipboard, From File, TR's Paste Fill, TR's Contour Filler, TR's Paste Warp, Hexagonal Grid (hard crash at random)
+
+FAILED TO LOAD
+Blur Map, Displacement Map, Channel Mask, Invert Intensity, Inside Out, Solarize, Egalize, Mirror top half over bottom half, Mirror right half over left half, Mirror bottom half over top half, Mirror left half over right half, Flip Horizontal, Flip Vertical, 2nd Diagonal Mirror, Vertical Mirror, Rotate 90 degrees Clockwise, Rotate 180 degrees Clockwise, Rotate 270 degrees Clockwise, Horizontal Mirror, 1st Diagonal Mirror, Normalize, Smooth, TR's FilmStrip
+
+FAILED TO SET EFFECT PROPERTIES
+Curves+, 3D Object, Gradient Mapping, Quadrilateral Correction, TR's Filaments, TR's Color Waves, TR's Third Dimension
+
+FAILED TO RENDER
+Distort This!, Planetoid, Scribble, Seam Carving - Vertical

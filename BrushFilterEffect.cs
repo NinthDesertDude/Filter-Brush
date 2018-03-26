@@ -141,7 +141,9 @@ namespace BrushFilter
         public override EffectConfigDialog CreateConfigDialog()
         {
             //Copies necessary user variables for dialog access.
-            UserSettings.userPrimaryColor = EnvironmentParameters.PrimaryColor;
+            UserSettings.UserPrimaryColor = EnvironmentParameters.PrimaryColor;
+            UserSettings.UserSecondaryColor = EnvironmentParameters.SecondaryColor;
+            UserSettings.UserBrushWidth = EnvironmentParameters.BrushWidth;
 
             //Static variables are remembered between plugin calls, so clear them.
             RenderSettings.Clear();

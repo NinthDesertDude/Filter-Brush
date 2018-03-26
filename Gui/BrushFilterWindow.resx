@@ -1825,69 +1825,6 @@
   <data name="&gt;&gt;txtEffectProperty1.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="sliderEffectProperty4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
-  <data name="sliderEffectProperty4.AutoSize" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="sliderEffectProperty4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="sliderEffectProperty4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 270</value>
-  </data>
-  <data name="sliderEffectProperty4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 25</value>
-  </data>
-  <data name="sliderEffectProperty4.TabIndex" type="System.Int32, mscorlib">
-    <value>34</value>
-  </data>
-  <data name="&gt;&gt;sliderEffectProperty4.Name" xml:space="preserve">
-    <value>sliderEffectProperty4</value>
-  </data>
-  <data name="&gt;&gt;sliderEffectProperty4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TrackBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sliderEffectProperty4.Parent" xml:space="preserve">
-    <value>tabEffect</value>
-  </data>
-  <data name="&gt;&gt;sliderEffectProperty4.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="txtEffectProperty4.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
-  <data name="txtEffectProperty4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="txtEffectProperty4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>31, 250</value>
-  </data>
-  <data name="txtEffectProperty4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 17</value>
-  </data>
-  <data name="txtEffectProperty4.TabIndex" type="System.Int32, mscorlib">
-    <value>33</value>
-  </data>
-  <data name="txtEffectProperty4.Text" xml:space="preserve">
-    <value>Property 4</value>
-  </data>
-  <data name="txtEffectProperty4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;txtEffectProperty4.Name" xml:space="preserve">
-    <value>txtEffectProperty4</value>
-  </data>
-  <data name="&gt;&gt;txtEffectProperty4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtEffectProperty4.Parent" xml:space="preserve">
-    <value>tabEffect</value>
-  </data>
-  <data name="&gt;&gt;txtEffectProperty4.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
   <data name="sliderEffectProperty3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
@@ -1916,7 +1853,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;sliderEffectProperty3.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>6</value>
   </data>
   <data name="txtEffectProperty3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -1949,7 +1886,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;txtEffectProperty3.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>7</value>
   </data>
   <data name="txtEffectType.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1979,7 +1916,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;txtEffectType.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>8</value>
   </data>
   <data name="cmbxEffectType.IntegralHeight" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -2006,7 +1943,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;cmbxEffectType.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>9</value>
   </data>
   <data name="pnlCustomProperties.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2030,7 +1967,7 @@
     <value>tabEffect</value>
   </data>
   <data name="&gt;&gt;pnlCustomProperties.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>10</value>
   </data>
   <data name="tabEffect.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 22</value>
