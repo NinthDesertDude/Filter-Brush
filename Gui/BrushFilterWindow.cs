@@ -2231,84 +2231,88 @@ namespace BrushFilter
         /// </summary>
         private List<Type> LoadUserEffects()
         {
-            List<Assembly> assemblies = new List<Assembly>();
-            List<Type> effects = new List<Type>();
+            Assembly basicAssembly = null;
+            List<Assembly> effectAssemblies = new List<Assembly>();           
+            var basicEffects = new List<Tuple<Type, string>>();
+            var customEffects = new List<Tuple<Type, string>>();
 
-            // TARGETDIR\Effects\*.dll
+            // Search path is <paint.net>\Effects\*.dll
             string homeDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             string builtInEffectsDir = Path.Combine(homeDir, "PaintDotNet.Effects.dll");
             string customEffectsDir = Path.Combine(homeDir, "Effects");
-            bool dirExists;
 
-            //Attempts to access the effects directory.
-            try
-            {
-                dirExists = Directory.Exists(customEffectsDir);
-            }
-            catch
-            {
-                dirExists = false;
-            }
-
-            //Adds the built-in effects assembly.
-            try
-            {
-                if (File.Exists(builtInEffectsDir))
-                {
-                    Assembly pluginAssembly = null;
-
-                    try
-                    {
-                        pluginAssembly = Assembly.LoadFrom(builtInEffectsDir);
-                        assemblies.Add(pluginAssembly);
-                    }
-                    catch { }
-                }
-            }
-            catch { }
-
-            //Accumulates assemblies to probe.
-            if (dirExists)
-            {
-                string fileSpec = "*.dll";
-                string[] filePaths = Directory.GetFiles(customEffectsDir, fileSpec);
-
-                foreach (string filePath in filePaths)
-                {
-                    Assembly pluginAssembly = null;
-
-                    try
-                    {
-                        pluginAssembly = Assembly.LoadFrom(filePath);
-                        assemblies.Add(pluginAssembly);
-                    }
-                    catch { }
-                }
-            }
-
-            //Probes assemblies for Effect or Effect-derived classes.
-            for (int i = 0; i < assemblies.Count; i++)
+            //Adds the built-in effects assembly to probe.
+            if (File.Exists(builtInEffectsDir))
             {
                 try
                 {
-                    foreach (Type candidate in assemblies[i].GetTypes())
+                    basicAssembly = Assembly.LoadFrom(builtInEffectsDir);
+                    effectAssemblies.Add(basicAssembly);
+                }
+                catch { }
+            }
+
+            //Adds custom assemblies to probe.
+            if (Directory.Exists(customEffectsDir))
+            {
+                try
+                {
+                    string[] assemblies = Directory.GetFiles(customEffectsDir, "*.dll");
+
+                    foreach (string assembly in assemblies)
+                    {
+                        try
+                        {
+                            Assembly pluginAssembly = Assembly.LoadFrom(assembly);
+                            effectAssemblies.Add(pluginAssembly);
+                        }
+                        catch { }
+                    }
+                }
+                catch { }
+            }
+
+            //Probes effect assemblies for Effect or Effect-derived classes.
+            for (int i = 0; i < effectAssemblies.Count; i++)
+            {
+                foreach (Type candidate in effectAssemblies[i].GetTypes())
+                {
+                    try
                     {
                         if (candidate.IsSubclassOf(typeof(Effect)) &&
                             !candidate.IsAbstract &&
                             !candidate.IsObsolete(false))
                         {
-                            effects.Add(candidate);
+                            //Attempts to instantiate the effect.
+                            var ctors = candidate.GetConstructors()
+                                .Where(o => o.GetParameters().Length == 0).ToArray();
+
+                            if (ctors.Length > 0)
+                            {
+                                var effect = (Effect)ctors[0].Invoke(new object[] { });
+
+                                if (i == 0 && basicAssembly != null)
+                                {
+                                    basicEffects.Add(new Tuple<Type, string>
+                                        (candidate, effect.Name));
+                                }
+                                else
+                                {
+                                    customEffects.Add(new Tuple<Type, string>
+                                        (candidate, effect.Name));
+                                }
+                            }
                         }
                     }
-                }
-                catch
-                {
-                    //Silence access errors.
+                    catch { }
                 }
             }
 
-            //Returns all effects found.
-            return effects;
+            //Returns effect types after alphabetizing built-in and custom
+            //effects separately.
+            basicEffects = basicEffects.OrderBy(o => o.Item2).ToList();
+            basicEffects.AddRange(customEffects.OrderBy(o => o.Item2));
+            return basicEffects.Select(o => o.Item1).Distinct().ToList();
         }
 
         /// <summary>
@@ -2476,7 +2480,7 @@ namespace BrushFilter
                             else
                             {
                                 dlg.EffectSourceSurface = Surface.CopyFromBitmap(bmpCurrentDrawing);
-                                dlg.ShowDialog();
+                                dlg.Show();
                             }
                         }
                     }
@@ -3705,7 +3709,8 @@ namespace BrushFilter
             if (item.Item2 == CmbxEffectOptions.Custom)
             {
                 //Uses reflection to get the unknown type's constructors.
-                var ctors = loadedUserEffects[int.Parse(item.Item1)].GetConstructors();
+                var ctors = loadedUserEffects[int.Parse(item.Item1)].GetConstructors()
+                    .Where(o => o.GetParameters().Length == 0).ToArray();
 
                 //Casts result of first constructor to Effect. Shows icon.
                 if (ctors.Length > 0)

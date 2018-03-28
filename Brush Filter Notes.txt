@@ -1,11 +1,6 @@
-- Transparency bug
+- Transparent areas are made slightly more opaque during brush strokes around white pixels.
 - Transparency artifact; last row and column of pixels render as translucent. Visible with large brushes.
-- AA's Assistant somehow affects areas you don't brush in by killing outlying pixels; leaves jagged edges (despite smoothness of usual effect)
-- Support non-property-based effects
-
-Remove all direct support for built-in plugins.
-Organize loaded DLLs by name.
-Continue the grind of supporting plugins.
+- Truncates transparency across image for highly transparent brush strokes. Perfectly transparent brush stroke will make image transparent. Side effects of uncover bitmap algorithm.
 
 REQUIRES SINGLE-THREADED
 ArtyThing, Cuboids, Film, Fur Blur, Object Bevel, Poster, Shaped Gradient, Shatters, Seam Carving - Horizontal, Stipple, Alpha Blur, Bidirectional Blur, Rounded Rectangle, Grain, Kaleidoscope, Local Contrast, Roses, Shadow / Highlight Recovery, Sharpen+, Splashes, TR's Plasmatics, Bulge, Emboss, Glow, Polar Inversion, Radial Blur, Rotate/Zoom, Pencil Sketch, Soften Portrait, Twist, Vignette, Zoom Blur
