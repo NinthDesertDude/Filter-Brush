@@ -8,6 +8,6 @@
         FlipHorizontal,
         FlipVertical,
         RgbTint,
-        Custom
+        Loaded
     }
 }

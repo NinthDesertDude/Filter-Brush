@@ -1870,7 +1870,7 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to load the custom effect..
+        ///   Looks up a localized string similar to Failed to load the effect..
         /// </summary>
         internal static string ErrorLoadingEffect {
             get {

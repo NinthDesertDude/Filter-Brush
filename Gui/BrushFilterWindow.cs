@@ -46,22 +46,22 @@ namespace BrushFilter
         private List<string> loadedBrushPaths = new List<string>();
 
         /// <summary>
-        /// Stores the user's custom effects as Types. They are instantiated
+        /// Stores the user's effects as Types. They are instantiated
         /// with Reflector dynamically and referenced by index when added to
-        /// the combobox. Effect type is CmbxEffectOptions.Custom.
+        /// the combobox. Effect type is CmbxEffectOptions.Loaded.
         /// </summary>
         private List<Type> loadedUserEffects = new List<Type>();
 
         /// <summary>
-        /// Stores an instance of a custom effect when chosen as the filter.
+        /// Stores an instance of a loaded effect when chosen as the filter.
         /// </summary>
-        private Effect customEffect;
+        private Effect loadedEffect;
 
         /// <summary>
-        /// Stores an instance of the token containing parameters for a custom
+        /// Stores an instance of the token containing parameters for a loaded
         /// effect not based on properties when chosen as the filter.
         /// </summary>
-        private EffectConfigToken customEffectToken;
+        private EffectConfigToken loadedEffectToken;
 
         /// <summary>
         /// Whether the user is drawing on the image.
@@ -265,9 +265,9 @@ namespace BrushFilter
         private GroupBox grpbxBrushOptions;
 
         /// <summary>
-        /// Hosts the configurable controls of a custom effect.
+        /// Hosts the configurable controls of a loaded effect.
         /// </summary>
-        private Panel pnlCustomProperties;
+        private Panel pnlEffectProperties;
 
         /// <summary>
         /// Controls the intensity of the effect (strength).
@@ -565,7 +565,7 @@ namespace BrushFilter
             for (int i = 0; i < loadedUserEffects.Count; i++)
             {
                 effectOptions.Add(new Tuple<string, CmbxEffectOptions>(
-                    i.ToString(), CmbxEffectOptions.Custom));
+                    i.ToString(), CmbxEffectOptions.Loaded));
             }
 
             //Forces the window to cover the screen without being maximized.
@@ -664,9 +664,9 @@ namespace BrushFilter
                 sliderEffectProperty3.Minimum, sliderEffectProperty3.Maximum);
             EnableParameterUpdates();
 
-            //Preserves custom effect values.
-            customEffect = token.CustomEffect;
-            customEffectToken = token.CustomEffectToken;
+            //Preserves loaded effect values.
+            loadedEffect = token.LoadedEffect;
+            loadedEffectToken = token.LoadedEffectToken;
         }
 
         /// <summary>
@@ -702,8 +702,8 @@ namespace BrushFilter
             token.EffectProperty2 = sliderEffectProperty2.Value;
             token.EffectProperty3 = sliderEffectProperty3.Value;
             token.CustomBrushLocations = loadedBrushPaths;
-            token.CustomEffect = customEffect;
-            token.CustomEffectToken = customEffectToken;
+            token.LoadedEffect = loadedEffect;
+            token.LoadedEffectToken = loadedEffectToken;
         }
 
         /// <summary>
@@ -1039,13 +1039,13 @@ namespace BrushFilter
                     bmpCurrentDrawing.UnlockBits(srcData);
                     bmpEffectDrawing.UnlockBits(destData);
                     break;
-                case CmbxEffectOptions.Custom:
-                    effect = customEffect;
+                case CmbxEffectOptions.Loaded:
+                    effect = loadedEffect;
                     break;
             }
 
             //Sets the source and destination bitmaps for effects.
-            if (effect != null && customEffectToken != null)
+            if (effect != null && loadedEffectToken != null)
             {
                 srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
                 dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
@@ -1075,7 +1075,7 @@ namespace BrushFilter
 
                                 try
                                 {
-                                    effect.Render(customEffectToken, dstArgs, srcArgs,
+                                    effect.Render(loadedEffectToken, dstArgs, srcArgs,
                                         new Rectangle[] { rect }, 0, 1);
                                 }
                                 catch (Exception)
@@ -1095,7 +1095,7 @@ namespace BrushFilter
                 {*/
                 try
                 {
-                    effect.Render(customEffectToken, dstArgs, srcArgs,
+                    effect.Render(loadedEffectToken, dstArgs, srcArgs,
                         new Rectangle[] { bounds }, 0, 1);
                 }
                 catch (Exception)
@@ -1557,7 +1557,7 @@ namespace BrushFilter
             this.txtEffectProperty3 = new System.Windows.Forms.Label();
             this.txtEffectType = new System.Windows.Forms.Label();
             this.cmbxEffectType = new System.Windows.Forms.ComboBox();
-            this.pnlCustomProperties = new System.Windows.Forms.Panel();
+            this.pnlEffectProperties = new System.Windows.Forms.Panel();
             this.displayCanvasBG.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.displayCanvas)).BeginInit();
             this.tabOther.SuspendLayout();
@@ -2064,7 +2064,7 @@ namespace BrushFilter
             this.tabEffect.Controls.Add(this.txtEffectProperty3);
             this.tabEffect.Controls.Add(this.txtEffectType);
             this.tabEffect.Controls.Add(this.cmbxEffectType);
-            this.tabEffect.Controls.Add(this.pnlCustomProperties);
+            this.tabEffect.Controls.Add(this.pnlEffectProperties);
             this.tabEffect.Name = "tabEffect";
             // 
             // chkbxAlphaMask
@@ -2155,10 +2155,10 @@ namespace BrushFilter
             this.cmbxEffectType.SelectedValueChanged += new System.EventHandler(this.CmbxEffectType_SelectedValueChanged);
             this.cmbxEffectType.MouseEnter += new System.EventHandler(this.CmbxEffectType_MouseEnter);
             // 
-            // pnlCustomProperties
+            // pnlEffectProperties
             // 
-            resources.ApplyResources(this.pnlCustomProperties, "pnlCustomProperties");
-            this.pnlCustomProperties.Name = "pnlCustomProperties";
+            resources.ApplyResources(this.pnlEffectProperties, "pnlEffectProperties");
+            this.pnlEffectProperties.Name = "pnlEffectProperties";
             // 
             // WinBrushFilter
             // 
@@ -2316,14 +2316,14 @@ namespace BrushFilter
         }
 
         /// <summary>
-        /// Checks if the filter is a custom effect and instantiates it if so.
+        /// Checks if the filter is a loaded effect and instantiates it if so.
         /// </summary>
         private void LoadUserEffect()
         {
             var cmbxItem = ((Tuple<string, CmbxEffectOptions>)
                 cmbxEffectType.SelectedItem);
 
-            if (cmbxItem?.Item2 == CmbxEffectOptions.Custom)
+            if (cmbxItem?.Item2 == CmbxEffectOptions.Loaded)
             {
                 //Uses reflection to get the unknown type's constructors.
                 var ctors = loadedUserEffects[int.Parse(cmbxItem.Item1)]
@@ -2335,25 +2335,25 @@ namespace BrushFilter
                     try
                     {
                         //Creates the effect token that handles settings.
-                        customEffect?.Dispose();
-                        customEffect = (Effect)ctors[0].Invoke(new object[] { });
+                        loadedEffect?.Dispose();
+                        loadedEffect = (Effect)ctors[0].Invoke(new object[] { });
 
-                        customEffect.EnvironmentParameters = new EffectEnvironmentParameters(
+                        loadedEffect.EnvironmentParameters = new EffectEnvironmentParameters(
                             UserSettings.UserPrimaryColor,
                             UserSettings.UserSecondaryColor,
                             UserSettings.UserBrushWidth,
                             new PdnRegion(Selection.GetRegionData()),
                             Surface.CopyFromBitmap(bmpCurrentDrawing));
 
-                        using (var dlg = customEffect.CreateConfigDialog())
+                        using (var dlg = loadedEffect.CreateConfigDialog())
                         {
-                            customEffectToken = dlg.EffectToken;
+                            loadedEffectToken = dlg.EffectToken;
                         }
                     }
                     catch (Exception)
                     {
-                        customEffect = null;
-                        customEffectToken = null;
+                        loadedEffect = null;
+                        loadedEffectToken = null;
                         MessageBox.Show(Globalization.GlobalStrings.ErrorLoadingEffect);
                     }
                 }
@@ -2379,10 +2379,10 @@ namespace BrushFilter
             sliderEffectProperty3.Enabled = false;
             txtEffectProperty3.Visible = false;
 
-            //Hides custom effect controls; clears loaded controls.
-            pnlCustomProperties.Visible = false;
-            pnlCustomProperties.Enabled = false;
-            pnlCustomProperties.Controls.Clear();
+            //Hides loaded effect controls; clears loaded controls.
+            pnlEffectProperties.Visible = false;
+            pnlEffectProperties.Enabled = false;
+            pnlEffectProperties.Controls.Clear();
 
             //Prevents redundant filter applications as parameters change.
             DisableParameterUpdates();
@@ -2429,27 +2429,27 @@ namespace BrushFilter
                     sliderEffectProperty3.Tag = Globalization.GlobalStrings.EffectRgbTintProperty3Tip;
                     txtEffectProperty3.Text = txtEffectProperty3.Tag + ": " + sliderEffectProperty3.Value;
                     break;
-                case CmbxEffectOptions.Custom:
+                case CmbxEffectOptions.Loaded:
 
-                    if (customEffect == null)
+                    if (loadedEffect == null)
                     {
                         break;
                     }
                     
                     //Shows the custom properties panel.
-                    pnlCustomProperties.Visible = true;
-                    pnlCustomProperties.Enabled = true;
+                    pnlEffectProperties.Visible = true;
+                    pnlEffectProperties.Enabled = true;
 
                     try
                     {
                         //Creates the dialog and loads or sets the token.
-                        using (var dlg = customEffect.CreateConfigDialog())
+                        using (var dlg = loadedEffect.CreateConfigDialog())
                         {
-                            dlg.EffectToken = customEffectToken;
+                            dlg.EffectToken = loadedEffectToken;
                             dlg.Selection = new PdnRegion(Selection.GetRegionData());
 
                             //Property effects are embedded with previewing.
-                            if (customEffect is PropertyBasedEffect)
+                            if (loadedEffect is PropertyBasedEffect)
                             {
                                 //Updates the token when a property changes.
                                 dlg.EffectTokenChanged += (a, b) =>
@@ -2468,7 +2468,7 @@ namespace BrushFilter
                                             var control = dlg.Controls[i].Controls[0];
                                             int prevWidth = control.Parent.Width;
 
-                                            pnlCustomProperties.Controls.Add(control);
+                                            pnlEffectProperties.Controls.Add(control);
                                             control.Width = prevWidth;
                                             break;
                                         }
@@ -3681,7 +3681,7 @@ namespace BrushFilter
         /// </summary>
         private void CmbxEffectType_SelectedValueChanged(object sender, EventArgs e)
         {
-            //Instantiates a custom effect if one is selected.
+            //Instantiates a loaded effect if one is selected.
             LoadUserEffect();
 
             //Loads effect properties if the dialog has loaded.
@@ -3700,13 +3700,13 @@ namespace BrushFilter
             var item = (Tuple<string, CmbxEffectOptions>)
                 cmbxEffectType.Items[e.Index];
 
-            //If the item is a custom effect, this stores the instantiation.
-            Effect currCustomEffect = null;
+            //If the item is a loaded effect, this stores the instantiation.
+            Effect currLoadedEffect = null;
 
             //Sets the icon to display for each entry.
             Image displayIcon = null;
 
-            if (item.Item2 == CmbxEffectOptions.Custom)
+            if (item.Item2 == CmbxEffectOptions.Loaded)
             {
                 //Uses reflection to get the unknown type's constructors.
                 var ctors = loadedUserEffects[int.Parse(item.Item1)].GetConstructors()
@@ -3717,8 +3717,8 @@ namespace BrushFilter
                 {
                     try
                     {
-                        currCustomEffect = (Effect)ctors[0].Invoke(new object[] { });
-                        displayIcon = currCustomEffect.Image;
+                        currLoadedEffect = (Effect)ctors[0].Invoke(new object[] { });
+                        displayIcon = currLoadedEffect.Image;
                     }
                     catch (TargetInvocationException)
                     {
@@ -3746,10 +3746,10 @@ namespace BrushFilter
             //Draws the text centered or right of its picture.
             string displayName = item.Item1;
 
-            //Sets the proper text for custom effects.
-            if (currCustomEffect != null)
+            //Sets the proper text for loaded effects.
+            if (currLoadedEffect != null)
             {
-                displayName = currCustomEffect?.Name;
+                displayName = currLoadedEffect?.Name;
             }
 
             //Displays the text next to the icon.

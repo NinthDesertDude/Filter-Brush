@@ -47,14 +47,14 @@ namespace BrushFilter
         }
 
         /// <summary>
-        /// A custom effect, if any.
+        /// A loaded effect, if any.
         /// </summary>
-        public Effect CustomEffect;
+        public Effect LoadedEffect;
 
         /// <summary>
-        /// The config details of a non-property-based custom effect.
+        /// The config details of a non-property-based loaded effect.
         /// </summary>
-        public EffectConfigToken CustomEffectToken;
+        public EffectConfigToken LoadedEffectToken;
 
         /// <summary>
         /// Whether the brush rotates with the mouse direction or not.
@@ -330,8 +330,8 @@ namespace BrushFilter
             EffectProperty3 = valProperty3;
             EffectProperty4 = valProperty4;
             CustomBrushLocations = new List<string>(customBrushLocations);
-            CustomEffect = customEffect;
-            CustomEffectToken = customEffectToken;
+            LoadedEffect = customEffect;
+            LoadedEffectToken = customEffectToken;
         }
 
         /// <summary>
@@ -366,8 +366,8 @@ namespace BrushFilter
             EffectProperty3 = other.EffectProperty3;
             EffectProperty4 = other.EffectProperty4;
             CustomBrushLocations = new List<string>(other.CustomBrushLocations);
-            CustomEffect = other.CustomEffect;
-            CustomEffectToken = other.CustomEffectToken;
+            LoadedEffect = other.LoadedEffect;
+            LoadedEffectToken = other.LoadedEffectToken;
         }
         #endregion
 

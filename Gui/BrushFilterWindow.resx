@@ -1945,28 +1945,28 @@
   <data name="&gt;&gt;cmbxEffectType.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
-  <data name="pnlCustomProperties.AutoSize" type="System.Boolean, mscorlib">
+  <data name="pnlEffectProperties.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="pnlCustomProperties.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="pnlEffectProperties.Location" type="System.Drawing.Point, System.Drawing">
     <value>11, 109</value>
   </data>
-  <data name="pnlCustomProperties.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="pnlEffectProperties.Size" type="System.Drawing.Size, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="pnlCustomProperties.TabIndex" type="System.Int32, mscorlib">
+  <data name="pnlEffectProperties.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
   </data>
-  <data name="&gt;&gt;pnlCustomProperties.Name" xml:space="preserve">
-    <value>pnlCustomProperties</value>
+  <data name="&gt;&gt;pnlEffectProperties.Name" xml:space="preserve">
+    <value>pnlEffectProperties</value>
   </data>
-  <data name="&gt;&gt;pnlCustomProperties.Type" xml:space="preserve">
+  <data name="&gt;&gt;pnlEffectProperties.Type" xml:space="preserve">
     <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;pnlCustomProperties.Parent" xml:space="preserve">
+  <data name="&gt;&gt;pnlEffectProperties.Parent" xml:space="preserve">
     <value>tabEffect</value>
   </data>
-  <data name="&gt;&gt;pnlCustomProperties.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;pnlEffectProperties.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
   <data name="tabEffect.Location" type="System.Drawing.Point, System.Drawing">

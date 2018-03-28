@@ -721,7 +721,7 @@
     <value>Failed to load custom brush.</value>
   </data>
   <data name="ErrorLoadingEffect" xml:space="preserve">
-    <value>Failed to load the custom effect.</value>
+    <value>Failed to load the effect.</value>
   </data>
   <data name="ErrorMemoryLoadingBrush" xml:space="preserve">
     <value>Failed to load custom brush: out of memory.</value>
