@@ -1942,6 +1942,15 @@ namespace BrushFilter.Globalization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t render the effect. Try switching to another effect..
+        /// </summary>
+        internal static string ErrorUsingEffect {
+            get {
+                return ResourceManager.GetString("ErrorUsingEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Middle click and drag to pan image. Right-click for options. Hover over items for details..
         /// </summary>
         internal static string GeneralTooltip {

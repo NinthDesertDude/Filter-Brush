@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -62,6 +63,11 @@ namespace BrushFilter
         /// effect not based on properties when chosen as the filter.
         /// </summary>
         private EffectConfigToken loadedEffectToken;
+
+        /// <summary>
+        /// Stores an instance of the loaded effect dialog.
+        /// </summary>
+        private EffectConfigDialog loadedEffectDialog;
 
         /// <summary>
         /// Whether the user is drawing on the image.
@@ -185,7 +191,7 @@ namespace BrushFilter
         /// Tracks when the user draws out-of-bounds and moves the canvas to
         /// accomodate them.
         /// </summary>
-        private Timer timerRepositionUpdate;
+        private System.Windows.Forms.Timer timerRepositionUpdate;
 
         /// <summary>
         /// Displays a list of brushes to choose from.
@@ -1045,7 +1051,7 @@ namespace BrushFilter
             }
 
             //Sets the source and destination bitmaps for effects.
-            if (effect != null && loadedEffectToken != null)
+            if (effect != null)
             {
                 srcArgs = new RenderArgs(Surface.CopyFromBitmap(bmpCurrentDrawing));
                 dstArgs = new RenderArgs(Surface.CopyFromBitmap(bmpEffectDrawing));
@@ -1095,8 +1101,14 @@ namespace BrushFilter
                 {*/
                 try
                 {
+                    //Catches thread exceptions from 3rd party DLLs.
+                    var exceptionHandler = new ThreadExceptionEventHandler(RenderFailureHandler);
+                    Application.ThreadException += exceptionHandler;
+
                     effect.Render(loadedEffectToken, dstArgs, srcArgs,
                         new Rectangle[] { bounds }, 0, 1);
+
+                    Application.ThreadException -= exceptionHandler;
                 }
                 catch (Exception)
                 {
@@ -2232,7 +2244,7 @@ namespace BrushFilter
         private List<Type> LoadUserEffects()
         {
             Assembly basicAssembly = null;
-            List<Assembly> effectAssemblies = new List<Assembly>();           
+            List<Assembly> effectAssemblies = new List<Assembly>();
             var basicEffects = new List<Tuple<Type, string>>();
             var customEffects = new List<Tuple<Type, string>>();
 
@@ -2275,37 +2287,41 @@ namespace BrushFilter
             //Probes effect assemblies for Effect or Effect-derived classes.
             for (int i = 0; i < effectAssemblies.Count; i++)
             {
-                foreach (Type candidate in effectAssemblies[i].GetTypes())
+                try
                 {
-                    try
+                    foreach (Type candidate in effectAssemblies[i].GetTypes())
                     {
-                        if (candidate.IsSubclassOf(typeof(Effect)) &&
-                            !candidate.IsAbstract &&
-                            !candidate.IsObsolete(false))
+                        try
                         {
-                            //Attempts to instantiate the effect.
-                            var ctors = candidate.GetConstructors()
-                                .Where(o => o.GetParameters().Length == 0).ToArray();
-
-                            if (ctors.Length > 0)
+                            if (candidate.IsSubclassOf(typeof(Effect)) &&
+                                !candidate.IsAbstract &&
+                                !candidate.IsObsolete(false))
                             {
-                                var effect = (Effect)ctors[0].Invoke(new object[] { });
+                                //Attempts to instantiate the effect.
+                                var ctors = candidate.GetConstructors()
+                                    .Where(o => o.GetParameters().Length == 0).ToArray();
 
-                                if (i == 0 && basicAssembly != null)
+                                if (ctors.Length > 0)
                                 {
-                                    basicEffects.Add(new Tuple<Type, string>
-                                        (candidate, effect.Name));
-                                }
-                                else
-                                {
-                                    customEffects.Add(new Tuple<Type, string>
-                                        (candidate, effect.Name));
+                                    var effect = (Effect)ctors[0].Invoke(new object[] { });
+
+                                    if (i == 0 && basicAssembly != null)
+                                    {
+                                        basicEffects.Add(new Tuple<Type, string>
+                                            (candidate, effect.Name));
+                                    }
+                                    else
+                                    {
+                                        customEffects.Add(new Tuple<Type, string>
+                                            (candidate, effect.Name));
+                                    }
                                 }
                             }
                         }
+                        catch { }
                     }
-                    catch { }
                 }
+                catch { }
             }
 
             //Returns effect types after alphabetizing built-in and custom
@@ -2332,6 +2348,10 @@ namespace BrushFilter
                 //Casts result of first constructor to Effect. Shows icon.
                 if (ctors.Length > 0)
                 {
+                    //Catches thread exceptions from 3rd party DLLs.
+                    var exceptionHandler = new ThreadExceptionEventHandler(RenderFailureHandler);
+                    Application.ThreadException += exceptionHandler;
+
                     try
                     {
                         //Creates the effect token that handles settings.
@@ -2347,7 +2367,7 @@ namespace BrushFilter
 
                         using (var dlg = loadedEffect.CreateConfigDialog())
                         {
-                            loadedEffectToken = dlg.EffectToken;
+                            loadedEffectToken = dlg?.EffectToken;
                         }
                     }
                     catch (Exception)
@@ -2356,7 +2376,27 @@ namespace BrushFilter
                         loadedEffectToken = null;
                         MessageBox.Show(Globalization.GlobalStrings.ErrorLoadingEffect);
                     }
+
+                    Application.ThreadException -= exceptionHandler;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Called when a thread involved in opening a dialog or rendering
+        /// for a 3rd-party DLL throws an exception. The corresponding dialog
+        /// is closed and an error message is displayed.
+        /// </summary>
+        private void RenderFailureHandler(object sender, ThreadExceptionEventArgs e)
+        {
+            if (loadedEffectDialog != null &&
+                loadedEffectDialog.IsShown)
+            {
+                loadedEffectDialog.Close();
+                loadedEffectDialog.Dispose();
+                loadedEffectDialog = null;
+
+                MessageBox.Show(Globalization.GlobalStrings.ErrorUsingEffect);
             }
         }
 
@@ -2435,53 +2475,59 @@ namespace BrushFilter
                     {
                         break;
                     }
-                    
+
                     //Shows the custom properties panel.
                     pnlEffectProperties.Visible = true;
                     pnlEffectProperties.Enabled = true;
 
+                    //Catches thread exceptions from 3rd party DLLs.
+                    var exceptionHandler = new ThreadExceptionEventHandler(SetPropertiesFailureHandler);
+                    Application.ThreadException += exceptionHandler;
+
                     try
                     {
                         //Creates the dialog and loads or sets the token.
-                        using (var dlg = loadedEffect.CreateConfigDialog())
+                        loadedEffectDialog?.Dispose();
+                        loadedEffectDialog = loadedEffect.CreateConfigDialog();
+                        if (loadedEffectDialog != null)
                         {
-                            dlg.EffectToken = loadedEffectToken;
-                            dlg.Selection = new PdnRegion(Selection.GetRegionData());
+                            loadedEffectDialog.EffectToken = loadedEffectToken;
+                            loadedEffectDialog.Selection = new PdnRegion(Selection.GetRegionData());
+                        }
 
-                            //Property effects are embedded with previewing.
-                            if (loadedEffect is PropertyBasedEffect)
+                        //Property effects are embedded with previewing.
+                        if (loadedEffect is PropertyBasedEffect && loadedEffectDialog != null)
+                        {
+                            //Updates the token when a property changes.
+                            loadedEffectDialog.EffectTokenChanged += (a, b) =>
                             {
-                                //Updates the token when a property changes.
-                                dlg.EffectTokenChanged += (a, b) =>
-                                {
-                                    ApplyFilter();
-                                };
+                                ApplyFilter();
+                            };
 
-                                //Moves the dialog controls to the side panel,
-                                //maintaining its intended width.
-                                for (int i = 0; i < dlg.Controls.Count; i++)
+                            //Moves the dialog controls to the side panel,
+                            //maintaining its intended width.
+                            for (int i = 0; i < loadedEffectDialog.Controls.Count; i++)
+                            {
+                                if (loadedEffectDialog.Controls[i] is Panel)
                                 {
-                                    if (dlg.Controls[i] is Panel)
+                                    if (loadedEffectDialog.Controls[i].Controls.Count > 0)
                                     {
-                                        if (dlg.Controls[i].Controls.Count > 0)
-                                        {
-                                            var control = dlg.Controls[i].Controls[0];
-                                            int prevWidth = control.Parent.Width;
+                                        var control = loadedEffectDialog.Controls[i].Controls[0];
+                                        int prevWidth = control.Parent.Width;
 
-                                            pnlEffectProperties.Controls.Add(control);
-                                            control.Width = prevWidth;
-                                            break;
-                                        }
+                                        pnlEffectProperties.Controls.Add(control);
+                                        control.Width = prevWidth;
+                                        break;
                                     }
                                 }
                             }
+                        }
 
-                            //Non-property effects are shown as dialogs.
-                            else
-                            {
-                                dlg.EffectSourceSurface = Surface.CopyFromBitmap(bmpCurrentDrawing);
-                                dlg.Show();
-                            }
+                        //Non-property effects are shown as dialogs.
+                        else if (loadedEffectDialog != null)
+                        {
+                            loadedEffectDialog.EffectSourceSurface = Surface.CopyFromBitmap(bmpCurrentDrawing);
+                            loadedEffectDialog.ShowDialog();
                         }
                     }
                     catch (Exception)
@@ -2489,12 +2535,31 @@ namespace BrushFilter
                         MessageBox.Show(Globalization.GlobalStrings.ErrorSettingEffectProperties);
                         EnableParameterUpdates();
                     }
+
+                    Application.ThreadException -= exceptionHandler;
                     break;
             }
 
             //Re-enables parameter updating and applies an effect.
             EnableParameterUpdates();
             ApplyFilter();
+        }
+
+        /// <summary>
+        /// Called when a thread involved in setting effect properties for a 3rd-party DLL
+        /// throws an exception.
+        /// </summary>
+        private void SetPropertiesFailureHandler(object sender, ThreadExceptionEventArgs e)
+        {
+            if (loadedEffectDialog != null &&
+                loadedEffectDialog.IsShown)
+            {
+                loadedEffectDialog.Close();
+                loadedEffectDialog.Dispose();
+                loadedEffectDialog = null;
+
+                MessageBox.Show(Globalization.GlobalStrings.ErrorSettingEffectProperties);
+            }
         }
 
         /// <summary>
@@ -3011,7 +3076,7 @@ namespace BrushFilter
             if (!hasLoaded)
             {
                 hasLoaded = true;
-                SetEffectProperties(false);                
+                SetEffectProperties(false);
                 return;
             }
 

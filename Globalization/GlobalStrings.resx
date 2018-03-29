@@ -744,6 +744,9 @@
   <data name="ErrorUsingClipboardImage" xml:space="preserve">
     <value>Could not use clipboard image.</value>
   </data>
+  <data name="ErrorUsingEffect" xml:space="preserve">
+    <value>Couldn't render the effect. Try switching to another effect.</value>
+  </data>
   <data name="GeneralTooltip" xml:space="preserve">
     <value>Middle click and drag to pan image. Right-click for options. Hover over items for details.</value>
   </data>
